@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<!--
+ThreeUI Community — Article Headings — Particle Wordmark
+Source: https://github.com/MengTo/threeui · https://threeui.com
+
+MIT License
+
+Copyright (c) 2026 Meng To
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+보관: 쿼카 모션랩 (2026-10-04). 원본 컴포넌트가 화면에 그리는 최종 문서를 그대로 저장했습니다.
+원본과 달라진 점: 없음 (아래 보관 표시 한 줄만 추가)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shaders Particle Wordmark</title>
+<style>
+  :root {
+    --olive-400: #a9a9ac;
+    --olive-500: #7a7a7d;
+    --olive-950: #0c0c0d;
+    --white: #fff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--olive-950);
+    color: var(--white);
+    min-height: 100%;
+  }
+  body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+  h3 { font-size: inherit; font-weight: 400; }
+
+  footer {
+    background: var(--olive-950);
+    color: var(--white);
+    padding-top: 4rem;
+  }
+  .inner { padding: 4rem 0 2rem; }
+  .wrap {
+    width: 100%;
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    font-size: .875rem;
+    line-height: 1.75rem;
+  }
+  .cols h3 { color: var(--white); }
+  .cols ul {
+    margin-top: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+  .cols a { color: var(--olive-400); }
+  .cols a:hover { color: #d7d7d9; }
+
+  .storm-wrap {
+    margin-top: 4rem;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .storm {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 5.333333333333333;
+  }
+  .storm canvas { display: block; width: 100%; height: 100%; }
+
+  .legal {
+    margin-top: 1.5rem;
+    font-size: .875rem;
+    line-height: 1.75rem;
+    color: var(--olive-500);
+  }
+  .legal-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .legal-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    text-align: center;
+  }
+  .legal nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .25rem 1rem;
+    color: var(--olive-400);
+  }
+  .legal nav a:hover { color: #d7d7d9; }
+
+  @media (min-width: 640px) {
+    .legal-row {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .legal-left {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+    }
+    .legal nav { justify-content: flex-start; }
+  }
+  @media (min-width: 768px) {
+    .wrap { max-width: 48rem; }
+    .cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .wrap { max-width: 80rem; padding: 0 2.5rem; }
+  }
+</style>
+<style data-threeui-focus>
+html, body { width: 100% !important; height: 100% !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; overflow: hidden !important; background: #0c0c0d !important; color-scheme: dark !important; }
+body { position: relative !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+body > * { visibility: hidden !important; }
+body[data-threeui-ready] > [data-threeui-role] { visibility: visible !important; }
+[data-threeui-residual] { display: none !important; }
+[data-threeui-hidden] { display: none !important; }
+[data-threeui-role="background"] { position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; z-index: 0 !important; opacity: 1 !important; pointer-events: none !important;  }
+[data-threeui-role="background"][data-threeui-fit="contain-square"] { position: absolute !important; top: 50% !important; right: auto !important; bottom: auto !important; left: 50% !important; width: min(100vw, 100vh) !important; height: min(100vw, 100vh) !important; aspect-ratio: 1 / 1 !important; transform: translate(-50%, -50%) !important; }
+[data-threeui-role="button"] { position: relative !important; z-index: 2 !important; opacity: 1 !important; flex: none !important; }
+[data-threeui-role="button"]:not([data-threeui-preserve-transform]) { transform: none !important; }
+[data-threeui-role="visual"] { position: relative !important; z-index: 1 !important; width: min(100%, 1040px) !important; max-width: 1040px !important; max-height: 100% !important; margin: auto !important; padding: 24px !important; overflow: auto !important; opacity: 1 !important; filter: none !important; }
+[data-threeui-role="visual"]:not([data-threeui-preserve-transform]) { transform: none !important; }
+[data-threeui-role="visual"][data-threeui-fit="contain-square"] { flex: none !important; width: min(calc(100vw - 32px), calc(100vh - 32px)) !important; max-width: none !important; height: min(calc(100vw - 32px), calc(100vh - 32px)) !important; max-height: none !important; aspect-ratio: 1 / 1 !important; padding: 0 !important; overflow: hidden !important; }
+[data-threeui-role="visual"][data-threeui-fit="wide-wordmark"] { width: min(calc(100vw - 48px), 1180px) !important; max-width: calc(100vw - 48px) !important; height: auto !important; max-height: none !important; aspect-ratio: 16 / 3 !important; padding: 0 !important; overflow: hidden !important; }
+[data-threeui-role="visual"][data-threeui-fit="portrait-stage"] { position: absolute !important; top: 50% !important; right: auto !important; bottom: auto !important; left: 50% !important; width: 1080px !important; max-width: none !important; height: 1350px !important; max-height: none !important; padding: 0 !important; overflow: hidden !important; transform-origin: center !important; }
+
+</style></head>
+<body>
+<footer id="footer">
+  <div class="inner">
+    <div class="wrap">
+      <nav class="cols" aria-label="Footer">
+        <div>
+          <h3>Product</h3>
+          <ul>
+            <li><a href="https://app.epilude.com">Download</a></li>
+            <li><a href="https://www.epilude.com/features/ai-smart-edits">AI Smart Edits</a></li>
+            <li><a href="https://www.epilude.com/features/tone-match">Tone Match</a></li>
+            <li><a href="https://www.epilude.com/features/vocabulary">Vocabulary</a></li>
+            <li><a href="https://www.epilude.com/features/shortcuts">Shortcuts</a></li>
+            <li><a href="https://www.epilude.com/features/actions">Actions</a></li>
+            <li><a href="https://www.epilude.com/features/privacy">Local Mode</a></li>
+            <li><a href="https://www.epilude.com/features/meetings">Meeting Notes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Solutions</h3>
+          <ul>
+            <li><a href="https://www.epilude.com/leaders">For Leaders</a></li>
+            <li><a href="https://www.epilude.com/lawyers">For Lawyers</a></li>
+            <li><a href="https://www.epilude.com/creators">For Content Creators</a></li>
+            <li><a href="https://www.epilude.com/developers">For Developers</a></li>
+            <li><a href="https://www.epilude.com/sales">For Sales</a></li>
+            <li><a href="https://www.epilude.com/students">For Students</a></li>
+            <li><a href="https://www.epilude.com/customer-support">For Customer Support</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Compare</h3>
+          <ul>
+            <li><a href="https://www.epilude.com/best-dictation-app-for-mac">Best dictation app for Mac</a></li>
+            <li><a href="https://www.epilude.com/compare/wispr-flow">Epilude vs Wispr Flow</a></li>
+            <li><a href="https://www.epilude.com/compare/superwhisper">Epilude vs Superwhisper</a></li>
+            <li><a href="https://www.epilude.com/compare/macwhisper">Epilude vs MacWhisper</a></li>
+            <li><a href="https://www.epilude.com/compare/aqua-voice">Epilude vs Aqua Voice</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="https://www.epilude.com/pricing">Pricing</a></li>
+            <li><a href="https://www.epilude.com/news">News</a></li>
+            <li><a href="https://www.epilude.com/help">Help Center</a></li>
+            <li><a href="https://www.epilude.com/help/changelog">Changelog</a></li>
+            <li><a href="https://www.epilude.com/trust">Trust &amp; Security</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="wrap storm-wrap" aria-hidden="true">
+      <div class="storm" id="storm">
+        <canvas id="storm-canvas"></canvas>
+      </div>
+    </div>
+
+    <div class="wrap legal">
+      <div class="legal-row">
+        <div class="legal-left">
+          <p>© 2026 Epilude. All rights reserved.</p>
+          <nav aria-label="Legal">
+            <a href="https://www.epilude.com/terms">Terms</a>
+            <a href="https://www.epilude.com/privacy">Privacy</a>
+            <a href="https://www.epilude.com/cookie-policy">Cookies</a>
+            <a href="https://www.epilude.com/refund">Refund</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var WORDMARK = "<svg width=\"1600\" height=\"300\" viewBox=\"0 0 1600 300\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n  <text x=\"800\" y=\"235\" text-anchor=\"middle\" fill=\"#F4F4F0\" font-family=\"'Helvetica Neue', Helvetica, Arial, sans-serif\" font-size=\"240\" font-weight=\"900\" letter-spacing=\"-8\">SHADERS</text>\n</svg>";
+
+  var PALETTE = [[255, 255, 255], [226, 232, 240], [191, 205, 225]];
+  var FORMATS = ["dot", "dot", "square"];
+  var SIZE_SMALL = [1.4, 2.8];
+  var SIZE_BIG = [3, 4.2];
+  var BIG_CHANCE = 0.07;
+  var GAP = 6;
+  var SPEED = 2;
+  var SEED = 1337;
+  var GAMMA = 0.8;
+  var DUR = 8;
+  var TAU = Math.PI * 2;
+
+  function noise(x, y, t) {
+    var a = x + 0.7 * Math.sin(1.2 * y + t);
+    var r = y + 0.7 * Math.cos(1.1 * x - t);
+    return (Math.sin(1.3 * a + 0.6 * t) + Math.cos(1.5 * r - 0.5 * t) + Math.sin((a + r) * 0.9 + 0.3 * t)) / 3;
+  }
+
+  function snowfall(p, t, n) {
+    var swirl = n.swirl ? n.swirl * noise(3 * p.nx, 3 * p.ny, 0.5 * t) : 0;
+    var sway = (n.sway || 0) * Math.sin(0.8 * t + p.offset * TAU + 4 * p.ny) + swirl;
+    var i = n.axis === "x" ? p.nx : p.ny;
+    var l = n.axis === "x" ? p.ny : p.nx;
+    var o = i * n.freq - t * n.fall + p.offset * n.freq + sway + (n.wind || 0) * l;
+    var s = o - Math.floor(o);
+    return s < n.trail ? 1 - s / n.trail : 0;
+  }
+
+  function squall(p, t) {
+    var band = 0.35 + 0.65 * Math.pow(0.5 + 0.5 * Math.sin(3 * p.nx - 0.5 * t), 2);
+    var flake = snowfall(p, t, { fall: 0.26, freq: 5, trail: 0.4, sway: 0.14, wind: 0.8 });
+    return {
+      a: 0.14 + 0.86 * band * Math.pow(flake, 1.8),
+      p: 0.7 * p.offset
+    };
+  }
+
+  function lerpRGB(a, b, t) {
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  }
+
+  function mixPalette(p) {
+    var e = Math.max(0, Math.min(1, p)) * (PALETTE.length - 1);
+    var r = Math.floor(e);
+    var s = e - r;
+    return lerpRGB(PALETTE[r], PALETTE[Math.min(PALETTE.length - 1, r + 1)], s);
+  }
+
+  var canvas = document.getElementById("storm-canvas");
+  var host = document.getElementById("storm");
+  var ctx = canvas.getContext("2d");
+  var particles = [];
+  var maskImg = null;
+  var maskReady = false;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var playing = !reduced;
+  var tNow = 0;
+  var t0 = performance.now();
+  var raf = 0;
+  var visible = true;
+
+  function lcg(seed) {
+    var e = seed >>> 0;
+    return function () {
+      e = (1664525 * e + 0x3c6ef35f) >>> 0;
+      return e / 0xffffffff;
+    };
+  }
+
+  function makeMask(w, h) {
+    if (!maskImg || !maskReady || !maskImg.width || !maskImg.height) return null;
+    var off = document.createElement("canvas");
+    off.width = w;
+    off.height = h;
+    var g = off.getContext("2d");
+    if (!g) return null;
+    var scale = Math.min(w / maskImg.width, h / maskImg.height);
+    var dw = maskImg.width * scale;
+    var dh = maskImg.height * scale;
+    g.drawImage(maskImg, (w - dw) / 2, (h - dh) / 2, dw, dh);
+    var data;
+    try { data = g.getImageData(0, 0, w, h).data; }
+    catch (e) { return null; }
+    return function (x, y) {
+      var ix = Math.min(w - 1, Math.max(0, Math.round(x)));
+      var iy = Math.min(h - 1, Math.max(0, Math.round(y)));
+      var i = (iy * w + ix) * 4;
+      var lum = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
+      return Math.pow(lum * (data[i + 3] / 255), GAMMA);
+    };
+  }
+
+  function rebuild() {
+    var w = host.clientWidth;
+    var h = host.clientHeight;
+    if (!w || !h) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.floor(w * dpr));
+    canvas.height = Math.max(1, Math.floor(h * dpr));
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var sample = makeMask(w, h);
+    var rand = lcg(SEED);
+    var cols = Math.ceil(w / GAP);
+    var rows = Math.ceil(h / GAP);
+    var ox = (w - (cols - 1) * GAP) / 2;
+    var oy = (h - (rows - 1) * GAP) / 2;
+    var cx = (cols - 1) / 2;
+    var cy = (rows - 1) / 2;
+    var maxd = Math.hypot(cx, cy) || 1;
+    particles = [];
+    for (var y = 0; y < rows; y++) {
+      for (var x = 0; x < cols; x++) {
+        var format = FORMATS[Math.floor(rand() * FORMATS.length)];
+        var range = rand() < BIG_CHANCE ? SIZE_BIG : SIZE_SMALL;
+        var size = range[0] + rand() * (range[1] - range[0]);
+        var px = ox + x * GAP;
+        var py = oy + y * GAP;
+        particles.push({
+          cx: px,
+          cy: py,
+          nx: cols > 1 ? x / (cols - 1) : 0.5,
+          ny: rows > 1 ? y / (rows - 1) : 0.5,
+          dist: Math.hypot(x - cx, y - cy) / maxd,
+          format: format,
+          size: size,
+          phase: rand() * Math.PI * 2,
+          speed: 0.6 + 2.6 * rand(),
+          offset: rand(),
+          mask: sample ? sample(px, py) : 1
+        });
+      }
+    }
+  }
+
+  function drawParticle(p, t) {
+    var field = squall(p, t);
+    var alpha = field.a;
+    var rgb = mixPalette(field.p);
+    alpha = Math.max(0, Math.min(1, alpha));
+    if (p.mask < 1) alpha = p.mask * (0.3 + 0.7 * alpha);
+    if (alpha <= 0.005) return;
+    ctx.fillStyle = "rgba(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + alpha + ")";
+    var hx = p.cx, hy = p.cy, d = p.size, r = d / 2;
+    if (p.format === "square") ctx.fillRect(hx - r, hy - r, d, d);
+    else {
+      ctx.beginPath();
+      ctx.arc(hx, hy, r, 0, TAU);
+      ctx.fill();
+    }
+  }
+
+  function render(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < particles.length; i++) drawParticle(particles[i], t);
+  }
+
+  function apply(t) {
+    tNow = ((t % DUR) + DUR) % DUR;
+    render(tNow * SPEED);
+  }
+
+  function tick(now) {
+    if (playing && visible) {
+      tNow = ((now - t0) / 1000) % DUR;
+      render(tNow * SPEED);
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function play() {
+    playing = true;
+    t0 = performance.now() - tNow * 1000;
+  }
+
+  function pause() {
+    playing = false;
+  }
+
+  var img = new Image();
+  img.onload = function () {
+    maskImg = img;
+    maskReady = true;
+    rebuild();
+    apply(tNow);
+  };
+  img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(WORDMARK);
+
+  rebuild();
+  apply(0);
+  raf = requestAnimationFrame(tick);
+
+  window.addEventListener("resize", function () {
+    rebuild();
+    apply(tNow);
+  });
+
+  if (typeof ResizeObserver !== "undefined") {
+    var lastW = host.clientWidth, lastH = host.clientHeight;
+    new ResizeObserver(function () {
+      if (host.clientWidth !== lastW || host.clientHeight !== lastH) {
+        lastW = host.clientWidth;
+        lastH = host.clientHeight;
+        rebuild();
+        apply(tNow);
+      }
+    }).observe(host);
+  }
+
+  if (typeof IntersectionObserver !== "undefined") {
+    new IntersectionObserver(function (entries) {
+      var on = entries[0] && entries[0].isIntersecting;
+      if (on === visible) return;
+      visible = !!on;
+      if (visible) t0 = performance.now() - tNow * 1000;
+    }, { rootMargin: "120px" }).observe(canvas);
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && playing) t0 = performance.now() - tNow * 1000;
+  });
+
+  window.__DUR = DUR;
+  window.__seek = function (t) { pause(); apply(t); };
+  window.__play = play;
+  window.__pause = pause;
+  window.__time = function () { return tNow; };
+})();
+</script>
+<script data-threeui-focus>
+(function () {
+  document.documentElement.dataset.sfMode = "dark";
+  var isolated = false;
+  function isolate() {
+    if (isolated) return;
+    var specs = [{"selector":"#storm","role":"visual","fit":"wide-wordmark"}];
+    var hiddenSelectors = [];
+    var introWordmark = null;
+    var roots = [];
+    hiddenSelectors.forEach(function (selector) {
+      document.querySelectorAll(selector).forEach(function (element) {
+        element.setAttribute('data-threeui-hidden', '');
+        element.setAttribute('aria-hidden', 'true');
+        if ('inert' in element) element.inert = true;
+      });
+    });
+    specs.forEach(function (spec) {
+      var element = document.querySelector(spec.selector);
+      if (!element) return;
+      element.setAttribute('data-threeui-role', spec.role);
+      if (spec.fit) element.setAttribute('data-threeui-fit', spec.fit);
+      if (spec.preserveTransform) element.setAttribute('data-threeui-preserve-transform', '');
+      if (!roots.some(function (root) { return root.contains(element); })) roots.push(element);
+    });
+    if (introWordmark) {
+      var introScene = document.querySelector(introWordmark.sceneSelector);
+      var introText = introScene && introScene.querySelector('.tx');
+      var introMark = introText && introText.querySelector('.mark');
+      if (introText && introMark) {
+        introMark.innerHTML = introWordmark.logoSvg;
+        var introCharacters = Array.from(introText.children).filter(function (element) { return element !== introMark; });
+        introCharacters.forEach(function (element, index) {
+          element.textContent = introWordmark.text[index] === ' ' ? ' ' : (introWordmark.text[index] || '');
+          element.style.display = index < introWordmark.text.length ? 'inline-block' : 'none';
+        });
+      }
+      var introReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var introStartedAt = performance.now();
+      function renderIntroWordmark(now) {
+        if (typeof window.__seek !== 'function') return;
+        if (introReducedMotion) {
+          window.__seek(introWordmark.endTime);
+          return;
+        }
+        var introCycle = introWordmark.endTime + introWordmark.holdTime;
+        var introTime = ((now - introStartedAt) / 1000) % introCycle;
+        window.__seek(Math.min(introTime, introWordmark.endTime));
+        requestAnimationFrame(renderIntroWordmark);
+      }
+      requestAnimationFrame(renderIntroWordmark);
+    }
+    if (!roots.length) return;
+    isolated = true;
+    roots.forEach(function (root) {
+      var placeholderLink = root.matches('a[href="#"]') ? root : root.querySelector('a[href="#"]');
+      if (placeholderLink) placeholderLink.addEventListener('click', function (event) { event.preventDefault(); });
+      document.body.appendChild(root);
+    });
+    Array.from(document.body.children).forEach(function (element) {
+      if (roots.indexOf(element) !== -1) return;
+      element.setAttribute('data-threeui-residual', '');
+      element.setAttribute('aria-hidden', 'true');
+      if ('inert' in element) element.inert = true;
+    });
+    document.body.setAttribute('data-threeui-ready', '');
+    requestAnimationFrame(function () { window.dispatchEvent(new Event('resize')); });
+  }
+  function scheduleIsolation() { setTimeout(isolate, 100); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleIsolation, { once: true });
+  else scheduleIsolation();
+  window.addEventListener('load', isolate, { once: true });
+})();
+</script><!--qml:start--><div id="qml-pill" style="position:fixed;left:12px;bottom:12px;z-index:2147483647;display:flex;gap:10px;align-items:center;padding:7px 11px;border-radius:999px;background:rgba(12,12,14,.74);color:#fff;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)"><a href="../index.html" onclick="if(history.length>1){history.back();return false}" style="color:#fff;text-decoration:none;font-weight:700">← 모션랩</a><span style="opacity:.72">ThreeUI Community · MIT © Meng To</span></div><script>if(/embed/.test(location.hash))document.getElementById("qml-pill").style.display="none";</script><!--qml:end--></body>
+</html>
