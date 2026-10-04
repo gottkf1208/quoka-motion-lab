@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<!--
+ThreeUI Community — Predictive Arc — Amber Halftone
+Source: https://github.com/MengTo/threeui · https://threeui.com
+
+MIT License
+
+Copyright (c) 2026 Meng To
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+보관: 쿼카 모션랩 (2026-10-04). 원본 컴포넌트가 화면에 그리는 최종 문서를 그대로 저장했습니다.
+원본과 달라진 점: 아이콘 스크립트(Iconify, MIT)와 아이콘 자료(Solar, CC BY 4.0 · 480 Design)를 문서 안에 넣음; 원격 이미지·영상(MIT 범위 밖)은 빈 자리로 둠
+-->
+<html lang="en">
+<head><script data-threeui-controls>
+(function () {
+  var controls = {"mode":"dark","speed":1,"size":1,"gap":2,"length":1,"density":1,"strokeWidth":1,"opacity":1};
+  window.__SF_CONTROLS = controls;
+  var origin = performance.now();
+  var virtual = 0;
+  var last = origin;
+  var performanceNow = performance.now.bind(performance);
+  var dateNow = Date.now.bind(Date);
+  var dateOrigin = dateNow();
+  performance.now = function () {
+    var real = performanceNow();
+    virtual += (real - last) * (controls.speed || 1);
+    last = real;
+    return origin + virtual;
+  };
+  Date.now = function () {
+    return dateOrigin + (performance.now() - origin);
+  };
+  var raf = window.requestAnimationFrame.bind(window);
+  window.requestAnimationFrame = function (callback) {
+    return raf(function () {
+      callback(performance.now());
+    });
+  };
+  function applyVisual() {
+    var opacity = controls.opacity == null ? 1 : controls.opacity;
+    var size = controls.size == null ? 1 : controls.size;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-threeui-role]'), function (element) {
+      element.style.opacity = String(opacity);
+      if (element.getAttribute('data-threeui-role') === 'ui') {
+        element.style.transform = 'scale(' + size + ')';
+        element.style.transformOrigin = 'center center';
+      }
+    });
+  }
+  window.addEventListener('message', function (event) {
+    if (!event.data || event.data.type !== 'threeui-controls') return;
+    var next = event.data.controls || {};
+    Object.keys(next).forEach(function (key) { controls[key] = next[key]; });
+    applyVisual();
+  });
+  window.__SF_APPLY_CONTROLS = applyVisual;
+})();
+</script><style data-threeui-focus>
+html, body { width: 100% !important; height: 100% !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; overflow: hidden !important; background: #0A0A0A !important; }
+body { position: relative !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+body > * { visibility: hidden !important; }
+body[data-threeui-ready] > [data-threeui-role] { visibility: visible !important; }
+[data-threeui-residual] { display: none !important; }
+[data-threeui-role="background"] { position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; z-index: 0 !important; opacity: 1 !important; pointer-events: none !important; }
+[data-threeui-role="ui"] { position: relative !important; z-index: 1 !important; width: min(calc(100% - 32px), var(--threeui-target-width, 1040px)) !important; max-width: none !important; max-height: calc(100% - 32px) !important; margin: auto !important; overflow: auto !important; opacity: 1 !important; transform: none !important; filter: none !important; flex: none !important; box-sizing: border-box !important; }
+
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis Security - Remixed Bento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>/* 보관용: 아이콘 자료를 문서에 담아 두고, 아이콘 서버 요청에 이 자료로 답합니다 */(function(){var S={"/solar.json": {"prefix": "solar", "lastModified": 1790422589, "aliases": {}, "width": 24, "height": 24, "icons": {"shield-network-linear": {"body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><path d=\"M3 10.4167C3 7.21907 3 5.62028 3.37752 5.08241C3.75503 4.54454 5.25832 4.02996 8.26491 3.00079L8.83772 2.80472C10.405 2.26824 11.1886 2 12 2C12.8114 2 13.595 2.26824 15.1623 2.80472L15.7351 3.00079C18.7417 4.02996 20.245 4.54454 20.6225 5.08241C21 5.62028 21 7.21907 21 10.4167C21 10.8996 21 11.4234 21 11.9914C21 17.6294 16.761 20.3655 14.1014 21.5273C13.38 21.8424 13.0193 22 12 22C10.9807 22 10.62 21.8424 9.89856 21.5273C7.23896 20.3655 3 17.6294 3 11.9914C3 11.4234 3 10.8996 3 10.4167Z\"/><path d=\"M17 12C17 12.6566 16.8707 13.3068 16.6194 13.9134C16.3681 14.52 15.9998 15.0712 15.5355 15.5355C15.0712 15.9998 14.52 16.3681 13.9134 16.6194C13.3068 16.8707 12.6566 17 12 17C11.3434 17 10.6932 16.8707 10.0866 16.6194C9.47995 16.3681 8.92876 15.9998 8.46447 15.5355C8.00017 15.0712 7.63188 14.52 7.3806 13.9134C7.12933 13.3068 7 12.6566 7 12C7 11.3434 7.12933 10.6932 7.3806 10.0866C7.63188 9.47995 8.00017 8.92876 8.46447 8.46447C8.92876 8.00017 9.47996 7.63188 10.0866 7.3806C10.6932 7.12933 11.3434 7 12 7C12.6566 7 13.3068 7.12933 13.9134 7.3806C14.52 7.63188 15.0712 8.00017 15.5355 8.46447C15.9998 8.92876 16.3681 9.47996 16.6194 10.0866C16.8707 10.6932 17 11.3434 17 12L17 12Z\"/><path d=\"M13.8478 13.9134C13.9483 13.3068 14 12.6566 14 12C14 11.3434 13.9483 10.6932 13.8478 10.0866C13.7472 9.47996 13.5999 8.92876 13.4142 8.46447C13.2285 8.00017 13.008 7.63188 12.7654 7.3806C12.5227 7.12933 12.2626 7 12 7C11.7374 7 11.4773 7.12933 11.2346 7.3806C10.992 7.63188 10.7715 8.00017 10.5858 8.46447C10.4001 8.92876 10.2528 9.47995 10.1522 10.0866C10.0517 10.6932 10 11.3434 10 12C10 12.6566 10.0517 13.3068 10.1522 13.9134C10.2527 14.52 10.4001 15.0712 10.5858 15.5355C10.7715 15.9998 10.992 16.3681 11.2346 16.6194C11.4773 16.8707 11.7374 17 12 17C12.2626 17 12.5227 16.8707 12.7654 16.6194C13.008 16.3681 13.2285 15.9998 13.4142 15.5355C13.5999 15.0712 13.7472 14.52 13.8478 13.9134Z\"/><path d=\"M7 12H17\"/><\/g>"}}}};var f=window.fetch;window.fetch=function(u,o){try{var a=new URL(typeof u==="string"?u:u.url,location.href);if(a.hostname==="api.iconify.design"&&S[a.pathname])return Promise.resolve(new Response(JSON.stringify(S[a.pathname]),{status:200,headers:{"Content-Type":"application/json"}}));}catch(e){}return f.apply(this,arguments);};})();</script><script>/**
+* (c) Iconify
+*
+* For the full copyright and license information, please view the license.txt
+* files at https://github.com/iconify/iconify
+*
+* Licensed under MIT.
+*
+* @license MIT
+* @version 1.0.7
+*/
+!function(){"use strict";const t=Object.freeze({left:0,top:0,width:16,height:16}),e=Object.freeze({rotate:0,vFlip:!1,hFlip:!1}),n=Object.freeze({...t,...e}),o=Object.freeze({...n,body:"",hidden:!1}),i=Object.freeze({width:null,height:null}),r=Object.freeze({...i,...e});const s=/[\s,]+/;const c={...r,preserveAspectRatio:""};function a(t){const e={...c},n=(e,n)=>t.getAttribute(e)||n;var o;return e.width=n("width",null),e.height=n("height",null),e.rotate=function(t,e=0){const n=t.replace(/^-?[0-9.]*/,"");function o(t){for(;t<0;)t+=4;return t%4}if(""===n){const e=parseInt(t);return isNaN(e)?0:o(e)}if(n!==t){let e=0;switch(n){case"%":e=25;break;case"deg":e=90}if(e){let i=parseFloat(t.slice(0,t.length-n.length));return isNaN(i)?0:(i/=e,i%1==0?o(i):0)}}return e}(n("rotate","")),o=e,n("flip","").split(s).forEach((t=>{switch(t.trim()){case"horizontal":o.hFlip=!0;break;case"vertical":o.vFlip=!0}})),e.preserveAspectRatio=n("preserveAspectRatio",n("preserveaspectratio","")),e}const u=/^[a-z0-9]+(-[a-z0-9]+)*$/,l=(t,e,n,o="")=>{const i=t.split(":");if("@"===t.slice(0,1)){if(i.length<2||i.length>3)return null;o=i.shift().slice(1)}if(i.length>3||!i.length)return null;if(i.length>1){const t=i.pop(),n=i.pop(),r={provider:i.length>0?i[0]:o,prefix:n,name:t};return e&&!f(r)?null:r}const r=i[0],s=r.split("-");if(s.length>1){const t={provider:o,prefix:s.shift(),name:s.join("-")};return e&&!f(t)?null:t}if(n&&""===o){const t={provider:o,prefix:"",name:r};return e&&!f(t,n)?null:t}return null},f=(t,e)=>!!t&&!(""!==t.provider&&!t.provider.match(u)||!(e&&""===t.prefix||t.prefix.match(u))||!t.name.match(u));function d(t,n){const i=function(t,e){const n={};!t.hFlip!=!e.hFlip&&(n.hFlip=!0),!t.vFlip!=!e.vFlip&&(n.vFlip=!0);const o=((t.rotate||0)+(e.rotate||0))%4;return o&&(n.rotate=o),n}(t,n);for(const r in o)r in e?r in t&&!(r in i)&&(i[r]=e[r]):r in n?i[r]=n[r]:r in t&&(i[r]=t[r]);return i}function h(t,e,n){const o=t.icons,i=t.aliases||Object.create(null);let r={};function s(t){r=d(o[t]||i[t],r)}return s(e),n.forEach(s),d(t,r)}function p(t,e){const n=[];if("object"!=typeof t||"object"!=typeof t.icons)return n;t.not_found instanceof Array&&t.not_found.forEach((t=>{e(t,null),n.push(t)}));const o=function(t,e){const n=t.icons,o=t.aliases||Object.create(null),i=Object.create(null);return(e||Object.keys(n).concat(Object.keys(o))).forEach((function t(e){if(n[e])return i[e]=[];if(!(e in i)){i[e]=null;const n=o[e]&&o[e].parent,r=n&&t(n);r&&(i[e]=[n].concat(r))}return i[e]})),i}(t);for(const i in o){const r=o[i];r&&(e(i,h(t,i,r)),n.push(i))}return n}const g={provider:"",aliases:{},not_found:{},...t};function m(t,e){for(const n in e)if(n in t&&typeof t[n]!=typeof e[n])return!1;return!0}function b(t){if("object"!=typeof t||null===t)return null;const e=t;if("string"!=typeof e.prefix||!t.icons||"object"!=typeof t.icons)return null;if(!m(t,g))return null;const n=e.icons;for(const t in n){const e=n[t];if(!t.match(u)||"string"!=typeof e.body||!m(e,o))return null}const i=e.aliases||Object.create(null);for(const t in i){const e=i[t],r=e.parent;if(!t.match(u)||"string"!=typeof r||!n[r]&&!i[r]||!m(e,o))return null}return e}const y=Object.create(null);function v(t,e){const n=y[t]||(y[t]=Object.create(null));return n[e]||(n[e]=function(t,e){return{provider:t,prefix:e,icons:Object.create(null),missing:new Set}}(t,e))}function x(t,e){return b(e)?p(e,((e,n)=>{n?t.icons[e]=n:t.missing.add(e)})):[]}function w(t,e){let n=[];return("string"==typeof t?[t]:Object.keys(y)).forEach((t=>{("string"==typeof t&&"string"==typeof e?[e]:Object.keys(y[t]||{})).forEach((e=>{const o=v(t,e);n=n.concat(Object.keys(o.icons).map((n=>(""!==t?"@"+t+":":"")+e+":"+n)))}))})),n}let k=!1;function j(t){return"boolean"==typeof t&&(k=t),k}function A(t){const e="string"==typeof t?l(t,!0,k):t;if(e){const t=v(e.provider,e.prefix),n=e.name;return t.icons[n]||(t.missing.has(n)?null:void 0)}}function _(t,e){const n=l(t,!0,k);if(!n)return!1;return function(t,e,n){try{if("string"==typeof n.body)return t.icons[e]={...n},!0}catch(t){}return!1}(v(n.provider,n.prefix),n.name,e)}function C(t,e){if("object"!=typeof t)return!1;if("string"!=typeof e&&(e=t.provider||""),k&&!e&&!t.prefix){let e=!1;return b(t)&&(t.prefix="",p(t,((t,n)=>{n&&_(t,n)&&(e=!0)}))),e}const n=t.prefix;if(!f({provider:e,prefix:n,name:"a"}))return!1;return!!x(v(e,n),t)}function O(t){return!!A(t)}function S(t){const e=A(t);return e?{...n,...e}:null}function I(t,e){t.forEach((t=>{const n=t.loaderCallbacks;n&&(t.loaderCallbacks=n.filter((t=>t.id!==e)))}))}let E=0;const M=Object.create(null);function T(t,e){M[t]=e}function F(t){return M[t]||M[""]}var N={resources:[],index:0,timeout:2e3,rotate:750,random:!1,dataAfterTimeout:!1};function P(t,e,n,o){const i=t.resources.length,r=t.random?Math.floor(Math.random()*i):t.index;let s;if(t.random){let e=t.resources.slice(0);for(s=[];e.length>1;){const t=Math.floor(Math.random()*e.length);s.push(e[t]),e=e.slice(0,t).concat(e.slice(t+1))}s=s.concat(e)}else s=t.resources.slice(r).concat(t.resources.slice(0,r));const c=Date.now();let a,u="pending",l=0,f=null,d=[],h=[];function p(){f&&(clearTimeout(f),f=null)}function g(){"pending"===u&&(u="aborted"),p(),d.forEach((t=>{"pending"===t.status&&(t.status="aborted")})),d=[]}function m(t,e){e&&(h=[]),"function"==typeof t&&h.push(t)}function b(){u="failed",h.forEach((t=>{t(void 0,a)}))}function y(){d.forEach((t=>{"pending"===t.status&&(t.status="aborted")})),d=[]}function v(){if("pending"!==u)return;p();const o=s.shift();if(void 0===o)return d.length?void(f=setTimeout((()=>{p(),"pending"===u&&(y(),b())}),t.timeout)):void b();const i={status:"pending",resource:o,callback:(e,n)=>{!function(e,n,o){const i="success"!==n;switch(d=d.filter((t=>t!==e)),u){case"pending":break;case"failed":if(i||!t.dataAfterTimeout)return;break;default:return}if("abort"===n)return a=o,void b();if(i)return a=o,void(d.length||(s.length?v():b()));if(p(),y(),!t.random){const n=t.resources.indexOf(e.resource);-1!==n&&n!==t.index&&(t.index=n)}u="completed",h.forEach((t=>{t(o)}))}(i,e,n)}};d.push(i),l++,f=setTimeout(v,t.rotate),n(o,e,i.callback)}return"function"==typeof o&&h.push(o),setTimeout(v),function(){return{startTime:c,payload:e,status:u,queriesSent:l,queriesPending:d.length,subscribe:m,abort:g}}}function R(t){const e={...N,...t};let n=[];function o(){n=n.filter((t=>"pending"===t().status))}return{query:function(t,i,r){const s=P(e,t,i,((t,e)=>{o(),r&&r(t,e)}));return n.push(s),s},find:function(t){return n.find((e=>t(e)))||null},setIndex:t=>{e.index=t},getIndex:()=>e.index,cleanup:o}}function L(t){let e;if("string"==typeof t.resources)e=[t.resources];else if(e=t.resources,!(e instanceof Array&&e.length))return null;return{resources:e,path:t.path||"/",maxURL:t.maxURL||500,rotate:t.rotate||750,timeout:t.timeout||5e3,random:!0===t.random,index:t.index||0,dataAfterTimeout:!1!==t.dataAfterTimeout}}const z=Object.create(null),Q=["https://api.simplesvg.com","https://api.unisvg.com"],q=[];for(;Q.length>0;)1===Q.length||Math.random()>.5?q.push(Q.shift()):q.push(Q.pop());function D(t,e){const n=L(e);return null!==n&&(z[t]=n,!0)}function U(t){return z[t]}function J(){return Object.keys(z)}function $(){}z[""]=L({resources:["https://api.iconify.design"].concat(q)});const H=Object.create(null);function B(t,e,n){let o,i;if("string"==typeof t){const e=F(t);if(!e)return n(void 0,424),$;i=e.send;const r=function(t){if(!H[t]){const e=U(t);if(!e)return;const n={config:e,redundancy:R(e)};H[t]=n}return H[t]}(t);r&&(o=r.redundancy)}else{const e=L(t);if(e){o=R(e);const n=F(t.resources?t.resources[0]:"");n&&(i=n.send)}}return o&&i?o.query(e,i,n)().abort:(n(void 0,424),$)}const G="iconify2",V="iconify",K=V+"-count",W=V+"-version",X=36e5;function Y(t,e){try{return t.getItem(e)}catch(t){}}function Z(t,e,n){try{return t.setItem(e,n),!0}catch(t){}}function tt(t,e){try{t.removeItem(e)}catch(t){}}function et(t,e){return Z(t,K,e.toString())}function nt(t){return parseInt(Y(t,K))||0}const ot={local:!0,session:!0},it={local:new Set,session:new Set};let rt=!1;let st="undefined"==typeof window?{}:window;function ct(t){const e=t+"Storage";try{if(st&&st[e]&&"number"==typeof st[e].length)return st[e]}catch(t){}ot[t]=!1}function at(t,e){const n=ct(t);if(!n)return;const o=Y(n,W);if(o!==G){if(o){const t=nt(n);for(let e=0;e<t;e++)tt(n,V+e.toString())}return Z(n,W,G),void et(n,0)}const i=Math.floor(Date.now()/X)-168,r=t=>{const o=V+t.toString(),r=Y(n,o);if("string"==typeof r){try{const n=JSON.parse(r);if("object"==typeof n&&"number"==typeof n.cached&&n.cached>i&&"string"==typeof n.provider&&"object"==typeof n.data&&"string"==typeof n.data.prefix&&e(n,t))return!0}catch(t){}tt(n,o)}};let s=nt(n);for(let e=s-1;e>=0;e--)r(e)||(e===s-1?(s--,et(n,s)):it[t].add(e))}function ut(){if(!rt){rt=!0;for(const t in ot)at(t,(t=>{const e=t.data,n=v(t.provider,e.prefix);if(!x(n,e).length)return!1;const o=e.lastModified||-1;return n.lastModifiedCached=n.lastModifiedCached?Math.min(n.lastModifiedCached,o):o,!0}))}}function lt(t,e){function n(n){let o;if(!ot[n]||!(o=ct(n)))return;const i=it[n];let r;if(i.size)i.delete(r=Array.from(i).shift());else if(r=nt(o),!et(o,r+1))return;const s={cached:Math.floor(Date.now()/X),provider:t.provider,data:e};return Z(o,V+r.toString(),JSON.stringify(s))}rt||ut(),e.lastModified&&!function(t,e){const n=t.lastModifiedCached;if(n&&n>=e)return n===e;if(t.lastModifiedCached=e,n)for(const n in ot)at(n,(n=>{const o=n.data;return n.provider!==t.provider||o.prefix!==t.prefix||o.lastModified===e}));return!0}(t,e.lastModified)||Object.keys(e.icons).length&&(e.not_found&&delete(e=Object.assign({},e)).not_found,n("local")||n("session"))}function ft(){}function dt(t){t.iconsLoaderFlag||(t.iconsLoaderFlag=!0,setTimeout((()=>{t.iconsLoaderFlag=!1,function(t){t.pendingCallbacksFlag||(t.pendingCallbacksFlag=!0,setTimeout((()=>{t.pendingCallbacksFlag=!1;const e=t.loaderCallbacks?t.loaderCallbacks.slice(0):[];if(!e.length)return;let n=!1;const o=t.provider,i=t.prefix;e.forEach((e=>{const r=e.icons,s=r.pending.length;r.pending=r.pending.filter((e=>{if(e.prefix!==i)return!0;const s=e.name;if(t.icons[s])r.loaded.push({provider:o,prefix:i,name:s});else{if(!t.missing.has(s))return n=!0,!0;r.missing.push({provider:o,prefix:i,name:s})}return!1})),r.pending.length!==s&&(n||I([t],e.id),e.callback(r.loaded.slice(0),r.missing.slice(0),r.pending.slice(0),e.abort))}))})))}(t)})))}const ht=(t,e)=>{const n=function(t,e=!0,n=!1){const o=[];return t.forEach((t=>{const i="string"==typeof t?l(t,e,n):t;i&&o.push(i)})),o}(t,!0,j()),o=function(t){const e={loaded:[],missing:[],pending:[]},n=Object.create(null);t.sort(((t,e)=>t.provider!==e.provider?t.provider.localeCompare(e.provider):t.prefix!==e.prefix?t.prefix.localeCompare(e.prefix):t.name.localeCompare(e.name)));let o={provider:"",prefix:"",name:""};return t.forEach((t=>{if(o.name===t.name&&o.prefix===t.prefix&&o.provider===t.provider)return;o=t;const i=t.provider,r=t.prefix,s=t.name,c=n[i]||(n[i]=Object.create(null)),a=c[r]||(c[r]=v(i,r));let u;u=s in a.icons?e.loaded:""===r||a.missing.has(s)?e.missing:e.pending;const l={provider:i,prefix:r,name:s};u.push(l)})),e}(n);if(!o.pending.length){let t=!0;return e&&setTimeout((()=>{t&&e(o.loaded,o.missing,o.pending,ft)})),()=>{t=!1}}const i=Object.create(null),r=[];let s,c;return o.pending.forEach((t=>{const{provider:e,prefix:n}=t;if(n===c&&e===s)return;s=e,c=n,r.push(v(e,n));const o=i[e]||(i[e]=Object.create(null));o[n]||(o[n]=[])})),o.pending.forEach((t=>{const{provider:e,prefix:n,name:o}=t,r=v(e,n),s=r.pendingIcons||(r.pendingIcons=new Set);s.has(o)||(s.add(o),i[e][n].push(o))})),r.forEach((t=>{const{provider:e,prefix:n}=t;i[e][n].length&&function(t,e){t.iconsToLoad?t.iconsToLoad=t.iconsToLoad.concat(e).sort():t.iconsToLoad=e,t.iconsQueueFlag||(t.iconsQueueFlag=!0,setTimeout((()=>{t.iconsQueueFlag=!1;const{provider:e,prefix:n}=t,o=t.iconsToLoad;let i;delete t.iconsToLoad,o&&(i=F(e))&&i.prepare(e,n,o).forEach((n=>{B(e,n,(e=>{if("object"!=typeof e)n.icons.forEach((e=>{t.missing.add(e)}));else try{const n=x(t,e);if(!n.length)return;const o=t.pendingIcons;o&&n.forEach((t=>{o.delete(t)})),lt(t,e)}catch(t){console.error(t)}dt(t)}))}))})))}(t,i[e][n])})),e?function(t,e,n){const o=E++,i=I.bind(null,n,o);if(!e.pending.length)return i;const r={id:o,icons:e,callback:t,abort:i};return n.forEach((t=>{(t.loaderCallbacks||(t.loaderCallbacks=[])).push(r)})),i}(e,o,r):ft},pt=t=>new Promise(((e,o)=>{const i="string"==typeof t?l(t,!0):t;i?ht([i||t],(r=>{if(r.length&&i){const t=A(i);if(t)return void e({...n,...t})}o(t)})):o(t)}));function gt(t,e){const n="string"==typeof t?l(t,!0,!0):null;if(!n){const e=function(t){try{const e="string"==typeof t?JSON.parse(t):t;if("string"==typeof e.body)return{...e}}catch(t){}}(t);return{value:t,data:e}}const o=A(n);if(void 0!==o||!n.prefix)return{value:t,name:n,data:o};const i=ht([n],(()=>e(t,n,A(n))));return{value:t,name:n,loading:i}}function mt(t){return t.hasAttribute("inline")}let bt=!1;try{bt=0===navigator.vendor.indexOf("Apple")}catch(t){}const yt=/(-?[0-9.]*[0-9]+[0-9.]*)/g,vt=/^-?[0-9.]*[0-9]+[0-9.]*$/g;function xt(t,e,n){if(1===e)return t;if(n=n||100,"number"==typeof t)return Math.ceil(t*e*n)/n;if("string"!=typeof t)return t;const o=t.split(yt);if(null===o||!o.length)return t;const i=[];let r=o.shift(),s=vt.test(r);for(;;){if(s){const t=parseFloat(r);isNaN(t)?i.push(r):i.push(Math.ceil(t*e*n)/n)}else i.push(r);if(r=o.shift(),void 0===r)return i.join("");s=!s}}function wt(t,e){const o={...n,...t},i={...r,...e},s={left:o.left,top:o.top,width:o.width,height:o.height};let c=o.body;[o,i].forEach((t=>{const e=[],n=t.hFlip,o=t.vFlip;let i,r=t.rotate;switch(n?o?r+=2:(e.push("translate("+(s.width+s.left).toString()+" "+(0-s.top).toString()+")"),e.push("scale(-1 1)"),s.top=s.left=0):o&&(e.push("translate("+(0-s.left).toString()+" "+(s.height+s.top).toString()+")"),e.push("scale(1 -1)"),s.top=s.left=0),r<0&&(r-=4*Math.floor(r/4)),r%=4,r){case 1:i=s.height/2+s.top,e.unshift("rotate(90 "+i.toString()+" "+i.toString()+")");break;case 2:e.unshift("rotate(180 "+(s.width/2+s.left).toString()+" "+(s.height/2+s.top).toString()+")");break;case 3:i=s.width/2+s.left,e.unshift("rotate(-90 "+i.toString()+" "+i.toString()+")")}r%2==1&&(s.left!==s.top&&(i=s.left,s.left=s.top,s.top=i),s.width!==s.height&&(i=s.width,s.width=s.height,s.height=i)),e.length&&(c='<g transform="'+e.join(" ")+'">'+c+"</g>")}));const a=i.width,u=i.height,l=s.width,f=s.height;let d,h;null===a?(h=null===u?"1em":"auto"===u?f:u,d=xt(h,l/f)):(d="auto"===a?l:a,h=null===u?xt(d,f/l):"auto"===u?f:u);const p={},g=(t,e)=>{(t=>"unset"===t||"undefined"===t||"none"===t)(e)||(p[t]=e.toString())};return g("width",d),g("height",h),p.viewBox=s.left.toString()+" "+s.top.toString()+" "+l.toString()+" "+f.toString(),{attributes:p,body:c}}let kt=(()=>{let t;try{if(t=fetch,"function"==typeof t)return t}catch(t){}})();function jt(t){kt=t}function At(){return kt}const _t={prepare:(t,e,n)=>{const o=[],i=function(t,e){const n=U(t);if(!n)return 0;let o;if(n.maxURL){let t=0;n.resources.forEach((e=>{const n=e;t=Math.max(t,n.length)}));const i=e+".json?icons=";o=n.maxURL-t-n.path.length-i.length}else o=0;return o}(t,e),r="icons";let s={type:r,provider:t,prefix:e,icons:[]},c=0;return n.forEach(((n,a)=>{c+=n.length+1,c>=i&&a>0&&(o.push(s),s={type:r,provider:t,prefix:e,icons:[]},c=n.length),s.icons.push(n)})),o.push(s),o},send:(t,e,n)=>{if(!kt)return void n("abort",424);let o=function(t){if("string"==typeof t){const e=U(t);if(e)return e.path}return"/"}(e.provider);switch(e.type){case"icons":{const t=e.prefix,n=e.icons.join(",");o+=t+".json?"+new URLSearchParams({icons:n}).toString();break}case"custom":{const t=e.uri;o+="/"===t.slice(0,1)?t.slice(1):t;break}default:return void n("abort",400)}let i=503;kt(t+o).then((t=>{const e=t.status;if(200===e)return i=501,t.json();setTimeout((()=>{n(function(t){return 404===t}(e)?"abort":"next",e)}))})).then((t=>{"object"==typeof t&&null!==t?setTimeout((()=>{n("success",t)})):setTimeout((()=>{404===t?n("abort",t):n("next",i)}))})).catch((()=>{n("next",i)}))}};function Ct(t,e){switch(t){case"local":case"session":ot[t]=e;break;case"all":for(const t in ot)ot[t]=e}}const Ot="data-style";let St="";function It(t){St=t}function Et(t,e){let n=Array.from(t.childNodes).find((t=>t.hasAttribute&&t.hasAttribute(Ot)));n||(n=document.createElement("style"),n.setAttribute(Ot,Ot),t.appendChild(n)),n.textContent=":host{display:inline-block;vertical-align:"+(e?"-0.125em":"0")+"}span,svg{display:block}"+St}function Mt(t,e){let n=-1===t.indexOf("xlink:")?"":' xmlns:xlink="http://www.w3.org/1999/xlink"';for(const t in e)n+=" "+t+'="'+e[t]+'"';return'<svg xmlns="http://www.w3.org/2000/svg"'+n+">"+t+"</svg>"}const Tt={"background-color":"currentColor"},Ft={"background-color":"transparent"},Nt={image:"var(--svg)",repeat:"no-repeat",size:"100% 100%"},Pt={"-webkit-mask":Tt,mask:Tt,background:Ft};for(const t in Pt){const e=Pt[t];for(const n in Nt)e[t+"-"+n]=Nt[n]}function Rt(t){return t?t+(t.match(/^[-0-9.]+$/)?"px":""):"inherit"}function Lt(t,e){const o=e.icon.data,i=e.customisations,r=wt(o,i);i.preserveAspectRatio&&(r.attributes.preserveAspectRatio=i.preserveAspectRatio);const s=e.renderedMode;let c;if("svg"===s)c=function(t){const e=document.createElement("span"),n=t.attributes;let o="";return n.width||(o="width: inherit;"),n.height||(o+="height: inherit;"),o&&(n.style=o),e.innerHTML=Mt(t.body,n),e.firstChild}(r);else c=function(t,e,n){const o=document.createElement("span");let i=t.body;-1!==i.indexOf("<a")&&(i+="\x3c!-- "+Date.now()+" --\x3e");const r=t.attributes,s='url("'+(u=Mt(i,{...r,width:e.width+"",height:e.height+""}),"data:image/svg+xml,"+function(t){return t.replace(/"/g,"'").replace(/%/g,"%25").replace(/#/g,"%23").replace(/</g,"%3C").replace(/>/g,"%3E").replace(/\s+/g," ")}(u)+'")'),c=o.style,a={"--svg":s,width:Rt(r.width),height:Rt(r.height),...n?Tt:Ft};var u;for(const t in a)c.setProperty(t,a[t]);return o}(r,{...n,...o},"mask"===s);const a=Array.from(t.childNodes).find((t=>{const e=t.tagName&&t.tagName.toUpperCase();return"SPAN"===e||"SVG"===e}));a?"SPAN"===c.tagName&&a.tagName===c.tagName?a.setAttribute("style",c.getAttribute("style")):t.replaceChild(c,a):t.appendChild(c)}function zt(t,e,n){return{rendered:!1,inline:e,icon:t,lastRender:n&&(n.rendered?n:n.lastRender)}}!function(t="iconify-icon"){let e,n;try{e=window.customElements,n=window.HTMLElement}catch(t){return}if(!e||!n)return;const o=e.get(t);if(o)return o;const i=["icon","mode","inline","width","height","rotate","flip"],r=class extends n{_shadowRoot;_state;_checkQueued=!1;constructor(){super();const t=this._shadowRoot=this.attachShadow({mode:"open"}),e=mt(this);Et(t,e),this._state=zt({value:""},e),this._queueCheck()}static get observedAttributes(){return i.slice(0)}attributeChangedCallback(t){if("inline"===t){const t=mt(this),e=this._state;t!==e.inline&&(e.inline=t,Et(this._shadowRoot,t))}else this._queueCheck()}get icon(){const t=this.getAttribute("icon");if(t&&"{"===t.slice(0,1))try{return JSON.parse(t)}catch(t){}return t}set icon(t){"object"==typeof t&&(t=JSON.stringify(t)),this.setAttribute("icon",t)}get inline(){return mt(this)}set inline(t){t?this.setAttribute("inline","true"):this.removeAttribute("inline")}restartAnimation(){const t=this._state;if(t.rendered){const e=this._shadowRoot;if("svg"===t.renderedMode)try{return void e.lastChild.setCurrentTime(0)}catch(t){}Lt(e,t)}}get status(){const t=this._state;return t.rendered?"rendered":null===t.icon.data?"failed":"loading"}_queueCheck(){this._checkQueued||(this._checkQueued=!0,setTimeout((()=>{this._check()})))}_check(){if(!this._checkQueued)return;this._checkQueued=!1;const t=this._state,e=this.getAttribute("icon");if(e!==t.icon.value)return void this._iconChanged(e);if(!t.rendered)return;const n=this.getAttribute("mode"),o=a(this);(t.attrMode!==n||function(t,e){for(const n in c)if(t[n]!==e[n])return!0;return!1}(t.customisations,o))&&this._renderIcon(t.icon,o,n)}_iconChanged(t){const e=gt(t,((t,e,n)=>{const o=this._state;if(o.rendered||this.getAttribute("icon")!==t)return;const i={value:t,name:e,data:n};i.data?this._gotIconData(i):o.icon=i}));e.data?this._gotIconData(e):this._state=zt(e,this._state.inline,this._state)}_gotIconData(t){this._checkQueued=!1,this._renderIcon(t,a(this),this.getAttribute("mode"))}_renderIcon(t,e,n){const o=function(t,e){switch(e){case"svg":case"bg":case"mask":return e}return"style"===e||!bt&&-1!==t.indexOf("<a")?-1===t.indexOf("currentColor")?"bg":"mask":"svg"}(t.data.body,n),i=this._state.inline;Lt(this._shadowRoot,this._state={rendered:!0,icon:t,inline:i,customisations:e,attrMode:n,renderedMode:o})}};i.forEach((t=>{t in r.prototype||Object.defineProperty(r.prototype,t,{get:function(){return this.getAttribute(t)},set:function(e){null!==e?this.setAttribute(t,e):this.removeAttribute(t)}})}));const s=function(){let t;T("",_t),j(!0);try{t=window}catch(t){}if(t){if(ut(),void 0!==t.IconifyPreload){const e=t.IconifyPreload,n="Invalid IconifyPreload syntax.";"object"==typeof e&&null!==e&&(e instanceof Array?e:[e]).forEach((t=>{try{("object"!=typeof t||null===t||t instanceof Array||"object"!=typeof t.icons||"string"!=typeof t.prefix||!C(t))&&console.error(n)}catch(t){console.error(n)}}))}if(void 0!==t.IconifyProviders){const e=t.IconifyProviders;if("object"==typeof e&&null!==e)for(const t in e){const n="IconifyProviders["+t+"] is invalid.";try{const o=e[t];if("object"!=typeof o||!o||void 0===o.resources)continue;D(t,o)||console.error(n)}catch(t){console.error(n)}}}}return{enableCache:t=>Ct(t,!0),disableCache:t=>Ct(t,!1),iconExists:O,getIcon:S,listIcons:w,addIcon:_,addCollection:C,calculateSize:xt,buildIcon:wt,loadIcons:ht,loadIcon:pt,addAPIProvider:D,appendCustomStyle:It,_api:{getAPIConfig:U,setAPIModule:T,sendAPIQuery:B,setFetch:jt,getFetch:At,listAPIProviders:J}}}();for(const t in s)r[t]=r.prototype[t]=s[t];e.define(t,r)}()}();
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#111111] text-black antialiased min-h-screen flex items-center justify-center p-4 md:p-8 lg:p-12 overflow-x-hidden selection:bg-yellow-300 selection:text-black" style="font-family: 'Space Mono', monospace;">
+
+    <!-- Bento Grid Container -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full max-w-5xl mx-auto min-h-[85vh] py-8">
+        
+        <!-- Card 1: Grainy / Light (Black Globe) -->
+        <article class="col-span-1 relative w-full h-[500px] md:h-auto min-h-[450px] rounded-[2rem] flex flex-col justify-between p-8 overflow-hidden shadow-2xl border border-transparent" style="background: linear-gradient(#f4f4f0, #f4f4f0) padding-box, linear-gradient(135deg, #ffffff 0%, #d1d5db 100%) border-box;">
+            <!-- Noise Overlay -->
+            <div class="absolute inset-0 z-10 pointer-events-none opacity-[0.15]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E'); mix-blend-mode: multiply;"></div>
+            
+            <!-- WebGL Background -->
+            <div class="absolute inset-0 z-0 top-1/4">
+                <canvas id="webgl-lines" class="w-full h-full opacity-60"></canvas>
+            </div>
+
+            <!-- Header -->
+            <header class="relative z-20 flex justify-between items-center text-sm tracking-tight font-normal">
+                <div class="flex items-center gap-1.5">
+                    <iconify-icon icon="solar:shield-network-linear" width="20" height="20" style="stroke-width: 1.5;"></iconify-icon>
+                    <span>aegis</span>
+                </div>
+                <span class="text-xs opacity-50 uppercase tracking-widest">Sector.01</span>
+            </header>
+
+            <!-- Main Content -->
+            <main class="relative z-20 mt-auto">
+                <h2 class="text-3xl md:text-4xl tracking-tight leading-[1.1] mb-4 masked-reveal">
+                    Absolute stealth.<br>Zero presence.
+                </h2>
+                <p class="text-xs leading-relaxed font-sans max-w-[220px] text-black/70 masked-reveal" style="font-family: 'Inter', sans-serif;">
+                    Your network footprint.<br>Entirely eradicated.
+                </p>
+            </main>
+        </article>
+
+        <!-- Card 2: Yellow Grid + Aura Asset Image -->
+        <article class="col-span-1 relative w-full h-[500px] md:h-auto min-h-[450px] rounded-[2rem] flex flex-col justify-between p-8 overflow-hidden shadow-2xl border border-transparent" style="background: linear-gradient(#FDE047, #FDE047) padding-box, linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(202,138,4,0.4) 100%) border-box;">
+            
+            <!-- Aura Asset Image Background -->
+            <div class="absolute inset-0 z-0 opacity-40 mix-blend-multiply pointer-events-none">
+                <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="w-full h-full object-cover" alt="Futuristic Deconstructed Pyramid">
+            </div>
+
+            <!-- Grid Background Overlay -->
+            <div class="absolute inset-0 z-0 opacity-[0.15] pointer-events-none" style="background-image: linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px); background-size: 1.5rem 1.5rem;"></div>
+
+            <!-- Header -->
+            <header class="relative z-20 flex justify-between items-center text-sm tracking-tight font-normal">
+                <div class="flex items-center gap-1.5">
+                    <iconify-icon icon="solar:shield-network-linear" width="20" height="20" style="stroke-width: 1.5;"></iconify-icon>
+                    <span>aegis</span>
+                </div>
+                <span class="text-xs opacity-50 uppercase tracking-widest">Sector.02</span>
+            </header>
+
+            <!-- Main Content -->
+            <main class="relative z-20 mt-auto">
+                <h2 class="text-3xl md:text-4xl tracking-tight leading-[1.1] masked-reveal">
+                    Adaptive shields.<br>Total autonomy.
+                </h2>
+            </main>
+        </article>
+
+        <!-- Card 3: Black Halftone -->
+        <article class="col-span-1 md:col-span-2 relative w-full h-[450px] md:h-[350px] rounded-[2rem] flex flex-col md:flex-row justify-between p-8 overflow-hidden text-white shadow-2xl border border-transparent" style="font-family: 'Inter', sans-serif; background: linear-gradient(#0A0A0A, #0A0A0A) padding-box, linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%) border-box;">
+            
+            <!-- WebGL Halftone Background -->
+            <div class="absolute inset-0 z-0 md:left-1/3 pointer-events-none">
+                <canvas id="webgl-halftone" class="w-full h-full"></canvas>
+            </div>
+
+            <!-- Header (Left on desktop) -->
+            <header class="relative z-20 flex md:flex-col justify-between md:justify-start items-center md:items-start text-sm tracking-tight font-normal text-white/90 gap-4" style="font-family: 'Space Mono', monospace;">
+                <div class="flex items-center gap-1.5">
+                    <iconify-icon icon="solar:shield-network-linear" width="20" height="20" class="text-yellow-400" style="stroke-width: 1.5;"></iconify-icon>
+                    <span>aegis</span>
+                </div>
+                <span class="text-xs opacity-50 uppercase tracking-widest">Sector.03</span>
+            </header>
+
+            <!-- Main Content (Right on desktop) -->
+            <main class="relative z-20 mt-auto md:mt-0 md:self-end md:text-right max-w-md w-full">
+                <h2 class="text-4xl md:text-5xl tracking-tight leading-[1.1] font-normal mb-4 md:mb-6 uppercase masked-reveal">
+                    Quantum<br>Core.
+                </h2>
+                <p class="text-xs leading-relaxed text-white/70 md:ml-auto md:max-w-[240px] masked-reveal" style="font-family: 'Space Mono', monospace;">
+                    Next-gen cryptography<br>for modern infrastructure.
+                </p>
+            </main>
+        </article>
+
+    </div>
+
+    <script>
+        // GSAP ScrollTrigger Setup
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Utility: Split text into words and wrap for masking
+        function wrapWords(element) {
+            const text = element.innerHTML;
+            const words = text.split(/(<br>|\s+)/).filter(Boolean);
+            element.innerHTML = '';
+            
+            words.forEach(word => {
+                if (word === '<br>') {
+                    element.appendChild(document.createElement('br'));
+                    return;
+                }
+                if (word.trim() === '') {
+                    element.appendChild(document.createTextNode(' '));
+                    return;
+                }
+
+                const outerSpan = document.createElement('span');
+                outerSpan.style.display = 'inline-block';
+                outerSpan.style.overflow = 'hidden';
+                outerSpan.style.verticalAlign = 'bottom';
+                outerSpan.style.paddingBottom = '0.1em'; // Prevent clipping on descenders
+
+                const innerSpan = document.createElement('span');
+                innerSpan.style.display = 'inline-block';
+                innerSpan.innerHTML = word;
+                innerSpan.classList.add('reveal-target');
+                innerSpan.style.transform = 'translateY(110%)';
+                innerSpan.style.willChange = 'transform';
+
+                outerSpan.appendChild(innerSpan);
+                element.appendChild(outerSpan);
+            });
+        }
+
+        // Apply masking structure and animation
+        document.querySelectorAll('.masked-reveal').forEach(el => {
+            wrapWords(el);
+            
+            gsap.to(el.querySelectorAll('.reveal-target'), {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                },
+                y: "0%",
+                duration: 0.85,
+                ease: "power4.out",
+                stagger: 0.04
+            });
+        });
+
+        /* --- WebGL Section 1: Abstract Lines --- */
+        const initLinesWebGL = () => {
+            const canvas = document.getElementById('webgl-lines');
+            if(!canvas) return;
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            
+            const resize = () => {
+                const parent = canvas.parentElement;
+                const width = parent.clientWidth;
+                const height = parent.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            camera.position.z = 4.5;
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            const material = new THREE.LineBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.85 }); 
+            const particlesCount = 200;
+            
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particlesCount * 3);
+            
+            for(let i = 0; i < particlesCount * 3; i+=3) {
+                const r = 2.5;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                positions[i] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i+1] = r * Math.sin(phi) * Math.sin(theta);
+                positions[i+2] = r * Math.cos(phi);
+            }
+            
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            const index = [];
+            for (let i = 0; i < particlesCount; i++) {
+                for (let j = i + 1; j < particlesCount; j++) {
+                    const dx = positions[i*3] - positions[j*3];
+                    const dy = positions[i*3+1] - positions[j*3+1];
+                    const dz = positions[i*3+2] - positions[j*3+2];
+                    const distSq = dx*dx + dy*dy + dz*dz;
+                    if (distSq < 1.2) { 
+                        index.push(i, j);
+                    }
+                }
+            }
+            geometry.setIndex(index);
+            
+            const lines = new THREE.LineSegments(geometry, material);
+            group.add(lines);
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                group.rotation.y += 0.002;
+                group.rotation.x += 0.001;
+                renderer.render(scene, camera);
+            };
+            animate();
+        };
+
+        /* --- WebGL Section 3: Animated Halftone --- */
+        const initHalftoneWebGL = () => {
+            const canvas = document.getElementById('webgl-halftone');
+            if(!canvas) return;
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setClearColor(0x0A0A0A, 1);
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+            
+            const resize = () => {
+                const parent = canvas.parentElement;
+                const width = Math.max(1, (parent && parent.clientWidth) || window.innerWidth || canvas.clientWidth || 1);
+                const height = Math.max(1, (parent && parent.clientHeight) || window.innerHeight || canvas.clientHeight || 1);
+                renderer.setSize(width, height, false);
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                const aspect = width / height;
+                camera.left = -aspect;
+                camera.right = aspect;
+                camera.bottom = -1;
+                camera.top = 1;
+                camera.updateProjectionMatrix();
+            };
+            window.addEventListener('resize', resize);
+            resize();
+            camera.position.z = 1;
+
+            const gridSize = 33;
+            const geometry = new THREE.BufferGeometry();
+            const positions = [];
+            const scales = [];
+
+            for (let x = -gridSize; x <= gridSize; x++) {
+                for (let y = -gridSize; y <= gridSize; y++) {
+                    positions.push(x * 0.085, y * 0.085, 0);
+                    scales.push(1); 
+                }
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('scale', new THREE.Float32BufferAttribute(scales, 1));
+
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    color1: { value: new THREE.Color(0xFBBF24) }, 
+                    color2: { value: new THREE.Color(0xFFFFFF) }
+                },
+                vertexShader: `
+                    attribute float scale;
+                    varying vec2 vUv;
+                    varying float vScale;
+                    uniform float time;
+                    
+                    void main() {
+                        vUv = position.xy;
+                        float dist = length(position.xy);
+                        float animatedScale = scale * (sin(dist * 6.00 - time * 2.5) * 0.5 + 0.5);
+                        vScale = animatedScale;
+                        
+                        gl_PointSize = animatedScale * 9.00; 
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform vec3 color1;
+                    uniform vec3 color2;
+                    varying vec2 vUv;
+                    varying float vScale;
+                    
+                    void main() {
+                        vec2 coord = gl_PointCoord - vec2(0.5);
+                        if(length(coord) > 0.5) discard;
+                        
+                        vec3 finalColor = mix(color2, color1, (vUv.y + 1.0) * 0.5);
+                        gl_FragColor = vec4(finalColor, vScale * 0.9);
+                    }
+                `,
+                transparent: true
+            });
+
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+
+            const clock = new THREE.Clock();
+            const animate = () => {
+                requestAnimationFrame(animate);
+                material.uniforms.time.value = clock.getElapsedTime() * ((window.__SF_CONTROLS&&window.__SF_CONTROLS.speed)||1);
+                renderer.render(scene, camera);
+            };
+            animate();
+        };
+
+        // Initialize WebGL instances
+        initLinesWebGL();
+        initHalftoneWebGL();
+    </script>
+<script data-threeui-focus>
+(function () {
+  var isolated = false;
+  function isolate() {
+    if (isolated) return;
+    var specs = [{"selector":"#webgl-halftone","role":"background"}];
+    var roots = [];
+    specs.forEach(function (spec) {
+      var element = document.querySelector(spec.selector);
+      if (!element) return;
+      element.setAttribute('data-threeui-role', spec.role);
+      if (spec.width) element.style.setProperty('--threeui-target-width', spec.width);
+      if (!roots.some(function (root) { return root.contains(element); })) roots.push(element);
+    });
+    if (!roots.length) return;
+    isolated = true;
+    roots.forEach(function (root) { document.body.appendChild(root); });
+    Array.from(document.body.children).forEach(function (element) {
+      if (roots.indexOf(element) !== -1) return;
+      element.setAttribute('data-threeui-residual', '');
+      element.setAttribute('aria-hidden', 'true');
+      if ('inert' in element) element.inert = true;
+    });
+    document.body.setAttribute('data-threeui-ready', '');
+    if (window.__SF_APPLY_CONTROLS) window.__SF_APPLY_CONTROLS();
+    requestAnimationFrame(function () { window.dispatchEvent(new Event('resize')); });
+  }
+  function scheduleIsolation() { setTimeout(isolate, 100); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleIsolation, { once: true });
+  else scheduleIsolation();
+  window.addEventListener('load', isolate, { once: true });
+})();
+</script><!--qml:start--><div id="qml-pill" style="position:fixed;left:12px;bottom:12px;z-index:2147483647;display:flex;gap:10px;align-items:center;padding:7px 11px;border-radius:999px;background:rgba(12,12,14,.74);color:#fff;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)"><a href="../index.html" onclick="if(history.length>1){history.back();return false}" style="color:#fff;text-decoration:none;font-weight:700">← 모션랩</a><span style="opacity:.72">ThreeUI Community · MIT © Meng To</span></div><script>if(/embed/.test(location.hash))document.getElementById("qml-pill").style.display="none";</script><!--qml:end--></body>
+</html>
