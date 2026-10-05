@@ -9715,6 +9715,23 @@ const QM_REG = [
     return tries.reduce((p, t) => p.then(found => found || VideoEncoder.isConfigSupported(t[1]).then(r => r.supported ? { kind: t[0], config: t[1] } : null, () => null)), Promise.resolve(null));
   }
   const vidSay = text => { $('vidNote').textContent = text; };
+  // 만든 파일 건네기. 클로드 아티팩트 화면 안에서는 바로 내려받기가 막혀 있어 그쪽이 띄우는 저장 창으로 건네고, 그 밖에서는 바로 내려받습니다
+  const saver = window.claude && typeof window.claude.use === 'function' ? window.claude.use('downloads').catch(() => null) : Promise.resolve(null);
+  async function handOver(blob, name) {
+    const viaClaude = await Promise.race([saver, new Promise(ok => setTimeout(() => ok(null), 4000))]);
+    if (viaClaude) {
+      try { await viaClaude.save({ filename: name, data: blob }); return 'saved'; }
+      catch (e) { if (e && (e.code === 'declined' || e.code === 'rate_limited')) return 'declined'; }
+    }
+    const link = document.createElement('a');
+    if (videoUrl) URL.revokeObjectURL(videoUrl);
+    videoUrl = link.href = URL.createObjectURL(blob);
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    return 'saved';
+  }
   // 화면 밖에 실제 영상 크기로 장면을 하나 더 만들고, t초의 장면을 그림 한 장으로 그려 주는 도구
   async function makeRig(m, secs) {
     const size = SIZE[ratioOf(m)], W = size[0], H = size[1], total = Math.round(secs * FPS);
@@ -9804,18 +9821,15 @@ const QM_REG = [
       await encoder.flush();
       if (failed) throw failed;
       muxer.finalize();
-      const blob = new Blob([muxer.target.buffer], { type: 'video/mp4' }), link = document.createElement('a');
-      if (videoUrl) URL.revokeObjectURL(videoUrl);
-      videoUrl = link.href = URL.createObjectURL(blob);
-      link.download = `quoka-${m.id}-${W}x${H}.mp4`;
-      link.textContent = '다시 받기';
-      link.className = 'textlink';
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const blob = new Blob([muxer.target.buffer], { type: 'video/mp4' }), name = `quoka-${m.id}-${W}x${H}.mp4`, again = document.createElement('button');
       video = null;
-      vidSay(`저장했어요 · ${W}×${H} · ${secs}초 · ${(blob.size / 1048576).toFixed(1)}MB` + (picked.kind === 'avc' ? '' : ' · 이 브라우저에는 H.264가 없어 다른 방식(' + picked.kind.toUpperCase() + ')으로 저장했어요. 인스타그램에 안 올라가면 크롬에서 다시 저장해 주세요.') + (rig.noFonts ? ' · 글꼴 파일을 가져오지 못해 기본 글꼴로 그려졌을 수 있어요.' : '') + '  ');
-      $('vidNote').appendChild(link);
+      const how = await handOver(blob, name);
+      vidSay((how === 'declined' ? '저장을 취소했어요' : '저장했어요') + ` · ${W}×${H} · ${secs}초 · ${(blob.size / 1048576).toFixed(1)}MB` + (picked.kind === 'avc' ? '' : ' · 이 브라우저에는 H.264가 없어 다른 방식(' + picked.kind.toUpperCase() + ')으로 저장했어요. 인스타그램에 안 올라가면 크롬에서 다시 저장해 주세요.') + (rig.noFonts ? ' · 글꼴 파일을 가져오지 못해 기본 글꼴로 그려졌을 수 있어요.' : '') + '  ');
+      again.type = 'button';
+      again.className = 'textlink';
+      again.textContent = '다시 받기';
+      again.addEventListener('click', () => handOver(blob, name));
+      $('vidNote').appendChild(again);
     } catch (e) {
       video = null;
       const why = e && e.message;
