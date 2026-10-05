@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="모션 284종을 눌러서 화면으로 보고, 프롬프트나 코드를 복사해 웹앱과 영상에 쓰는 쿼카연구회의 모션 라이브러리.">
+<meta name="description" content="모션 265종을 눌러서 화면으로 보고, 프롬프트나 코드를 복사해 웹앱과 영상에 쓰는 쿼카연구회의 모션 라이브러리.">
 <meta property="og:title" content="쿼카 모션랩">
-<meta property="og:description" content="눌러서 보고, 프롬프트를 복사해 가는 모션 284종.">
+<meta property="og:description" content="눌러서 보고, 프롬프트를 복사해 가는 모션 265종.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -8663,7 +8663,11 @@ const QM_REG = [
   // ThreeUI Community 원본 (MIT · © 2026 Meng To): HTML 파일 하나가 모션 하나. 같은 목록에 섞어 넣습니다
   const SHELF = window.QML_SHELF || { cols: 1, rows: 1, items: [] };
   const HOME = { 'Buttons': 'button', 'Text Animation': 'kinetic', 'Backgrounds': 'bg', 'Three.js': 'bg' };   // 여기 없는 종류(UI 요소, 히어로, 랜딩, 섹션)는 넣지 않음
-  const EXT = SHELF.items.filter(it => HOME[it.cat]).map(it => {
+  // 빼 달라고 한 ThreeUI 원본 (풍경 7종, 탑 6종, Halftone Relay, Living Green, Temple Night, Bookshelf, Atelier Flag, Washi Noren)
+  const DROP = ['matrix-field--halftone-relay', 'sylva-living-world--living-green', 'temple-night--temple-night', 'bookshelf',
+    'landscape--sunrise', 'landscape--noon', 'landscape--sunset', 'landscape--night', 'landscape--rain', 'landscape--storm', 'landscape--snow',
+    'japanese-tower--japan', 'japanese-tower--china', 'japanese-tower--vietnam', 'japanese-tower--thailand', 'japanese-tower--cambodia', 'japanese-tower--turkey', 'woven-cloth--atelier', 'woven-cloth--washi'];
+  const EXT = SHELF.items.filter(it => HOME[it.cat] && DROP.indexOf(it.id) < 0).map(it => {
     const own = it.variant && it.variant !== it.label;
     return {
       id: 'tu-' + it.id, ko: own ? it.variant : it.label, en: 'ThreeUI · ' + it.label, cat: HOME[it.cat], uses: 'x', lib: [], ext: it,
