@@ -3,7 +3,7 @@
 눌러서 화면으로 보고, 프롬프트나 코드를 복사해 가는 모션 라이브러리입니다. 쿼카연구회(Q.U.O.K.A) 웹앱과 코드로 만드는 영상에 쓰려고 모았습니다.
 
 - 라이브: https://gottkf1208.github.io/quoka-motion-lab/
-- 모션 345종: 카드 쇼케이스, 알림·대화, 버튼·입력, 숫자·차트, 글자, 키네틱 타이포, 수업·기록, 영상 소스, 3D·배경
+- 모션 395종: 카드 쇼케이스, 알림·대화, 버튼·입력, 숫자·차트, 글자, 키네틱 타이포, 수업·기록, 영상 소스, 3D·배경
 - 정적 페이지 하나(`index.html`)와 `threeui/` 폴더의 HTML 파일들로 이루어져 있습니다.
 
 ## 쓰는 법
@@ -26,7 +26,7 @@ ffmpeg -framerate 30 -i frames/frame_%05d.png -c:v libx264 -pix_fmt yuv420p -crf
 
 ## 출처와 라이선스
 
-- 카드 쇼케이스, UI 모션, 글자, 키네틱 타이포, 수업·기록, 영상 소스, 3D 장면 238종은 이 저장소에서 직접 만든 것입니다.
+- 카드 쇼케이스, UI 모션, 글자, 키네틱 타이포, 수업·기록, 영상 소스, 3D 장면 288종은 이 저장소에서 직접 만든 것입니다.
 - `threeui/` 폴더의 107종(버튼, 글자, 배경·3D)은 [ThreeUI Community](https://github.com/MengTo/threeui) 원본입니다. MIT License, Copyright (c) 2026 Meng To. 라이선스 전문은 `threeui/LICENSE`에 있고, 파일마다 맨 위에 저작권 고지와 원본에서 달라진 점을 적어 두었습니다.
 - 3D 모션은 [three.js](https://threejs.org) (MIT)를 씁니다.
 - 영상 저장은 [mp4-muxer](https://github.com/Vanilagy/mp4-muxer) (MIT)를 저장할 때만 불러 씁니다.
