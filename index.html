@@ -326,6 +326,72 @@ pre { margin: 0; max-height: 260px; overflow: auto; padding: 14px 16px; border-r
 @media (prefers-reduced-motion: reduce) {
   .thumb, .cta { transition: none; }
 }
+/* 바구니: 여러 모션을 담아 한꺼번에 받기 · 링크로 넘기기 */
+.nav-links .bask-nav { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 600; }
+.bask-n { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--track); font: 500 11px/18px var(--mono); color: var(--muted); text-align: center; }
+.bask-nav.has .bask-n { background: var(--wine); color: var(--bg); }
+.bask-nav.bump .bask-n { animation: baskBump .45s ease; }
+@keyframes baskBump { 35% { transform: scale(1.4); } }
+.btn.bask-add { gap: 7px; }
+.bask-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--wine); }
+.btn.bask-add[aria-pressed="true"] { background: var(--on); color: var(--on-ink); }
+.bask { position: fixed; z-index: 70; top: 16px; right: 16px; bottom: 16px; width: min(420px, calc(100vw - 32px)); display: flex; flex-direction: column; border-radius: 24px; background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 40px 90px -30px var(--lift); overflow: hidden; }
+.bask-head { position: relative; padding: 20px 22px 16px; border-bottom: 1px solid var(--line); }
+.bask-eye { padding-right: 70px; font: 500 11px/1.5 var(--mono); letter-spacing: .12em; color: var(--wine); }
+.bask-title { margin-top: 6px; font-weight: 700; font-size: 20px; letter-spacing: -.03em; }
+.bask-note { margin-top: 6px; font-size: 13px; line-height: 1.55; color: var(--muted); word-break: keep-all; }
+.bask-x { position: absolute; right: 16px; top: 14px; }
+.bask-banner { margin: 12px 22px 0; padding: 12px 14px; border-radius: 14px; background: var(--panel); font-size: 13px; line-height: 1.55; word-break: keep-all; }
+.bask-acts { display: flex; gap: 8px; margin-top: 8px; }
+.bask-list { flex: 1; min-height: 0; overflow-y: auto; margin: 0; padding: 4px 0; list-style: none; }
+.bask-list.busy { pointer-events: none; opacity: .5; }
+.bask-item { display: grid; grid-template-columns: 152px minmax(0, 1fr); gap: 14px; padding: 14px 22px; border-bottom: 1px solid var(--line); }
+.bask-stage { position: relative; display: block; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: var(--track) center / cover no-repeat; box-shadow: inset 0 0 0 1px var(--line); cursor: zoom-in; justify-self: center; align-self: start; }
+.bask-host { position: absolute; left: 0; top: 0; transform-origin: 0 0; pointer-events: none; }
+.bask-role { display: flex; gap: 8px; font: 500 11px/1.5 var(--mono); letter-spacing: .04em; color: var(--muted); }
+.bask-role b { color: var(--wine); font-weight: 500; }
+.bask-name { margin-top: 3px; font-weight: 600; font-size: 15px; letter-spacing: -.02em; }
+.bask-why { margin-top: 3px; font-size: 12.5px; line-height: 1.5; color: var(--muted); word-break: keep-all; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.bask-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 8px; }
+.bask-ctl .btn { height: 28px; padding: 0 10px; font-size: 12px; }
+.bask-ctl .btn.ico { width: 28px; padding: 0; }
+.bask-ctl .btn:disabled { opacity: .35; cursor: default; }
+.bask-count { min-width: 28px; font: 500 11px/1 var(--mono); color: var(--muted); text-align: center; }
+.bask-len { display: inline-flex; align-items: center; gap: 3px; height: 28px; padding: 0 9px; border-radius: 999px; background: var(--track); font-size: 12px; color: var(--muted); }
+.bask-len input { width: 32px; border: 0; padding: 0; background: none; font: inherit; color: var(--ink); text-align: right; }
+.bask-empty { padding: 36px 26px; font-size: 13.5px; line-height: 1.75; color: var(--muted); word-break: keep-all; }
+.bask-empty b { color: var(--ink); font-weight: 600; }
+.bask-foot { display: grid; gap: 10px; padding: 14px 22px 18px; border-top: 1px solid var(--line); }
+.bask-opt { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.bask-lab { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.bask-opt .chips { gap: 4px; justify-content: flex-end; }
+.bask-opt .chip { height: 28px; padding: 0 10px; font-size: 12px; }
+.bask-frame { display: inline-flex; align-items: center; gap: 8px; }
+.bask-frame .btn { height: 28px; padding: 0 11px; font-size: 12px; }
+.bask-sw { position: relative; width: 38px; height: 22px; padding: 0; border: 0; border-radius: 999px; background: var(--hover); cursor: pointer; }
+.bask-sw::after { content: ""; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); transition: transform .18s; }
+.bask-sw[aria-pressed="true"] { background: var(--accent); }
+.bask-sw[aria-pressed="true"]::after { transform: translateX(16px); }
+.bask-more { display: flex; justify-content: center; gap: 22px; }
+.bask-more .textlink { font-size: 13px; }
+.bask-more .textlink.quiet { color: var(--muted); }
+.bask-foot .hint:empty { display: none; }
+.bask-url { display: block; width: 100%; margin-top: 6px; height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font: 12px var(--mono); color: var(--ink); }
+.bask-menu { position: fixed; z-index: 90; width: 280px; padding: 6px; border-radius: 16px; background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 24px 60px -20px var(--lift); }
+.bask-menu p { padding: 8px 10px 6px; font-size: 11.5px; line-height: 1.5; color: var(--muted); word-break: keep-all; }
+.bask-menu button { display: flex; width: 100%; align-items: baseline; gap: 10px; padding: 9px 10px; border: 0; border-radius: 10px; background: none; font-size: 13.5px; color: var(--ink); text-align: left; cursor: pointer; }
+.bask-menu button:hover { background: var(--track); }
+.bask-menu .bask-num { width: 18px; flex: none; font: 500 11px var(--mono); color: var(--muted); }
+.bask-menu small { margin-left: auto; max-width: 104px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; color: var(--muted); }
+.bask-toast { position: fixed; z-index: 95; left: 50%; bottom: 28px; max-width: calc(100vw - 32px); transform: translateX(-50%); padding: 11px 18px; border-radius: 999px; background: var(--on); color: var(--on-ink); font-size: 13.5px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.bask-toast.on { opacity: 1; }
+.tile { position: relative; }
+.bask-badge { position: absolute; left: 8px; top: 8px; z-index: 1; padding: 4px 7px; border-radius: 999px; background: var(--wine); color: var(--bg); font: 600 10.5px/1 var(--mono); pointer-events: none; }
+@media (max-width: 560px) {
+  .bask { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; height: 84vh; }
+  .bask-item { grid-template-columns: 120px minmax(0, 1fr); gap: 12px; padding: 12px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .bask-nav.bump .bask-n { animation: none; } }
 </style>
 
 </head>
@@ -342,6 +408,7 @@ pre { margin: 0; max-height: 260px; overflow: auto; padding: 14px 16px; border-r
       <button type="button" data-view="how">쓰는 법</button>
       <button type="button" data-view="video-how">영상 만들기</button>
       <button type="button" data-view="faq">질문</button>
+      <button type="button" class="bask-nav" id="baskNav" aria-expanded="false" aria-controls="bask">바구니<span class="bask-n" id="baskN">0</span></button>
     </nav>
   </header>
 
@@ -386,6 +453,13 @@ pre { margin: 0; max-height: 260px; overflow: auto; padding: 14px 16px; border-r
             <li>모션을 눌러 창을 열고, 위쪽 비율 단추로 크기를 고릅니다. 인스타 캐러셀은 4:5(1080×1350), 릴스·스토리는 9:16(1080×1920)입니다.</li>
             <li>오른쪽 ‘문구’에서 글자를 내 것으로 고칩니다. 미리보기에 바로 반영됩니다.</li>
             <li>저장 형식(MP4 · WebM 투명 · MOV 투명 · PNG 묶음 · GIF 투명)을 고르고 <b>영상으로 저장</b>을 누릅니다. 길이(초)만큼 30fps로 찍어 파일로 내려받습니다. 한 바퀴가 딱 맞게 돌도록 길이가 미리 들어 있어요.</li>
+          </ol>
+          <h3>여러 개를 한 번에: 바구니</h3>
+          <ol>
+            <li>모션 창 위쪽의 <b>바구니에 담기</b>를 누릅니다. 담은 순서대로 칸이 쌓이고, 목록의 썸네일에 ‘담음’ 표시가 붙어요. 이미 담은 칸과 바꾸고 싶으면 담을 때 그 칸을 고르면 됩니다.</li>
+            <li>맨 위 <b>바구니</b>를 열어 순서(↑↓)와 길이를 맞춥니다. ‘내 영상 장면 고르기’로 내 영상을 고르면 그 장면 위에 얹힌 모습으로 미리 볼 수 있어요. 파일은 이 브라우저 안에서만 쓰이고 어디에도 올라가지 않습니다.</li>
+            <li>형식과 비율을 고르고 <b>모두 받기</b>를 누르면 칸마다 영상 하나씩 만들어 zip 하나로 내려받습니다(01_타이틀카드.webm …). 압축을 풀어 브루·캡컷·프리미어에 차례대로 끌어다 놓으면 됩니다. MOV는 파일이 커서 하나씩 받습니다.</li>
+            <li><b>링크 복사</b>를 누르면 바구니가 주소 하나에 담깁니다. 연구회 선생님께 보내면 같은 바구니(고친 글자·색·글꼴 포함)가 그대로 열리고, 클로드에게 주면 편집에 바로 얹어 줍니다.</li>
           </ol>
           <h3>투명 배경으로 저장해 편집기에 얹기</h3>
           <p>‘숏폼 자막’처럼 영상 위에 얹을 조각은 투명 형식으로 저장합니다. 투명 형식을 고르면 미리보기 바탕이 체크무늬로 바뀌는데, 체크무늬 자리가 투명하게 저장되는 곳이에요. 숏폼 자막의 흐릿한 바탕은 영상 대신 깔아 둔 미리보기라 투명 저장 때는 빠지고, ‘내 이미지’에 내 영상 캡처를 넣으면 그 위에 얹어 볼 수 있습니다.</p>
@@ -474,6 +548,7 @@ ffmpeg -i out.mp4 -i voice.wav -c:v copy -c:a aac -b:a 192k -shortest out_audio.
         <h2 id="mName"></h2>
       </div>
       <div class="win-nav">
+        <button class="btn bask-add" id="baskAdd" type="button" aria-pressed="false"><span class="bask-dot" aria-hidden="true"></span><span>바구니에 담기</span></button>
         <button class="btn" id="btnPrev" type="button" aria-label="이전 모션">←</button>
         <button class="btn" id="btnNext" type="button" aria-label="다음 모션">→</button>
         <button class="btn" id="btnClose" type="button">닫기</button>
@@ -579,6 +654,34 @@ ffmpeg -i out.mp4 -i voice.wav -c:v copy -c:a aac -b:a 192k -shortest out_audio.
     </div>
   </div>
 </div>
+
+<aside class="bask" id="bask" aria-label="바구니" hidden>
+  <header class="bask-head">
+    <p class="bask-eye" id="baskEye">QUOKA BASKET</p>
+    <h2 class="bask-title" id="baskTitle">내 바구니</h2>
+    <p class="bask-note" id="baskNote"></p>
+    <button class="btn bask-x" id="baskClose" type="button">닫기</button>
+  </header>
+  <div class="bask-banner" id="baskBanner" hidden></div>
+  <ol class="bask-list" id="baskList"></ol>
+  <footer class="bask-foot" id="baskFoot">
+    <div class="bask-opt"><span class="bask-lab">형식</span>
+      <div class="chips" id="baskKind" role="group" aria-label="받을 형식"><button class="chip" type="button" data-v="webm">WebM 투명</button><button class="chip" type="button" data-v="mov">MOV 투명</button><button class="chip" type="button" data-v="mp4">MP4</button></div>
+    </div>
+    <div class="bask-opt"><span class="bask-lab">비율</span>
+      <div class="chips" id="baskRatio" role="group" aria-label="비율"><button class="chip" type="button" data-v="16 / 9">16:9</button><button class="chip" type="button" data-v="9 / 16">9:16</button><button class="chip" type="button" data-v="1 / 1">1:1</button><button class="chip" type="button" data-v="4 / 5">4:5</button></div>
+    </div>
+    <div class="bask-opt"><span class="bask-lab">내 영상 위에서 미리 보기</span>
+      <span class="bask-frame"><button class="btn" id="baskFrames" type="button">내 영상 장면 고르기</button><button class="bask-sw" id="baskFrameSw" type="button" aria-pressed="true" aria-label="내 영상 위에서 보기"></button></span>
+    </div>
+    <button class="cta tall wide" id="baskGet" type="button"><span>모두 받기</span></button>
+    <div class="bask-more"><button class="textlink" id="baskLink" type="button">링크 복사</button><button class="textlink" id="baskClaude" type="button" hidden>클로드에게 넘기기</button><button class="textlink quiet" id="baskClear" type="button">비우기</button></div>
+    <p class="hint" id="baskSay" aria-live="polite"></p>
+  </footer>
+</aside>
+<div class="bask-menu" id="baskMenu" hidden></div>
+<div class="bask-toast" id="baskToast" role="status" aria-live="polite"></div>
+<input type="file" id="baskPick" accept="video/*,image/*" multiple hidden>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -35329,6 +35432,7 @@ const QM_REG = [
       back = document.activeElement;
       $('win').hidden = false;
       document.documentElement.style.overflow = 'hidden';
+      baskWin(true);
     }
     pick();
     $('btnMain').focus();
@@ -35341,6 +35445,7 @@ const QM_REG = [
     stage.textContent = '';
     $('win').hidden = true;
     document.documentElement.style.overflow = '';
+    baskWin(false);
     if (back && back.focus) back.focus();
   }
   $('btnClose').addEventListener('click', closeWin);
@@ -35435,6 +35540,7 @@ const QM_REG = [
     paintVideo();
     mount();
     renderCode();
+    baskPaintAdd();
   }
   $('btnPrev').addEventListener('click', () => choose(MOTIONS[(index() - 1 + MOTIONS.length) % MOTIONS.length].id));
   $('btnNext').addEventListener('click', () => choose(MOTIONS[(index() + 1) % MOTIONS.length].id));
@@ -35992,9 +36098,9 @@ const QM_REG = [
     link.remove();
     return 'saved';
   }
-  // 화면 밖에 실제 영상 크기로 장면을 하나 더 만들고, t초의 장면을 그림 한 장으로 그려 주는 도구
-  async function makeRig(m, secs, clear) {
-    const size = SIZE[ratioOf(m)], W = size[0], H = size[1], total = Math.round(secs * FPS);
+  // 화면 밖에 실제 영상 크기로 장면을 하나 더 만들고, t초의 장면을 그림 한 장으로 그려 주는 도구 (ratio를 주면 그 비율로)
+  async function makeRig(m, secs, clear, ratio) {
+    const rr = SIZE[ratio] ? ratio : ratioOf(m), size = SIZE[rr], W = size[0], H = size[1], total = Math.round(secs * FPS);
     const host = document.createElement('div'), root = document.createElement('div'), sheet = document.createElement('canvas'), g = sheet.getContext('2d', { willReadFrequently: !!clear });
     const images = await Promise.all(files.map(f => asData(f.url)));
     // 미리보기 무대가 물려받는 글자 설정(글꼴·줄 간격·색 등)을 그대로 물려줘야 미리보기와 똑같이 나옵니다
@@ -36005,7 +36111,7 @@ const QM_REG = [
     host.appendChild(root);
     document.body.appendChild(host);
     sheet.width = W; sheet.height = H;
-    const player = qmEngine(root, { images: images, speed: 1, radius: state.radius, bg: clear ? 'transparent' : bgOf(m), colors: colorsOf(m), ratio: ratioOf(m), seed: SEED, words: wordsOf(m), autoplay: false }, fnOf(m));
+    const player = qmEngine(root, { images: images, speed: 1, radius: state.radius, bg: clear ? 'transparent' : bgOf(m), colors: colorsOf(m), ratio: rr, seed: SEED, words: wordsOf(m), autoplay: false }, fnOf(m));
     const rig = { W: W, H: H, sheet: sheet, css: '', dom: true, inherit: inherit, close() { player.destroy(); host.remove(); } };
     try {
       // 미리 한 번 훑어서 쓰이는 글자를 모으고, 필요한 글꼴이 다 도착하기를 기다림
@@ -36106,34 +36212,17 @@ const QM_REG = [
     gif.finish();
     return new Blob([gif.bytes()], { type: 'image/gif' });
   }
-  async function saveVideo() {
-    const m = current(), btn = $('btnVideo'), label = btn.querySelector('span'), kind = kindOf(), K = KINDS[kind];
-    if (video) { video.stop = true; return; }                       // 만드는 중에 한 번 더 누르면 멈춤
-    if (m.ext) return;
-    if (kind === 'mp4' && (!window.VideoEncoder || !window.VideoFrame)) { vidSay('이 브라우저에서는 mp4 저장이 안 돼요. 컴퓨터의 크롬이나 엣지에서 열거나, 위에서 다른 형식을 골라 주세요.'); return; }
-    if (kind === 'webm' && (!window.VideoEncoder || !window.VideoFrame)) { vidSay('이 브라우저에서는 WebM 저장이 안 돼요. 컴퓨터의 크롬이나 엣지에서 열거나, 위에서 다른 형식을 골라 주세요.'); return; }
-    const secs = secOf(m), total = Math.round(secs * FPS), job = video = { stop: false };
-    let rig = null, encoder = null, failed = null, picked = null;
-    label.textContent = '준비하는 중… (누르면 멈춤)';
-    vidSay('만드는 동안 이 창을 그대로 두세요. 다른 탭으로 가면 느려지거나 멈춥니다.');
-    const began = performance.now();
-    // 진행 표시 (몇 장마다 한 번씩 화면에 숨 돌릴 틈을 줌)
-    // share·from: 여러 단계로 나눠 만들 때 이 단계가 전체에서 차지하는 몫과 시작점
-    const step = async (i, quick, share, from) => {
-      if (quick && i % 4) return;
-      const done = (from || 0) + (share || 1) * (i + 1) / total;
-      const left = (performance.now() - began) / done * (1 - done) / 1000;
-      label.textContent = `만드는 중 ${Math.round(done * 100)}% (누르면 멈춤)`;
-      if (i > 8) vidSay(`만드는 동안 이 창을 그대로 두세요. 남은 시간 약 ${left < 60 ? Math.ceil(left) + '초' : Math.ceil(left / 60) + '분'}.`);
-      await tick();
-    };
+  // 모션 하나를 파일 하나로 (창의 '영상으로 저장'과 바구니가 함께 씀). ratio를 주면 그 비율로 그림
+  async function encodeMotion(m, secs, kind, job, step, ratio) {
+    const total = Math.round(secs * FPS);
+    let rig = null, encoder = null, failed = null, picked = null, blob;
     try {
-      let blob;
       if (kind === 'mp4') {
         await loadScript(MUXER);
-        picked = await pickCodec(SIZE[ratioOf(m)][0], SIZE[ratioOf(m)][1]);
+        const size = SIZE[SIZE[ratio] ? ratio : ratioOf(m)];
+        picked = await pickCodec(size[0], size[1]);
         if (!picked) throw new Error('codec');
-        rig = await makeRig(m, secs, false);
+        rig = await makeRig(m, secs, false, ratio);
         if (job.stop) throw new Error('stop');
         const muxer = new Mp4Muxer.Muxer({ target: new Mp4Muxer.ArrayBufferTarget(), video: { codec: picked.kind, width: rig.W, height: rig.H, frameRate: FPS }, fastStart: 'in-memory' });
         encoder = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, meta), error: e => { failed = e; } });
@@ -36153,7 +36242,7 @@ const QM_REG = [
         muxer.finalize();
         blob = new Blob([muxer.target.buffer], { type: 'video/mp4' });
       } else {
-        rig = await makeRig(m, secs, true);
+        rig = await makeRig(m, secs, true, ratio);
         if (job.stop) throw new Error('stop');
         if (kind === 'gif') blob = await makeGif(rig, total, job, step);
         else if (kind === 'webm') blob = await encodeWebm(rig, total, job, step);
@@ -36168,10 +36257,38 @@ const QM_REG = [
           blob = kind === 'mov' ? qmMovPng(frames, rig.W, rig.H, FPS) : qmZip(frames.map((f, i) => ({ name: `${m.id}-${String(i + 1).padStart(4, '0')}.png`, data: f })));
         }
       }
-      const W = rig.W, H = rig.H, name = `quoka-${m.id}-${W}x${H}${K.clear ? '-alpha' : ''}.${K.ext}`, again = document.createElement('button');
+      return { blob: blob, W: rig.W, H: rig.H, picked: picked, noFonts: rig.noFonts };
+    } finally {
+      if (encoder && encoder.state !== 'closed') try { encoder.close(); } catch (e) {}
+      if (rig) rig.close();
+    }
+  }
+  async function saveVideo() {
+    const m = current(), btn = $('btnVideo'), label = btn.querySelector('span'), kind = kindOf(), K = KINDS[kind];
+    if (video) { video.stop = true; return; }                       // 만드는 중에 한 번 더 누르면 멈춤
+    if (m.ext) return;
+    if (kind === 'mp4' && (!window.VideoEncoder || !window.VideoFrame)) { vidSay('이 브라우저에서는 mp4 저장이 안 돼요. 컴퓨터의 크롬이나 엣지에서 열거나, 위에서 다른 형식을 골라 주세요.'); return; }
+    if (kind === 'webm' && (!window.VideoEncoder || !window.VideoFrame)) { vidSay('이 브라우저에서는 WebM 저장이 안 돼요. 컴퓨터의 크롬이나 엣지에서 열거나, 위에서 다른 형식을 골라 주세요.'); return; }
+    const secs = secOf(m), total = Math.round(secs * FPS), job = video = { stop: false };
+    label.textContent = '준비하는 중… (누르면 멈춤)';
+    vidSay('만드는 동안 이 창을 그대로 두세요. 다른 탭으로 가면 느려지거나 멈춥니다.');
+    const began = performance.now();
+    // 진행 표시 (몇 장마다 한 번씩 화면에 숨 돌릴 틈을 줌)
+    // share·from: 여러 단계로 나눠 만들 때 이 단계가 전체에서 차지하는 몫과 시작점
+    const step = async (i, quick, share, from) => {
+      if (quick && i % 4) return;
+      const done = (from || 0) + (share || 1) * (i + 1) / total;
+      const left = (performance.now() - began) / done * (1 - done) / 1000;
+      label.textContent = `만드는 중 ${Math.round(done * 100)}% (누르면 멈춤)`;
+      if (i > 8) vidSay(`만드는 동안 이 창을 그대로 두세요. 남은 시간 약 ${left < 60 ? Math.ceil(left) + '초' : Math.ceil(left / 60) + '분'}.`);
+      await tick();
+    };
+    try {
+      const out = await encodeMotion(m, secs, kind, job, step), blob = out.blob, picked = out.picked;
+      const W = out.W, H = out.H, name = `quoka-${m.id}-${W}x${H}${K.clear ? '-alpha' : ''}.${K.ext}`, again = document.createElement('button');
       video = null;
       const how = await handOver(blob, name);
-      vidSay((how === 'declined' ? '저장을 취소했어요' : '저장했어요') + ` · ${K.name} · ${kind === 'gif' ? W / 2 + '×' + H / 2 : W + '×' + H} · ${secs}초 · ${(blob.size / 1048576).toFixed(1)}MB` + (picked && picked.kind !== 'avc' ? ' · 이 브라우저에는 H.264가 없어 다른 방식(' + picked.kind.toUpperCase() + ')으로 저장했어요. 인스타그램에 안 올라가면 크롬에서 다시 저장해 주세요.' : '') + (rig.noFonts ? ' · 글꼴 파일을 가져오지 못해 기본 글꼴로 그려졌을 수 있어요.' : '') + '  ');
+      vidSay((how === 'declined' ? '저장을 취소했어요' : '저장했어요') + ` · ${K.name} · ${kind === 'gif' ? W / 2 + '×' + H / 2 : W + '×' + H} · ${secs}초 · ${(blob.size / 1048576).toFixed(1)}MB` + (picked && picked.kind !== 'avc' ? ' · 이 브라우저에는 H.264가 없어 다른 방식(' + picked.kind.toUpperCase() + ')으로 저장했어요. 인스타그램에 안 올라가면 크롬에서 다시 저장해 주세요.' : '') + (out.noFonts ? ' · 글꼴 파일을 가져오지 못해 기본 글꼴로 그려졌을 수 있어요.' : '') + '  ');
       again.type = 'button';
       again.className = 'textlink';
       again.textContent = '다시 받기';
@@ -36183,8 +36300,6 @@ const QM_REG = [
       vidSay(why === 'stop' ? '멈췄어요.' : why === 'script' ? '영상 묶는 도구를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.' : why === 'codec' ? '이 브라우저에는 이 형식의 압축 기능이 없어요. 컴퓨터의 크롬이나 엣지에서 열거나 다른 형식을 골라 주세요.' : '영상을 만들지 못했어요. 길이를 줄이거나 다른 비율·형식으로 다시 해 보세요.');
       if (why !== 'stop' && window.console) console.warn('[모션랩] 영상 저장 실패', e);
     }
-    if (encoder && encoder.state !== 'closed') try { encoder.close(); } catch (e) {}
-    if (rig) rig.close();
     paintVideoLabel();
   }
   const paintVideoLabel = () => { $('btnVideo').querySelector('span').textContent = `영상으로 저장 (${KINDS[kindOf()].name})`; };
@@ -36234,6 +36349,455 @@ const QM_REG = [
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => { if (open) mount(); }, 200);
   });
+
+  /* ---- 바구니: 모션 여러 개를 담아 두었다가 한꺼번에 받거나, 링크 하나로 넘깁니다 ----
+     칸 하나 = { label, options: [{ id, why, words, set, scrim }], pick, dur, mode }
+     클로드가 골라 준 바구니는 칸마다 대안(options)이 딸려 와 ‹ › 로 바꿔 볼 수 있습니다.
+     글자·색·글꼴은 모션 창에서 고친 값을 그대로 씁니다 (창에서 고치면 바구니에도 그대로 들어감) */
+  var baskReady = false;
+  const BASK_KEY = 'qmlBasket1', BASK_RATIOS = ['16 / 9', '9 / 16', '1 / 1', '4 / 5'], BASK_KINDS = ['webm', 'mov', 'mp4'];
+  const motionOf = id => MOTIONS.find(m => m.id === id);
+  const bask = { title: '', note: '', by: 'teacher', ratio: '16 / 9', kind: 'webm', slots: [], frames: [], onFrame: true, status: 'draft', seeded: {} };
+  (() => {
+    let got = null;
+    try { got = JSON.parse(localStorage.getItem(BASK_KEY) || 'null'); } catch (e) {}
+    if (!got) try {                                                  // 크롬 확장으로 미리 써 보던 바구니가 있으면 이어서
+      const old = JSON.parse(localStorage.getItem('quokaBasket.v1') || 'null');
+      if (old && Array.isArray(old.slots)) got = { title: old.project || '', note: old.note || '', by: old.by || 'claude', slots: old.slots.filter(s => !s.off), frames: old.frames || [], onFrame: old.onFrame !== false, seeded: {} };
+    } catch (e) {}
+    if (got && typeof got === 'object') Object.assign(bask, got);
+  })();
+  function baskTidy() {
+    bask.slots = (Array.isArray(bask.slots) ? bask.slots : []).filter(s => s && Array.isArray(s.options) && !s.off);
+    bask.slots.forEach(s => { s.options = s.options.filter(o => o && motionOf(o.id)); s.pick = Math.min(Math.max(0, s.pick | 0), Math.max(0, s.options.length - 1)); });
+    bask.slots = bask.slots.filter(s => s.options.length);
+    if (!BASK_RATIOS.includes(bask.ratio)) bask.ratio = '16 / 9';
+    if (!BASK_KINDS.includes(bask.kind)) bask.kind = 'webm';
+    if (!Array.isArray(bask.frames)) bask.frames = [];
+    if (!bask.seeded || typeof bask.seeded !== 'object') bask.seeded = {};
+  }
+  baskTidy();
+  const baskSave = () => { try { localStorage.setItem(BASK_KEY, JSON.stringify(bask)); } catch (e) {} };
+  const baskCur = s => s.options[s.pick] || s.options[0];
+  const baskSecs = (s, m) => Math.min(30, Math.max(1, +s.dur || secOf(m)));
+  const baskEsc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const baskWords = ws => ws.map(w => String(w).replace(/,/g, ' ').replace(/\n/g, '\\n')).join(', ');   // 모션 창 '글자' 칸과 같은 모양
+  const baskBusy = () => !!baskJob;
+  let baskJob = null, baskPending = null, baskWasOpen = false, baskArm = 0, baskEngines = [];
+
+  // 칸에 딸려 온 글자·문구·색을 모션 창 설정에 넣음. force가 아니면 선생님이 창에서 직접 고친 값은 덮지 않음
+  function baskApply(o, force) {
+    const m = motionOf(o.id);
+    if (!m || m.ext) return;
+    const mark = bask.seeded[m.id] || (bask.seeded[m.id] = {});
+    if (Array.isArray(o.words) && o.words.length) {
+      const w = baskWords(o.words);
+      if (force || !state.wordsBy[m.id] || state.wordsBy[m.id] === mark.words) { state.wordsBy[m.id] = w; mark.words = w; }
+    }
+    if (o.set && typeof o.set === 'object') {
+      const items = fieldsFor(m).reduce((a, g) => a.concat(g.items), []), mine = state.textBy[m.id] || (state.textBy[m.id] = {});
+      mark.set = mark.set || {};
+      Object.keys(o.set).forEach(k => {
+        const it = items.find(x => x.key === k);
+        if (!it) return;
+        const v = it.kind === 'num' ? +o.set[k] : typeof it.value === 'boolean' ? !!o.set[k] : String(o.set[k]);
+        if (it.kind === 'num' && !isFinite(v)) return;
+        if (!force && mine[k] && mine[k].v !== mark.set[k]) return;
+        mine[k] = { o: it.value, v: v };
+        mark.set[k] = v;
+      });
+    }
+    if (o.font && KFONTS[o.font]) state.fontBy[m.id] = o.font;
+    if (/^#[0-9a-f]{6}$/i.test(o.point || '')) state.pointBy[m.id] = o.point;
+    if (/^#[0-9a-f]{6}$/i.test(o.bg || '')) state.bgBy[m.id] = o.bg;
+  }
+  // 지금 모습 그대로 (클로드·편집기가 읽는 모양)
+  function baskResult() {
+    return {
+      title: bask.title, status: bask.status, ratio: bask.ratio.replace(' / ', ':'), kind: bask.kind,
+      slots: bask.slots.map((s, n) => {
+        const o = baskCur(s), m = motionOf(o.id), set = {};
+        Object.keys(state.textBy[m.id] || {}).forEach(k => { set[k] = state.textBy[m.id][k].v; });
+        return { no: n + 1, label: s.label || '', role: s.role || '', mode: s.mode === 'scene' ? 'scene' : 'overlay', dur: baskSecs(s, m), id: m.id, ko: m.ko, cat: m.cat,
+          words: m.uses.indexOf('t') >= 0 ? wordsOf(m) : null, set: set, font: state.fontBy[m.id] || null, point: state.pointBy[m.id] || null, scrim: o.scrim || null, scrim_alpha: o.scrim_alpha || null };
+      })
+    };
+  }
+  // 클로드가 골라 준 묶음(또는 링크로 받은 묶음)으로 바구니를 통째로 바꿈
+  function baskLoad(seed) {
+    if (!seed || !Array.isArray(seed.slots)) return 0;
+    Object.assign(bask, { title: seed.title || seed.project || '', note: seed.note || '', by: seed.by || 'teacher', slots: JSON.parse(JSON.stringify(seed.slots)), status: 'draft', seeded: {} });
+    if (BASK_RATIOS.includes(seed.ratio)) bask.ratio = seed.ratio;
+    if (BASK_KINDS.includes(seed.kind)) bask.kind = seed.kind;
+    if (Array.isArray(seed.frames) && seed.frames.length) bask.frames = seed.frames.filter(f => /^data:image\//.test(f));
+    baskTidy();
+    bask.slots.forEach(s => baskApply(baskCur(s), true));
+    save();
+    baskSave();
+    baskPaint();
+    if (open) pick();
+    return bask.slots.length;
+  }
+
+  /* 링크: 바구니를 주소 하나에 담아 넘깁니다 (#basket=…). 장면 사진은 이 컴퓨터에만 남고 링크에는 들어가지 않습니다 */
+  const b64e = str => { const b = new TextEncoder().encode(str); let s = ''; for (let i = 0; i < b.length; i += 8192) s += String.fromCharCode.apply(null, b.subarray(i, i + 8192)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+  const b64d = str => new TextDecoder().decode(Uint8Array.from(atob(str.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
+  function baskPack() {
+    return {
+      v: 1, t: bask.title || undefined, n: bask.note || undefined, r: bask.ratio, k: bask.kind,
+      s: bask.slots.map(s => {
+        const o = baskCur(s), m = motionOf(o.id), x = {};
+        Object.keys(state.textBy[m.id] || {}).forEach(k => { const e = state.textBy[m.id][k]; if (e.v !== e.o) x[k] = e.v; });
+        return { i: m.id, l: s.label || undefined, d: +s.dur || undefined, m: s.mode === 'scene' ? 1 : undefined, w: state.wordsBy[m.id] || undefined, x: Object.keys(x).length ? x : undefined,
+          f: state.fontBy[m.id] || undefined, p: state.pointBy[m.id] || undefined, b: m.bg && state.bgBy[m.id] ? state.bgBy[m.id] : undefined, c: o.scrim || undefined, a: o.scrim_alpha || undefined };
+      })
+    };
+  }
+  const baskUrl = () => location.origin + location.pathname + '#basket=' + b64e(JSON.stringify(baskPack()));
+  function baskUnpack(code) {
+    const p = JSON.parse(b64d(code));
+    if (!p || !Array.isArray(p.s)) throw new Error('pack');
+    return { title: p.t || '', note: p.n || '', by: 'link', ratio: p.r, kind: p.k,
+      slots: p.s.filter(x => x && motionOf(x.i)).map(x => ({ label: x.l || '', dur: x.d, mode: x.m ? 'scene' : undefined,
+        options: [{ id: x.i, words: x.w ? String(x.w).split(',').map(w => w.trim().replace(/\\n/g, '\n')).filter(Boolean) : undefined, set: x.x, font: x.f, point: x.p, bg: x.b, scrim: x.c, scrim_alpha: x.a }] })) };
+  }
+
+  /* 그리기 */
+  const baskBox = () => {
+    const p = bask.ratio.split('/').map(Number), r = p[0] / p[1], small = matchMedia('(max-width: 560px)').matches;
+    const w = Math.min(small ? 120 : 152, Math.round((small ? 68 : 86) * r)), BW = r >= 1 ? 960 : 540;
+    return { w: w, h: Math.round(w / r), BW: BW, BH: Math.round(BW / r) };
+  };
+  function baskUnmount() {
+    baskEngines.forEach(e => { try { e.destroy(); } catch (x) {} });
+    baskEngines = [];
+  }
+  function baskMount() {
+    baskUnmount();
+    if ($('bask').hidden || baskBusy()) return;
+    const box = baskBox(), n = bask.frames.length;
+    $('baskList').querySelectorAll('.bask-stage').forEach(el => {
+      const s = bask.slots[+el.dataset.i], o = baskCur(s), m = motionOf(o.id);
+      const frame = s.mode !== 'scene' && bask.onFrame && n ? bask.frames[(s.frame || 0) % n] : '';
+      const sa = o.scrim_alpha || (o.scrim === 'bottom' ? 0.55 : 0.38);
+      const shade = frame && o.scrim ? (o.scrim === 'bottom' ? `linear-gradient(to bottom,rgba(0,0,0,0) 45%,rgba(0,0,0,${sa})),` : `linear-gradient(rgba(0,0,0,${sa}),rgba(0,0,0,${sa})),`) : '';
+      el.style.backgroundImage = frame ? `${shade}url("${frame}")` : '';
+      el.style.backgroundColor = frame ? '' : (m.ext ? '#000000' : bgOf(m));
+      el.textContent = '';
+      const host = document.createElement('div'), root = document.createElement('div');
+      host.className = 'bask-host';
+      host.style.cssText = `width:${box.BW}px;height:${box.BH}px;transform:scale(${box.w / box.BW});`;
+      root.style.width = box.BW + 'px';
+      host.appendChild(root);
+      el.appendChild(host);
+      if (isStill(m)) { root.style.height = box.BH + 'px'; poster(root, { ratio: bask.ratio }, m); return; }
+      try {
+        const eng = qmEngine(root, { images: files.map(f => f.url), speed: state.speed, radius: state.radius, bg: frame ? 'transparent' : bgOf(m), colors: colorsOf(m), ratio: bask.ratio, seed: SEED, words: wordsOf(m), autoplay: !calm }, fnOf(m));
+        baskEngines.push(eng);
+      } catch (e) { el.textContent = ''; }
+    });
+  }
+  function baskBadges() {
+    const at = {};
+    bask.slots.forEach((s, i) => { const id = baskCur(s).id; (at[id] = at[id] || []).push(String(i + 1).padStart(2, '0')); });
+    MOTIONS.forEach(m => {
+      const tile = tiles[m.id];
+      if (!tile) return;
+      let b = tile.querySelector('.bask-badge');
+      if (at[m.id]) {
+        if (!b) { b = document.createElement('span'); b.className = 'bask-badge'; tile.appendChild(b); }
+        b.textContent = '담음 ' + at[m.id].join('·');
+      } else if (b) b.remove();
+    });
+  }
+  function baskPaintAdd() {
+    if (!baskReady) return;
+    const m = current(), btn = $('baskAdd'), k = bask.slots.findIndex(s => baskCur(s).id === m.id);
+    btn.hidden = !!m.ext;
+    btn.setAttribute('aria-pressed', k >= 0);
+    btn.lastChild.textContent = k >= 0 ? `바구니에 있어요 · ${String(k + 1).padStart(2, '0')}` : '바구니에 담기';
+  }
+  function baskPaint() {
+    const n = bask.slots.length, nav = $('baskNav');
+    $('baskN').textContent = n;
+    nav.classList.toggle('has', n > 0);
+    $('baskEye').textContent = 'QUOKA BASKET' + (bask.by === 'claude' ? ' · 클로드가 먼저 고름' : bask.by === 'link' ? ' · 링크로 받음' : '');
+    $('baskTitle').textContent = bask.title || '내 바구니';
+    $('baskNote').textContent = n ? (bask.note ? bask.note + ' ' : '') + '모두 받기를 누르면 칸마다 영상 파일이 하나씩 만들어져요.' : '';
+    $('baskNote').hidden = !n;
+    $('baskList').innerHTML = n ? bask.slots.map((s, i) => {
+      const o = baskCur(s), m = motionOf(o.id), box = baskBox();
+      return `<li class="bask-item">
+        <button class="bask-stage" type="button" data-act="open" data-i="${i}" style="width:${box.w}px;height:${box.h}px" aria-label="${baskEsc(m.ko)} 크게 보기"></button>
+        <div class="bask-info">
+          <p class="bask-role"><b>${String(i + 1).padStart(2, '0')}</b>${baskEsc(s.label || '')}${s.mode === 'scene' ? ' · 화면 전체' : ''}</p>
+          <p class="bask-name">${baskEsc(m.ko)}</p>
+          ${o.why ? `<p class="bask-why">${baskEsc(o.why)}</p>` : ''}
+          ${m.ext ? '<p class="bask-why">이 모션은 코드로만 써요 (영상으로는 못 받아요)</p>' : ''}
+          <div class="bask-ctl">
+            ${s.options.length > 1 ? `<button class="btn ico" type="button" data-act="prev" data-i="${i}" aria-label="이전 후보">‹</button><span class="bask-count">${s.pick + 1}/${s.options.length}</span><button class="btn ico" type="button" data-act="next" data-i="${i}" aria-label="다음 후보">›</button>` : ''}
+            ${m.ext ? '' : `<label class="bask-len">길이<input type="number" data-act="len" data-i="${i}" min="1" max="30" step="0.5" value="${baskSecs(s, m)}" inputmode="decimal">초</label>`}
+            <button class="btn ico" type="button" data-act="up" data-i="${i}" aria-label="앞으로" ${i ? '' : 'disabled'}>↑</button>
+            <button class="btn ico" type="button" data-act="down" data-i="${i}" aria-label="뒤로" ${i < n - 1 ? '' : 'disabled'}>↓</button>
+            <button class="btn" type="button" data-act="drop" data-i="${i}">빼기</button>
+          </div>
+        </div></li>`;
+    }).join('') : '<li class="bask-empty">아직 비어 있어요.<br>모션을 눌러 창을 열고 위쪽 <b>바구니에 담기</b>를 누르면 여기에 차례로 쌓여요. 다 담으면 <b>모두 받기</b>로 한꺼번에 내려받거나, <b>링크 복사</b>로 다른 선생님께 그대로 넘길 수 있어요.</li>';
+    $('baskFoot').hidden = !n;
+    $('baskFrames').textContent = bask.frames.length ? '장면 바꾸기' : '내 영상 장면 고르기';
+    $('baskFrameSw').hidden = !bask.frames.length;
+    $('baskFrameSw').setAttribute('aria-pressed', !!bask.onFrame);
+    $('baskClaude').hidden = bask.by !== 'claude';
+    $('baskClaude').textContent = bask.status === 'confirmed' ? '클로드에게 넘겼어요 ✓' : '클로드에게 넘기기';
+    if (!baskBusy()) $('baskGet').firstChild.textContent = `모두 받기 · ${n}개`;
+    paintBaskKind(bask.kind);
+    paintBaskRatio(bask.ratio);
+    baskBanner();
+    baskBadges();
+    baskPaintAdd();
+    baskMount();
+  }
+  function baskBanner() {
+    const el = $('baskBanner');
+    el.hidden = !baskPending;
+    if (!baskPending) return;
+    el.innerHTML = `<p>링크로 받은 바구니${baskPending.title ? ` ‘${baskEsc(baskPending.title)}’` : ''}(${baskPending.slots.length}칸)가 있어요. 지금 바구니 대신 열까요?</p><div class="bask-acts"><button class="btn" type="button" data-act="take">이걸로 바꾸기</button><button class="btn" type="button" data-act="keep">지금 바구니 두기</button></div>`;
+  }
+  let toastTimer = 0;
+  const baskToast = text => { const t = $('baskToast'); t.textContent = text; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2400); };
+  const baskSay = text => { $('baskSay').textContent = text; };
+  function baskShow(on) {
+    $('bask').hidden = !on;
+    $('baskNav').setAttribute('aria-expanded', on);
+    if (on) baskPaint(); else baskUnmount();
+  }
+  function baskChanged() {                                             // 고칠 때마다: 저장하고 다시 그림 (클로드에게 넘긴 뒤 고치면 다시 넘겨야 함)
+    if (bask.status === 'confirmed') bask.status = 'draft';
+    baskSave();
+    baskPaint();
+  }
+  function baskConfirm(how) {
+    bask.status = 'confirmed';
+    baskSave();
+    const r = baskResult();
+    r.how = how;
+    window.dispatchEvent(new CustomEvent('quoka-basket-confirm', { detail: r }));
+    if (window.console) console.log('[QuokaBasket] confirmed ' + JSON.stringify(r));
+  }
+
+  /* 담기: 모션 창의 '바구니에 담기' */
+  function baskPut(id, at) {
+    const m = motionOf(id);
+    if (!m || m.ext) return;
+    if (at === undefined || at === 'new') {
+      bask.slots.push({ label: '', options: [{ id: id }], pick: 0 });
+      at = bask.slots.length - 1;
+    } else {
+      const s = bask.slots[at];
+      let k = s.options.findIndex(o => o.id === id);
+      if (k < 0) { s.options.push({ id: id, why: '모션랩에서 직접 골랐어요.' }); k = s.options.length - 1; }
+      s.pick = k;
+    }
+    baskChanged();
+    const nav = $('baskNav');
+    nav.classList.remove('bump');
+    void nav.offsetWidth;
+    nav.classList.add('bump');
+    baskToast(`‘${m.ko}’을(를) ${String(at + 1).padStart(2, '0')}번 칸에 담았어요 · 모두 ${bask.slots.length}개`);
+  }
+  function baskMenu(show) {
+    const menu = $('baskMenu');
+    if (!show) { menu.hidden = true; return; }
+    const m = current(), r = $('baskAdd').getBoundingClientRect();
+    menu.innerHTML = `<p>‘${baskEsc(m.ko)}’ 넣을 곳 · 칸을 고르면 그 칸의 모션과 바뀌어요</p><button type="button" data-put="new"><span class="bask-num">+</span>맨 뒤에 새로 담기</button>` +
+      bask.slots.map((s, i) => `<button type="button" data-put="${i}"><span class="bask-num">${String(i + 1).padStart(2, '0')}</span>${baskEsc(s.label || (i + 1) + '번 칸')}<small>${baskEsc(motionOf(baskCur(s).id).ko)}</small></button>`).join('');
+    menu.hidden = false;
+    menu.style.top = Math.round(r.bottom + 8) + 'px';
+    menu.style.left = Math.round(Math.max(8, Math.min(innerWidth - menu.offsetWidth - 8, r.right - menu.offsetWidth))) + 'px';
+  }
+  $('baskAdd').addEventListener('click', e => {
+    e.stopPropagation();
+    if (!$('baskMenu').hidden) { baskMenu(false); return; }
+    if (!bask.slots.length) baskPut(current().id);
+    else baskMenu(true);
+  });
+  $('baskMenu').addEventListener('click', e => {
+    const b = e.target.closest('[data-put]');
+    if (!b) return;
+    baskMenu(false);
+    baskPut(current().id, b.dataset.put === 'new' ? 'new' : +b.dataset.put);
+  });
+  document.addEventListener('click', e => { if (!$('baskMenu').hidden && !$('baskMenu').contains(e.target)) baskMenu(false); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!$('baskMenu').hidden) { baskMenu(false); return; }
+    if (!open && !$('bask').hidden) baskShow(false);
+  });
+
+  /* 바구니 창 */
+  $('baskNav').addEventListener('click', () => baskShow($('bask').hidden));
+  $('baskClose').addEventListener('click', () => baskShow(false));
+  $('bask').addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b || b.dataset.act === 'len') return;
+    const act = b.dataset.act, i = +b.dataset.i, s = bask.slots[i];
+    if (baskBusy()) return;
+    if (act === 'take') { const p = baskPending; baskPending = null; baskLoad(p); baskToast('링크로 받은 바구니를 열었어요'); return; }
+    if (act === 'keep') { baskPending = null; baskBanner(); return; }
+    if (!s) return;
+    if (act === 'open') { baskWasOpen = true; baskShow(false); choose(baskCur(s).id); return; }
+    if (act === 'prev' || act === 'next') { s.pick = (s.pick + (act === 'next' ? 1 : -1) + s.options.length) % s.options.length; baskApply(baskCur(s), false); save(); baskChanged(); return; }
+    if (act === 'up' && i > 0) { bask.slots.splice(i - 1, 0, bask.slots.splice(i, 1)[0]); baskChanged(); return; }
+    if (act === 'down' && i < bask.slots.length - 1) { bask.slots.splice(i + 1, 0, bask.slots.splice(i, 1)[0]); baskChanged(); return; }
+    if (act === 'drop') { const name = motionOf(baskCur(s).id).ko; bask.slots.splice(i, 1); baskChanged(); baskToast(`‘${name}’을(를) 뺐어요`); }
+  });
+  $('baskList').addEventListener('change', e => {
+    const el = e.target;
+    if (el.dataset.act !== 'len') return;
+    const s = bask.slots[+el.dataset.i], v = Math.min(30, Math.max(1, +el.value || 0));
+    if (s && v) { s.dur = v; if (bask.status === 'confirmed') bask.status = 'draft'; baskSave(); }
+    el.value = s ? baskSecs(s, motionOf(baskCur(s).id)) : el.value;
+  });
+  const paintBaskKind = seg($('baskKind'), bask.kind, v => { bask.kind = v; baskSave(); baskSay(v === 'mov' ? 'MOV는 파일이 커서 zip으로 묶지 않고 하나씩 내려받아요. 브라우저가 여러 파일 받기를 물으면 허용해 주세요.' : ''); });
+  const paintBaskRatio = seg($('baskRatio'), bask.ratio, v => { bask.ratio = v; baskChanged(); });
+  $('baskFrames').addEventListener('click', () => $('baskPick').click());
+  $('baskFrameSw').addEventListener('click', () => { bask.onFrame = !bask.onFrame; baskSave(); baskPaint(); });
+  // 내 영상(또는 사진)에서 장면 한 장씩 뽑아 미리보기 바탕으로 (이 브라우저 안에서만 처리하고, 어디에도 올리지 않음)
+  const frameOf = (src, w0, h0) => { const c = document.createElement('canvas'), w = 320, h = 180, g = c.getContext('2d'), r = Math.max(w / w0, h / h0); c.width = w; c.height = h; g.drawImage(src, (w - w0 * r) / 2, (h - h0 * r) / 2, w0 * r, h0 * r); return c.toDataURL('image/jpeg', 0.72); };
+  const grabFrame = f => new Promise(ok => {
+    const url = URL.createObjectURL(f), done = v => { URL.revokeObjectURL(url); ok(v); };
+    if (/^image\//.test(f.type)) { const im = new Image(); im.onload = () => done(frameOf(im, im.naturalWidth, im.naturalHeight)); im.onerror = () => done(null); im.src = url; return; }
+    const v = document.createElement('video');
+    v.muted = true; v.preload = 'auto';
+    v.onloadedmetadata = () => { v.currentTime = Math.min(3, (v.duration || 1) * 0.4); };
+    v.onseeked = () => done(frameOf(v, v.videoWidth, v.videoHeight));
+    v.onerror = () => done(null);
+    v.src = url;
+  });
+  $('baskPick').addEventListener('change', async e => {
+    const list = Array.from(e.target.files || []).slice(0, 4);
+    e.target.value = '';
+    if (!list.length) return;
+    const got = (await Promise.all(list.map(grabFrame))).filter(Boolean);
+    if (!got.length) { baskToast('이 파일에서는 장면을 못 뽑았어요'); return; }
+    bask.frames = got;
+    bask.onFrame = true;
+    baskSave();
+    baskPaint();
+    baskToast(`내 영상 장면 ${got.length}장 위에서 미리 보여 드려요`);
+  });
+  $('baskClear').addEventListener('click', () => {
+    if (Date.now() - baskArm > 3000) { baskArm = Date.now(); $('baskClear').textContent = '한 번 더 누르면 비워요'; setTimeout(() => { $('baskClear').textContent = '비우기'; }, 3000); return; }
+    baskArm = 0;
+    $('baskClear').textContent = '비우기';
+    Object.assign(bask, { title: '', note: '', by: 'teacher', slots: [], status: 'draft', seeded: {} });
+    baskChanged();
+  });
+  $('baskLink').addEventListener('click', () => {
+    const url = baskUrl(), done = () => { baskToast('링크를 복사했어요. 다른 선생님이나 클로드에게 붙여 넣어 주세요'); baskConfirm('link'); };
+    const show = () => {                                               // 복사가 막힌 곳에서는 주소를 보여 주고 골라 둠
+      $('baskSay').innerHTML = '아래 주소를 복사해 주세요<input class="bask-url" type="text" readonly>';
+      const box = $('baskSay').lastChild;
+      box.value = url;
+      box.focus();
+      box.select();
+      baskConfirm('link');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, show);
+    else show();
+  });
+  $('baskClaude').addEventListener('click', () => { baskConfirm('claude'); baskPaint(); baskToast('클로드에게 넘겼어요. 이 탭은 그대로 두세요'); });
+
+  /* 모두 받기: 칸마다 영상 하나씩 만들어 zip 하나로 (MOV는 커서 하나씩 바로 받음) */
+  const fileName = t => String(t || '').replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, '').slice(0, 40);
+  async function baskExport() {
+    if (baskJob) { baskJob.stop = true; return; }
+    const list = bask.slots.map((s, i) => ({ s: s, i: i, m: motionOf(baskCur(s).id) })).filter(x => !x.m.ext);
+    if (!list.length) { baskSay('영상으로 받을 수 있는 모션이 없어요.'); return; }
+    const needCodec = list.some(x => x.s.mode === 'scene') || bask.kind !== 'mov';
+    if (needCodec && (!window.VideoEncoder || !window.VideoFrame)) { baskSay('이 브라우저에서는 영상 만들기가 안 돼요. 컴퓨터의 크롬이나 엣지에서 열어 주세요.'); return; }
+    const job = baskJob = { stop: false }, btn = $('baskGet'), out = [], began = performance.now();
+    let n = 0, bytes = 0;
+    baskUnmount();
+    $('baskList').classList.add('busy');
+    baskSay('만드는 동안 이 탭을 그대로 두세요. 다른 탭으로 가면 느려지거나 멈춥니다.');
+    try {
+      for (; n < list.length; n++) {
+        const x = list[n], kind = x.s.mode === 'scene' ? 'mp4' : bask.kind, K = KINDS[kind], secs = baskSecs(x.s, x.m), total = Math.round(secs * FPS);
+        const step = async (k, quick) => {
+          if (quick && k % 4) return;
+          const done = (n + (k + 1) / total) / list.length, left = (performance.now() - began) / done * (1 - done) / 1000;
+          btn.firstChild.textContent = `만드는 중 ${n + 1}/${list.length} · ${Math.round(done * 100)}% (누르면 멈춤)`;
+          if (k > 8 || n) baskSay(`‘${x.m.ko}’ 만드는 중. 남은 시간 약 ${left < 60 ? Math.ceil(left) + '초' : Math.ceil(left / 60) + '분'}. 이 탭을 그대로 두세요.`);
+          await tick();
+        };
+        const made = await encodeMotion(x.m, secs, kind, job, step, bask.ratio);
+        const name = `${String(x.i + 1).padStart(2, '0')}_${fileName(x.s.label) ? fileName(x.s.label) + '_' : ''}${fileName(x.m.ko)}.${K.ext}`;
+        bytes += made.blob.size;
+        if (kind === 'mov') await handOver(made.blob, name);
+        else out.push({ name: name, data: new Uint8Array(await made.blob.arrayBuffer()) });
+      }
+      if (out.length) {
+        const info = baskResult();
+        info.files = list.map(x => `${String(x.i + 1).padStart(2, '0')}_${fileName(x.s.label) ? fileName(x.s.label) + '_' : ''}${fileName(x.m.ko)}.${KINDS[x.s.mode === 'scene' ? 'mp4' : bask.kind].ext}`);
+        out.push({ name: 'basket.json', data: new TextEncoder().encode(JSON.stringify(info, null, 1)) });
+        const day = new Date(), stamp = `${day.getFullYear()}${String(day.getMonth() + 1).padStart(2, '0')}${String(day.getDate()).padStart(2, '0')}`;
+        await handOver(qmZip(out), `quoka-basket-${fileName(bask.title) || stamp}.zip`);
+      }
+      baskSay(`받았어요 · ${list.length}개 · ${(bytes / 1048576).toFixed(1)}MB · ${bask.ratio.replace(' / ', ':')}. ` + (out.length ? 'zip을 풀어 브루·캡컷·프리미어에 차례대로 끌어다 놓으세요.' : '받은 파일을 편집기에 차례대로 끌어다 놓으세요.') + (list.length < bask.slots.length ? ' 코드로만 쓰는 모션은 빠졌어요.' : ''));
+      baskConfirm('download');
+    } catch (e) {
+      const why = e && e.message;
+      baskSay(why === 'stop' ? '멈췄어요.' : why === 'script' ? '영상 묶는 도구를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.' : why === 'codec' ? '이 브라우저에는 이 형식의 압축 기능이 없어요. 컴퓨터의 크롬이나 엣지에서 열거나 다른 형식을 골라 주세요.' : `‘${list[Math.min(n, list.length - 1)].m.ko}’을(를) 만들지 못했어요. 길이를 줄이거나 다른 형식으로 다시 해 보세요.`);
+      if (why !== 'stop' && window.console) console.warn('[모션랩] 바구니 저장 실패', e);
+    }
+    baskJob = null;
+    $('baskList').classList.remove('busy');
+    btn.firstChild.textContent = `모두 받기 · ${bask.slots.length}개`;
+    baskPaint();
+  }
+  $('baskGet').addEventListener('click', baskExport);
+
+  // 모션 창이 열리면 바구니는 잠시 접고, 창을 닫으면 다시 펼침
+  function baskWin(opened) {
+    if (!baskReady) return;
+    baskMenu(false);
+    if (opened) { if (!$('bask').hidden) { baskWasOpen = true; baskShow(false); } baskPaintAdd(); }
+    else if (baskWasOpen) { baskWasOpen = false; baskShow(true); }
+  }
+
+  // 클로드(크롬 확장)와 이어지는 손잡이: 클로드가 바구니를 채우고(load), 선생님이 확정하면 읽어 감(get · waitConfirm)
+  window.quokaBasket = {
+    get: baskResult,
+    load: seed => { const k = baskLoad(seed); baskShow(true); return k; },
+    link: baskUrl,
+    open: () => baskShow(true),
+    close: () => baskShow(false),
+    confirmed: () => bask.status === 'confirmed',
+    waitConfirm: (ms = 25000) => new Promise(ok => {
+      if (bask.status === 'confirmed') return ok(baskResult());
+      const f = e => { clearTimeout(t); ok(e.detail); }, t = setTimeout(() => { removeEventListener('quoka-basket-confirm', f); ok(null); }, ms);
+      addEventListener('quoka-basket-confirm', f, { once: true });
+    })
+  };
+  baskReady = true;
+  // 주소 끝에 #basket=… 이 붙어 오면 그 바구니를 엽니다 (지금 바구니가 비어 있지 않으면 먼저 물어봄)
+  function baskFromHash() {
+    if (!/^#basket=/.test(location.hash)) return;
+    try {
+      const got = baskUnpack(location.hash.slice(8));
+      if (open) closeWin();
+      if (bask.slots.length) baskPending = got;
+      else { baskLoad(got); baskToast('링크로 받은 바구니를 열었어요'); }
+      baskShow(true);
+    } catch (e) { baskToast('바구니 링크를 읽지 못했어요'); }
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+  addEventListener('hashchange', baskFromHash);
+  baskSave();
+  baskFromHash();
+  baskPaint();
+  baskShow(!$('bask').hidden);
 
   if (/[?&]qmltest/.test(location.search)) window.qmlTest = { motions: MOTIONS, fieldsFor: fieldsFor, srcOf: srcOf, fnOf: fnOf, state: state, makeRig: makeRig, SEED: SEED };   // 점검용
   paintPlay();
