@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="모션 787종을 눌러서 보고, 프롬프트나 코드를 복사해 웹앱·영상·PPT·카드뉴스에 쓰는 쿼카연구회의 모션 라이브러리. 모션 PPT·캐러셀·영상 작업실 포함.">
+<meta name="description" content="모션 787종을 눌러서 보고, 프롬프트나 코드를 복사해 웹앱·영상·PPT·카드뉴스에 쓰는 쿼카연구회의 모션 라이브러리. 디자인 테마 예시 28가지를 담은 모션 PPT·캐러셀·영상 작업실 포함.">
 <meta property="og:title" content="쿼카 모션랩">
 <meta property="og:description" content="눌러서 보고, 프롬프트를 복사해 가는 모션 787종. 모션 PPT·캐러셀·영상 작업실.">
 <meta property="og:type" content="website">
@@ -434,6 +434,27 @@ pre { margin: 0; max-height: 260px; overflow: auto; padding: 14px 16px; border-r
 @media (max-width: 820px) { .st-doors { grid-template-columns: minmax(0, 1fr); gap: 8px; } .nav-links .st-navs { display: none; } }
 @media (prefers-reduced-motion: reduce) { .st-art::after, .st-art span { animation: none !important; } }
 
+.st-galbtn { gap: 6px; font-weight: 600; }
+.st-galbtn b { min-width: 18px; padding: 0 6px; border-radius: 999px; background: var(--wine); color: var(--bg); font: 600 11px/18px var(--mono); }
+.st-gal { position: fixed; inset: 0; z-index: 85; display: grid; place-items: center; padding: 16px; background: var(--veil); }
+.st-gal[hidden] { display: none; }
+.st-gal-in { width: min(1180px, 100%); height: min(840px, 100%); display: flex; flex-direction: column; border-radius: 22px; background: var(--bg); overflow: hidden; box-shadow: 0 40px 80px -40px rgba(0,0,0,.6), 0 0 0 1px var(--line); }
+.st-gal-in > header { flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 20px 16px; border-bottom: 1px solid var(--line); }
+.st-gal-in > header b { display: block; font-size: 18px; letter-spacing: -.02em; }
+.st-gal-in > header .hint { margin-top: 4px; }
+.st-gal-grid { flex: 1; min-height: 0; overflow-y: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px 18px; align-content: start; }
+.st-gal-card { padding: 0; border: 0; background: none; color: var(--ink); text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
+.st-gal-th { position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; background: #16171b; box-shadow: 0 0 0 1px var(--line); transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s; }
+.st-gal-th * { pointer-events: none; }
+.st-gal-card:hover .st-gal-th { transform: translateY(-3px); box-shadow: 0 0 0 2px var(--accent), 0 18px 32px -20px var(--lift); }
+.st-gal-card.on .st-gal-th { box-shadow: 0 0 0 2px var(--accent); }
+.st-gal-meta > b { display: block; font-size: 15px; font-weight: 700; letter-spacing: -.02em; }
+.st-gal-meta > small { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.45; color: var(--muted); word-break: keep-all; }
+.st-gal-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.st-gal-tags > i { font-style: normal; font-size: 11.5px; color: var(--muted); padding: 3px 8px; border-radius: 999px; background: var(--track); white-space: nowrap; }
+.st-gal-tags > .st-gal-sw { display: inline-flex; gap: 3px; padding: 4px 7px; }
+.st-gal-sw em { width: 11px; height: 11px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(0,0,0,.14); }
+@media (max-width: 620px) { .st-gal-grid { grid-template-columns: minmax(0, 1fr); padding: 14px; } }
 .st { position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); }
 .st[hidden] { display: none; }
 .st-head { flex: none; display: flex; align-items: center; gap: 10px; height: 60px; padding: 0 14px; border-bottom: 1px solid var(--line); }
@@ -1451,6 +1472,7 @@ function wcKit(api) {
 function slKit(api) {
   const clamp = x => Math.max(0, Math.min(1, x));
   const W = api.W, H = api.H, u = api.u, wide = W / H > 1.2, tall = H / W > 1.2;
+  api.root.style.fontSynthesis = 'none';   // 굵기가 하나뿐인 글꼴(검은고딕 등)을 고르면 억지로 굵게 그리지 않게
   const sk = {
     W: W, H: H, u: u, wide: wide, tall: tall,
     face: name => `'${name}','Pretendard Variable','Pretendard',sans-serif`,
@@ -1682,7 +1704,7 @@ function slKit(api) {
       const tag = o.tag ? sk.tag(parent, o.tag, `left:${X}px;top:${y}px;transform-origin:0 50%;`) : null;
       if (tag) y += u * 0.062;
       const ts = o.size || u * 0.07;
-      const title = sk.rise(parent, o.title, `left:${X}px;top:${y}px;font:800 ${ts}px/1.2 ${body};letter-spacing:-0.035em;color:${api.fg};`);
+      const title = sk.rise(parent, o.title, `left:${X}px;top:${y}px;font:700 ${ts}px/1.2 ${disp};letter-spacing:-0.03em;color:${api.fg};`);
       const keyW = o.key ? W * 0.32 : 0;
       sk.fit(title.core, W - X * 2 - keyW);
       const key = o.key ? sk.text(parent, o.key, `right:${X + Math.max(5, W * 0.011)}px;top:${y + ts * 1.2 - u * 0.095}px;text-align:right;font:700 ${u * 0.088}px/1.15 ${disp};letter-spacing:-0.02em;color:${api.accent};opacity:0;transform-origin:100% 80%;white-space:nowrap;`) : null;
@@ -1723,7 +1745,7 @@ function slKit(api) {
       const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg'), path = document.createElementNS(NS, 'path'), r = api.rand(o.seed || 17);
       svg.setAttribute('width', 10); svg.setAttribute('height', 10);
       svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible;pointer-events:none;';
-      const cx = x + w / 2, cy = y + h / 2, rx = w / 2 + u * 0.03, ry = h / 2 + u * 0.022, a0 = -2.6 + r() * 0.4, turn = Math.PI * 2 * 1.12, n = 90, pts = [];
+      const cx = x + w / 2, cy = y + h / 2, rx = w / 2 + u * 0.03, ry = h / 2 + (o.py != null ? o.py : u * 0.022), a0 = -2.6 + r() * 0.4, turn = Math.PI * 2 * 1.12, n = 90, pts = [];
       for (let i = 0; i <= n; i++) {
         const k = i / n, a = a0 + turn * k, wob = 1 + 0.035 * Math.sin(a * 3 + r() * 0.3) + (k > 0.85 ? 0.06 * (k - 0.85) / 0.15 : 0);
         pts.push([cx + Math.cos(a) * rx * wob, cy + Math.sin(a) * ry * wob * (1 - 0.04 * k)]);
@@ -1754,6 +1776,8 @@ function slKit(api) {
     },
     // 요소가 화면(모션 상자) 안 어디에 있나 { x, y, w, h } — 바깥에서 크기를 줄여 보여 줘도 원래 px로 돌려줌
     rect(el) { const r = el.getBoundingClientRect(), s = api.root.getBoundingClientRect(), k = s.width / W || 1; return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k }; },
+    // 목록에서 빈 칸은 뺌 (문구 칸을 비우면 그 항목·단계가 사라지게). [이름, 설명] 꼴이면 이름이 빈 것을 뺌
+    keep: list => (list || []).filter(x => String(Array.isArray(x) ? x[0] : x).trim() !== ''),
     // 글자 자리를 재야 하는 장치(펜 동그라미·화살표)는 처음 그려질 때 만듦 (글꼴이 다 들어온 뒤에 재도록). make: () => ({ set(p) })
     later(make) { let r = null; return p => { if (p > 0 && !r) r = make(); if (r) r.set(p); }; },
     // 캐러셀 카드 머리: 왼쪽 시리즈 이름, 오른쪽 쪽 번호, 아래 가는 선. 돌려주는 값 { line } (선은 set(p)로 그음)
@@ -54353,12 +54377,13 @@ function slCase(api) {
   const BANNER = '수업 사례 (1) 다장조 음계 로봇 · 5학년 음악';                                                  // 위 띠
   const ITEMS = [['성취기준', '느낌과 아이디어를 떠올려 여러 방법으로 자신감 있게 표현한다.'], ['탐구 문제', '몸의 움직임으로 음이름을 표현할 수 있을까?'], ['흐름', '도입 영상 감상 → 음계 알아보기 → 로봇 만들기 → 음이름 댄스']];   // 줄 [이름, 내용]
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length;
   const chrome = sk.chrome(stage);
   const ban = sk.tag(stage, BANNER, `left:${X}px;top:${Y * 0.8}px;font-size:${u * 0.032}px;padding:.55em 1.3em .5em;transform-origin:0 50%;`, true);
   const rw = sk.wide ? W * 0.52 : W - X * 2 - bar, top = Y * 0.8 + u * 0.15, rh = Math.min(u * 0.2, (H - Y - top) / n), bs = u * 0.1;
-  const rows = ITEMS.map((it, i) => {
+  const rows = ITEMS_.map((it, i) => {
     const y = top + i * rh, b = sk.badge(stage, String(i + 1).padStart(2, '0'), bs, X + bs / 2, y + rh / 2);
     const tx = sk.text(stage, '', `left:${X + bs + u * 0.035}px;top:${y + rh / 2 - u * 0.034 * 0.7}px;width:${rw - bs - u * 0.035}px;font:500 ${u * 0.034}px/1.45 ${body};letter-spacing:-0.025em;color:${fg};opacity:0;`);
     const nm = document.createElement('b'); nm.textContent = it[0] + '  '; nm.style.fontWeight = 800;
@@ -54402,26 +54427,30 @@ function slIndex(api) {
   const ITEMS = [['관계 맺기', '피지컬 AI의 개념과 원리 이해'], ['집중하기', '생활 맥락 관찰과 문제 발견'], ['조사하기', '사용자 중심 문제 구체화'], ['만들기', '해결 로봇 설계와 제작'], ['고치기', '테스트하며 수정하기'], ['전이하기', '다른 상황에 다시 적용']];   // 줄 [이름, 설명]
   const NOW = 4;                                                                                             // 지금 하는 차시 번호 (0이면 표시 안 함)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length;
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { crumb: CRUMB, title: TITLE, key: KEY });
   const cols = sk.wide && n > 3 ? 2 : 1, per = Math.ceil(n / cols), top = head.bottom + u * 0.07, cw = (W - X * 2 - bar - u * 0.05 * (cols - 1)) / cols, rh = Math.min(u * 0.15, (H - Y * 0.8 - top) / per), bs = u * 0.075;
   const band = document.createElement('div');
-  band.style.cssText = `position:absolute;left:0;top:0;width:${cw + u * 0.02}px;height:${rh * 0.86}px;border-radius:${rh}px;background:${ac};opacity:0;transform-origin:0 50%;`;
+  band.style.cssText = `position:absolute;left:0;top:0;width:${cw + u * 0.02}px;height:${rh * 0.86}px;border-radius:${u * 0.02}px;background:${ac};opacity:0;transform-origin:0 50%;`;
   stage.appendChild(band);
-  const rows = ITEMS.map((it, i) => {
+  const rows = ITEMS_.map((it, i) => {
     const x = X + Math.floor(i / per) * (cw + u * 0.05), y = top + (i % per) * rh, now = NOW === i + 1;
     const b = sk.badge(stage, String(i + 1), bs, x + bs / 2, y + rh / 2);
-    const nm = sk.text(stage, it[0], `left:${x + bs + u * 0.03}px;top:${y + rh / 2 - u * 0.04 * 0.62}px;white-space:nowrap;font:800 ${u * 0.04}px/1.25 ${body};letter-spacing:-0.03em;color:${fg};opacity:0;`);
-    const ds = sk.text(stage, it[1], `left:${x + bs + u * 0.03}px;top:${y + rh / 2 - u * 0.04 * 0.62}px;white-space:nowrap;font:500 ${u * 0.028}px/1.25 ${body};color:${fg};opacity:0;`);
+    // 이름 아래에 설명 (칸 너비에 맞춰 줄임)
+    const tw = cw - bs - u * 0.05, ty = it[1] ? y + rh / 2 - u * 0.046 : y + rh / 2 - u * 0.04 * 0.62;
+    const nm = sk.text(stage, it[0], `left:${x + bs + u * 0.03}px;top:${ty}px;white-space:nowrap;font:800 ${u * 0.04}px/1.25 ${body};letter-spacing:-0.03em;color:${fg};opacity:0;`);
+    const ds = sk.text(stage, it[1] || '', `left:${x + bs + u * 0.03}px;top:${ty + u * 0.054}px;white-space:nowrap;font:500 ${u * 0.027}px/1.25 ${body};color:${fg};opacity:0;`);
+    sk.fit(nm, tw, 0.6); sk.fit(ds, tw, 0.6);
     return { b: b, nm: nm, ds: ds, x: x, y: y, now: now };
   });
   let placed = false, nowRow = null;
-  const ring = sk.later(() => nowRow ? sk.ring(stage, nowRow.nm.offsetLeft - u * 0.01, nowRow.nm.offsetTop, nowRow.nm.offsetWidth + u * 0.02, nowRow.nm.offsetHeight, { seed: 8 }) : { set() {} });
+  const ring = sk.later(() => nowRow ? sk.ring(stage, nowRow.nm.offsetLeft - u * 0.01, nowRow.nm.offsetTop + nowRow.nm.offsetHeight * 0.1, nowRow.nm.offsetWidth + u * 0.02, nowRow.nm.offsetHeight * 0.8, { seed: 8, py: u * 0.008 }) : { set() {} });
   const steps = 1 + n;
   function frame(t) {
-    if (!placed || t < 1.5) { rows.forEach(r => { r.ds.style.left = (r.nm.offsetLeft + r.nm.offsetWidth + u * 0.025) + 'px'; r.ds.style.top = (r.nm.offsetTop + u * 0.009) + 'px'; if (r.now) nowRow = r; }); placed = true; }
+    if (!placed) { rows.forEach(r => { if (r.now) nowRow = r; }); placed = true; }
     const c = sk.cue(t, steps, 0.75, 2.8), lin = x => x, a = c.of(0, 1.2, lin);
     chrome(sk.seg(a, 0, 0.5)); head.set(a);
     rows.forEach((r, i) => {
@@ -54450,8 +54479,9 @@ function slPoints(api) {
   const ITEMS = [['발달 수준과 경험을 고려한 학습 지원', '교구 활용 경험을 고려해 탐색 활동을 먼저 하고,\n조작에서 설계로 이어지는 발판을 놓았어요.'], ['문학적 맥락으로 공감과 전이', '등장인물의 상황과 필요를 분석하고\n이야기 속 맥락에 해결 원리를 적용했어요.'], ['코딩에 집중하기 NO, 일단 만들어 보기 YES', '만들고 확인하고 고치는 경험으로\n자기효능감을 길렀어요.']];   // 묶음 [굵은 제목, 설명]
   const PHOTO = '프로젝트 활동 장면';                                                               // 사진 위 이름표
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent, ink = api.on(ac);
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length;
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { crumb: CRUMB, title: TITLE });
   const top = head.bottom + u * 0.06, bw = sk.wide ? W * 0.5 : W - X * 2 - bar, bh = sk.wide ? H - Y - top : (H - Y - top) * 0.62, pad = u * 0.04;
@@ -54459,7 +54489,7 @@ function slPoints(api) {
   box.style.cssText = `position:absolute;left:${X}px;top:${top}px;width:${bw}px;height:${bh}px;background:${ac};transform-origin:50% 0;`;
   stage.appendChild(box);
   const ih = (bh - pad * 2) / n;
-  const groups = ITEMS.map((it, i) => {
+  const groups = ITEMS_.map((it, i) => {
     const y = top + pad + i * ih;
     const hd = sk.text(stage, it[0], `left:${X + pad}px;top:${y}px;white-space:nowrap;font:800 ${u * 0.04}px/1.25 ${body};letter-spacing:-0.03em;color:${ink};opacity:0;`);
     sk.fit(hd, bw - pad * 2);
@@ -54503,6 +54533,8 @@ function slCompare(api) {
   const RIGHT = '인간 중심 사고';                                                                   // 오른쪽 제목
   const RIGHT_ITEMS = ['누가 어떤 문제를 겪고 있지?', '그 사람을 돕기 위해 AI가 무엇을 해야 할까?', '어떤 행동이 실제로 도움이 될까?'];   // 오른쪽 줄
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const LEFT_ITEMS_ = sk.keep(LEFT_ITEMS);   // 비운 칸은 빼고
+  const RIGHT_ITEMS_ = sk.keep(RIGHT_ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
   const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011);
   const chrome = sk.chrome(stage);
@@ -54524,7 +54556,7 @@ function slCompare(api) {
     });
     return { hd: hd, lines: lines, side: side };
   };
-  const L = col(0, LEFT, LEFT_ITEMS), R = col(1, RIGHT, RIGHT_ITEMS);
+  const L = col(0, LEFT, LEFT_ITEMS_), R = col(1, RIGHT, RIGHT_ITEMS_);
   const ring = sk.later(() => sk.ring(stage, R.hd.offsetLeft, R.hd.offsetTop, R.hd.offsetWidth, R.hd.offsetHeight, { seed: 5 }));
   const show = (C, p) => {
     const k = sk.seg(p, 0, 0.3);
@@ -54755,8 +54787,9 @@ function slPhoto(api) {
   const TITLE = '생활 속 불편을 해결할 로봇 만들기';                                                 // 제목
   const ITEMS = ['우리가 만든 로봇의 쓸모 확인', '경험을 넓혀 현실로 연결하기', '이야기 속 문제 해결하기'];   // 설명 줄 (번호 원과 함께)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length;
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { crumb: CRUMB, title: TITLE });
   const top = head.bottom + u * 0.06, pw = sk.wide ? W * 0.5 : W - X * 2 - bar, ph = sk.wide ? H - Y * 0.8 - top : pw * 0.62, bw = Math.max(5, u * 0.016);
@@ -54766,7 +54799,7 @@ function slPhoto(api) {
   const pic = sk.layer(pf, `background:${art ? `url(${art.url}) center / cover no-repeat` : api.paint(0)};`);
   stage.appendChild(pf);
   const rx = sk.wide ? X + pw + u * 0.06 : X, ry = sk.wide ? top + u * 0.04 : top + ph + u * 0.05, rw = W - rx - X - bar, gap = Math.min(u * 0.13, (H - Y - ry) / n), bs = u * 0.055;
-  const rows = ITEMS.map((s, i) => {
+  const rows = ITEMS_.map((s, i) => {
     const y = ry + i * gap, b = sk.badge(stage, String(i + 1), bs, rx + bs / 2, y + bs / 2);
     const tx = sk.text(stage, s, `left:${rx + bs + u * 0.025}px;top:${y + bs / 2 - u * 0.033 * 0.66}px;width:${rw - bs - u * 0.025}px;font:600 ${u * 0.033}px/1.35 ${body};letter-spacing:-0.025em;color:${fg};opacity:0;`);
     return { b: b, tx: tx };
@@ -54797,12 +54830,13 @@ function slGallery(api) {
   const TITLE = '생활 속 불편을 해결할 로봇 · 1차 결과물';                     // 제목
   const ITEMS = ['피아노 연주 로봇', '심부름 로봇', '독도 안전 로봇'];            // 사진 이름표 (사진 수 = 이름표 수, 내 사진이 차례로)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, ac = api.accent;
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length;
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { crumb: CRUMB, title: TITLE });
   const cols = sk.wide ? Math.min(n, 4) : Math.min(n, 2), rowsN = Math.ceil(n / cols), gap = u * 0.04, top = head.bottom + u * 0.11, tagH = u * 0.07;
   const cw = (W - X * 2 - bar - gap * (cols - 1)) / cols, ch = Math.min(cw * 0.8, (H - Y * 0.7 - top - (tagH + gap) * (rowsN - 1)) / rowsN), bw = Math.max(5, u * 0.014);
-  const tiles = ITEMS.map((s, i) => {
+  const tiles = ITEMS_.map((s, i) => {
     const x = X + (i % cols) * (cw + gap), y = top + Math.floor(i / cols) * (ch + tagH + gap);
     const box = document.createElement('div');
     box.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:${cw}px;height:${ch}px;border-radius:${u * 0.025}px;border:${bw}px solid ${ac};box-sizing:border-box;overflow:hidden;background:#ddd;transform-origin:50% 80%;`;
@@ -54838,13 +54872,14 @@ function slFlow(api) {
   const POINT = 'Today’s Point!';                                           // 마지막 낱말 아래 손글씨 (비우면 안 보임)
   const BASE = '기존의 피지컬 AI 수업';                                         // 앞 단계들 아래 작은 글 (비우면 안 보임)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable'), hand = sk.face('Nanum Pen Script');
-  const stage = sk.layer(api.root), X = sk.pad.x, bar = Math.max(5, W * 0.011), n = ITEMS.length, NS = 'http://www.w3.org/2000/svg';
+  const stage = sk.layer(api.root), X = sk.pad.x, bar = Math.max(5, W * 0.011), n = ITEMS_.length, NS = 'http://www.w3.org/2000/svg';
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { title: TITLE });
   const hz = !sk.tall, fs = sk.wide ? u * 0.05 : u * 0.044, cy = H * 0.52;
   const span = W - X * 2 - bar, slot = span / n;
-  const items = ITEMS.map((s, i) => {
+  const items = ITEMS_.map((s, i) => {
     const x = hz ? X + slot * i : X, y = hz ? cy : head.bottom + u * 0.1 + i * (H - head.bottom - u * 0.25) / n;
     const el = sk.text(stage, s, `left:${x}px;top:${y - fs * 0.62 * s.split('\n').length}px;width:${hz ? slot - u * 0.06 : W - X * 2}px;text-align:${hz ? 'center' : 'left'};font:800 ${fs}px/1.25 ${body};letter-spacing:-0.03em;color:${fg};opacity:0;`);
     sk.fit(el, (hz ? slot - u * 0.06 : W - X * 2));
@@ -54897,8 +54932,9 @@ function slGrowth(api) {
   const TITLE = '한 학기 발자국';                                                                     // 제목
   const ITEMS = [['3월', '질문 노트 시작'], ['5월', '모둠 질문 지도'], ['7월', 'AI와 함께 찾기'], ['9월', '질문 발표회']];   // 칸 [때, 한 일]
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length, NS = 'http://www.w3.org/2000/svg';
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length, NS = 'http://www.w3.org/2000/svg';
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { crumb: CRUMB, title: TITLE });
   const bx = X, by = H - Y * 0.8, ex = W - X - bar - u * 0.04, ey = head.bottom + u * 0.15, sw = (ex - bx) / n, sh = (by - ey) / n;
@@ -54917,7 +54953,7 @@ function slGrowth(api) {
   for (let i = 1; i < pts.length; i++) { acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); segLen.push(acc); }
   path.setAttribute('stroke-dasharray', acc);
   const lenAt = k => k <= 0 ? 0 : segLen[Math.min(segLen.length - 1, k * 2 - 1)];
-  const marks = ITEMS.map((it, i) => {
+  const marks = ITEMS_.map((it, i) => {
     const x = bx + sw * i + u * 0.02, y = by - sh * (i + 1);
     const when = sk.tag(stage, it[0], `left:${x}px;top:${y - u * 0.15}px;font-size:${u * 0.03}px;transform-origin:0 100%;`);
     const what = sk.text(stage, it[1], `left:${x}px;top:${y - u * 0.072}px;white-space:nowrap;font:700 ${u * 0.032}px/1.3 ${body};letter-spacing:-0.025em;color:${fg};opacity:0;`);
@@ -54954,8 +54990,9 @@ function slTable(api) {
   const HEAD = ['어려웠던 점', '다음 수업의 개선'];                                                                          // 머리줄
   const ROWS = [['완성에 매달려 원리 탐구가 부족', '원리 질문 카드를 단계마다 넣기'], ['모둠 안 역할 쏠림', '역할 바꾸기 시간을 정해 두기'], ['기록이 결과 사진에만 남음', '과정 한 줄 기록을 매 차시 남기기']];   // 줄
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ROWS_ = sk.keep(ROWS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ROWS.length, m = HEAD.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ROWS_.length, m = HEAD.length;
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { crumb: CRUMB, title: TITLE });
   const tw = W - X * 2 - bar, cw = tw / m, top = head.bottom + u * 0.07, hh = u * 0.075, rh = Math.min(u * 0.13, (H - Y * 0.8 - top - hh) / n);
@@ -54966,7 +55003,7 @@ function slTable(api) {
   const band = document.createElement('div');
   band.style.cssText = `position:absolute;left:${X}px;width:${tw}px;height:${rh}px;top:0;background:${ac};opacity:0;`;
   stage.appendChild(band);
-  const rows = ROWS.map((r, i) => {
+  const rows = ROWS_.map((r, i) => {
     const y = top + hh + i * rh;
     const cells = r.map((s, j) => {
       const el = sk.text(stage, s, `left:${X + j * cw + u * 0.025}px;top:${y + rh / 2 - u * 0.031 * 0.7}px;width:${cw - u * 0.05}px;font:${j === 0 ? 600 : 700} ${u * 0.031}px/1.35 ${body};letter-spacing:-0.025em;color:${fg};opacity:0;`);
@@ -55001,12 +55038,13 @@ function slKeywords(api) {
   const ITEMS = [['인간중심사고', '누구의 어떤 문제를\n해결할 것인가?'], ['개념기반탐구', '학생이 어떤 개념과 관계를\n이해하게 할 것인가?'], ['깊이 있는 학습', '그렇게 이해한 것을\n다른 상황에서도 쓸 수 있는가?']];   // 칸 [꼬리표, 물음]
   const FOOT = '사람의 문제 → 개념 이해 → 새로운 맥락으로의 전이';                                                            // 아래 한 줄 (비우면 안 보임)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length;
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { title: TITLE });
   const hz = !sk.tall, cw = hz ? (W - X * 2 - bar) / n : W - X * 2 - bar, top = head.bottom + u * (hz ? 0.12 : 0.08), chh = hz ? 0 : (H - Y - top) / n;
-  const cols = ITEMS.map((it, i) => {
+  const cols = ITEMS_.map((it, i) => {
     const x = hz ? X + i * cw : X, y = hz ? top : top + i * chh;
     const tag = sk.tag(stage, it[0], `left:${x + (hz ? cw / 2 : 0)}px;top:${y}px;font-size:${u * 0.042}px;padding:.55em 1.2em .5em;${hz ? 'transform:translateX(-50%);' : ''}transform-origin:50% 60%;border-radius:${u * 0.016}px;box-shadow:0 ${u * 0.008}px 0 ${sk.dark ? 'rgba(255,255,255,.25)' : 'rgba(0,0,0,.18)'};`);
     const q = sk.text(stage, it[1], `left:${x}px;width:${hz ? cw : W - X * 2}px;top:${y + u * (hz ? 0.14 : 0.1)}px;text-align:${hz ? 'center' : 'left'};font:600 ${u * 0.032}px/1.5 ${body};letter-spacing:-0.025em;color:${fg};opacity:0;`);
@@ -55040,8 +55078,9 @@ function slCycle(api) {
   const ITEMS = ['감지', '판단', '행동', '결과', '성찰'];             // 고리 낱말 (차례대로)
   const NOTE = '교구나 문제가 바뀌어도 남아야 하는 것';                  // 오른쪽 글 (비우면 안 보임)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable'), disp = sk.face('GmarketSans');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length, NS = 'http://www.w3.org/2000/svg';
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length, NS = 'http://www.w3.org/2000/svg';
   const chrome = sk.chrome(stage);
   const head = sk.head(stage, { title: TITLE });
   const R = Math.min(H - head.bottom - Y * 0.7, sk.wide ? W * 0.4 : W - X * 2) * 0.36, cx = sk.wide ? X + R * 1.4 : (W - bar) / 2, cy = head.bottom + (H - head.bottom) / 2 - u * 0.01;
@@ -55049,7 +55088,7 @@ function slCycle(api) {
   svg.setAttribute('width', W); svg.setAttribute('height', H);
   svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible;';
   stage.appendChild(svg);
-  const nodeR = u * 0.075, arcs = ITEMS.map((_, i) => {
+  const nodeR = u * 0.075, arcs = ITEMS_.map((_, i) => {
     const a0 = -Math.PI / 2 + i / n * Math.PI * 2 + 0.36, a1 = -Math.PI / 2 + (i + 1) / n * Math.PI * 2 - 0.36;
     const p = document.createElementNS(NS, 'path'), tip = document.createElementNS(NS, 'path');
     p.setAttribute('d', `M${cx + Math.cos(a0) * R} ${cy + Math.sin(a0) * R} A${R} ${R} 0 0 1 ${cx + Math.cos(a1) * R} ${cy + Math.sin(a1) * R}`);
@@ -55061,7 +55100,7 @@ function slCycle(api) {
     svg.appendChild(p); svg.appendChild(tip);
     return { p: p, tip: tip, L: L };
   });
-  const nodes = ITEMS.map((s, i) => {
+  const nodes = ITEMS_.map((s, i) => {
     const a = -Math.PI / 2 + i / n * Math.PI * 2, x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R, el = document.createElement('div');
     el.textContent = s;
     el.style.cssText = `position:absolute;left:${x - nodeR}px;top:${y - nodeR}px;width:${nodeR * 2}px;height:${nodeR * 2}px;border-radius:50%;box-sizing:border-box;border:${Math.max(2, u * 0.004)}px solid ${fg};background:${sk.dark ? api.bg : '#ffffff'};color:${fg};display:flex;align-items:center;justify-content:center;font:800 ${u * 0.036}px/1 ${body};letter-spacing:-0.02em;opacity:0;`;
@@ -55099,17 +55138,19 @@ function slActivity(api) {
   const META = ['15분', '모둠 4명', '질문 카드'];                                // 시간·인원·준비물
   const ITEMS = ['질문 카드를 모두 펼친다', '비슷한 질문끼리 묶는다', '묶음마다 이름을 붙인다', '가장 궁금한 묶음을 고른다'];   // 할 일 (차례대로)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
+  const META_ = sk.keep(META);   // 비운 칸은 빼고
   const body = sk.face('Pretendard Variable'), disp = sk.face('GmarketSans');
-  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS.length, NS = 'http://www.w3.org/2000/svg';
+  const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y, bar = Math.max(5, W * 0.011), n = ITEMS_.length, NS = 'http://www.w3.org/2000/svg';
   const chrome = sk.chrome(stage);
   const lw = sk.wide ? W * 0.36 : W - X * 2 - bar;
   const tag = sk.tag(stage, TAG, `left:${X}px;top:${Y}px;transform-origin:0 50%;`);
   const tl = TITLE.split('\n'), ts = u * 0.1;
   const rows = tl.map((s, i) => { const r = sk.rise(stage, s, `left:${X}px;top:${Y + u * 0.08 + i * ts * 1.2}px;white-space:nowrap;font:700 ${ts}px/1.2 ${disp};letter-spacing:-0.03em;color:${fg};`); sk.fit(r.core, lw); return r; });
   const my = Y + u * 0.08 + tl.length * ts * 1.2 + u * 0.05;
-  const pills = META.map((s, i) => sk.text(stage, s, `left:0;top:${my}px;padding:${u * 0.012}px ${u * 0.024}px;border-radius:999px;box-sizing:border-box;border:${Math.max(2, u * 0.003)}px solid ${i ? fg : ac};background:${i ? 'transparent' : ac};color:${i ? fg : api.on(ac)};font:700 ${u * 0.026}px/1 ${body};white-space:nowrap;opacity:0;`));
+  const pills = META_.map((s, i) => sk.text(stage, s, `left:0;top:${my}px;padding:${u * 0.012}px ${u * 0.024}px;border-radius:999px;box-sizing:border-box;border:${Math.max(2, u * 0.003)}px solid ${i ? fg : ac};background:${i ? 'transparent' : ac};color:${i ? fg : api.on(ac)};font:700 ${u * 0.026}px/1 ${body};white-space:nowrap;opacity:0;`));
   const rx = sk.wide ? W * 0.48 : X, ry = sk.wide ? Y + u * 0.04 : my + u * 0.12, rw = W - rx - X - bar, gap = Math.min(u * 0.14, (H - Y - ry - u * 0.08) / n), bs = u * 0.055;
-  const items = ITEMS.map((s, i) => {
+  const items = ITEMS_.map((s, i) => {
     const y = ry + i * gap, box = document.createElement('div');
     box.style.cssText = `position:absolute;left:${rx}px;top:${y}px;width:${bs}px;height:${bs}px;border-radius:${bs * 0.22}px;border:${Math.max(2, u * 0.004)}px solid ${fg};box-sizing:border-box;opacity:0;`;
     stage.appendChild(box);
@@ -55160,14 +55201,15 @@ function slStatement(api) {
   const LINES = ['AI는 답을 주지 않는다.', '사고의 길을 안내한다.'];   // 줄 (다음 효과마다 한 줄)
   const KEY = '사고의 길';                                      // 강조할 말
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const LINES_ = sk.keep(LINES);   // 비운 칸은 빼고
   const disp = sk.face('GmarketSans');
-  const stage = sk.layer(api.root), X = sk.pad.x, bar = Math.max(5, W * 0.011), n = LINES.length;
+  const stage = sk.layer(api.root), X = sk.pad.x, bar = Math.max(5, W * 0.011), n = LINES_.length;
   const chrome = sk.chrome(stage);
   const ts = sk.wide ? u * 0.12 : u * 0.095, lh = ts * 1.4, top = H / 2 - n * lh / 2;
   const fill = document.createElement('div');
   fill.style.cssText = `position:absolute;left:0;top:0;height:${ts * 1.1}px;background:${ac};transform-origin:0 50%;transform:scaleX(0);`;
   stage.appendChild(fill);
-  const rows = LINES.map((s, i) => {
+  const rows = LINES_.map((s, i) => {
     const mask = document.createElement('div');
     mask.style.cssText = `position:absolute;left:${X}px;top:${top + i * lh}px;overflow:hidden;padding:.1em .1em .2em 0;margin:-.1em 0 -.2em;`;
     stage.appendChild(mask);
@@ -55346,6 +55388,7 @@ function cnProblem(api) {
   const ITEMS = ['질문 있냐고 물으면 조용해진다', '손 드는 학생만 계속 손 든다', 'AI가 준 답을 그대로 적는다'];   // 줄
   const LOOP = 6;                                                                      // 한 바퀴 길이(초)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
   const face = sk.face('Paperlogy'), body = sk.face('Pretendard Variable'), TAU = Math.PI * 2, NS = 'http://www.w3.org/2000/svg';
   const aura = sk.aura(api.root, { x: 0.15, y: 0.9 });
   const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y;
@@ -55356,8 +55399,8 @@ function cnProblem(api) {
   const tl = TITLE.split('\n');
   const titles = tl.map((s, i) => { const el = sk.text(stage, s, `left:${X}px;top:${ty + i * ts * 1.2}px;white-space:nowrap;font:800 ${ts}px/1.2 ${face};letter-spacing:-0.04em;color:${fg};`); sk.fit(el, W - X * 2); return el; });
   const shines = titles.map(el => sk.shine(el, fg, sk.gleam()));
-  const y0 = ty + tl.length * ts * 1.2 + u * 0.1, rh = Math.min(u * 0.15, (H - Y - y0) / ITEMS.length), bs = u * 0.055;
-  const rows = ITEMS.map((s, i) => {
+  const y0 = ty + tl.length * ts * 1.2 + u * 0.1, rh = Math.min(u * 0.15, (H - Y - y0) / ITEMS_.length), bs = u * 0.055;
+  const rows = ITEMS_.map((s, i) => {
     const y = y0 + i * rh;
     const box = document.createElement('div');
     box.style.cssText = `position:absolute;left:${X}px;top:${y + rh / 2 - bs / 2}px;width:${bs}px;height:${bs}px;border-radius:${bs * 0.26}px;border:${Math.max(2, u * 0.003)}px solid ${fg};box-sizing:border-box;opacity:.5;`;
@@ -55371,7 +55414,7 @@ function cnProblem(api) {
     svg.appendChild(p); stage.appendChild(svg);
     const tx = sk.text(stage, s, `left:${X + bs + u * 0.035}px;top:${y + rh / 2 - u * 0.042 * 0.65}px;white-space:nowrap;font:600 ${u * 0.042}px/1.3 ${body};letter-spacing:-0.025em;color:${fg};`);
     sk.fit(tx, W - X * 2 - bs - u * 0.035);
-    const ln = i < ITEMS.length - 1 ? sk.hair(stage, X, y + rh, W - X * 2, { alpha: sk.dark ? 0.18 : 0.1, spark: false }) : null;
+    const ln = i < ITEMS_.length - 1 ? sk.hair(stage, X, y + rh, W - X * 2, { alpha: sk.dark ? 0.18 : 0.1, spark: false }) : null;
     if (ln) ln.set(1);
     return { box: box, p: p, tx: tx };
   });
@@ -55443,7 +55486,8 @@ function cnList(api) {
   const ITEMS = [['질문 먼저', '답보다 질문을 먼저 쓰기'], ['짝 먼저', 'AI보다 짝에게 먼저 묻기'], ['기록 먼저', '한 줄이라도 남기기']];   // 줄 [제목, 설명]
   const LOOP = 6;                                                                          // 한 바퀴 길이(초)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
-  const face = sk.face('Paperlogy'), body = sk.face('Pretendard Variable'), TAU = Math.PI * 2, n = ITEMS.length;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
+  const face = sk.face('Paperlogy'), body = sk.face('Pretendard Variable'), TAU = Math.PI * 2, n = ITEMS_.length;
   const aura = sk.aura(api.root, { x: 0.9, y: 0.1 });
   const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y;
   const top = sk.cardTop(stage, SERIES, PAGE);
@@ -55456,7 +55500,7 @@ function cnList(api) {
   const band = document.createElement('div');
   band.style.cssText = `position:absolute;left:${X - u * 0.025}px;width:${W - X * 2 + u * 0.05}px;height:${rh - u * 0.02}px;top:0;border-radius:${u * 0.03}px;background:${ac};opacity:0;`;
   stage.appendChild(band);
-  const rows = ITEMS.map((it, i) => {
+  const rows = ITEMS_.map((it, i) => {
     const y = y0 + i * rh;
     const no = sk.text(stage, String(i + 1).padStart(2, '0'), `left:${X}px;top:${y + rh / 2 - u * 0.075 * 0.62}px;font:800 ${u * 0.075}px/1.2 ${face};letter-spacing:-0.04em;color:${sk.acText()};transform-origin:0 50%;`);
     const nm = sk.text(stage, it[0], `left:${X + u * 0.15}px;top:${y + rh / 2 - u * 0.05}px;white-space:nowrap;font:800 ${u * 0.05}px/1.2 ${face};letter-spacing:-0.03em;color:${fg};`);
@@ -55547,7 +55591,8 @@ function cnNumber(api) {
   const top = sk.cardTop(stage, SERIES, PAGE);
   top.line.set(1);
   sk.text(stage, KICKER, `left:0;width:100%;top:${top.bottom + u * 0.07}px;text-align:center;font:700 ${u * 0.027}px/1.2 ${body};letter-spacing:.24em;color:${sk.acText()};`);
-  const cx = W / 2, cy = H * 0.45, R = u * 0.3, C = TAU * R;
+  const y0 = top.bottom + u * 0.17, y1 = H - Y - u * 0.02, need = u * 0.25;   // 낮은 판(정사각)에서는 고리를 줄여 아래 글과 겹치지 않음
+  const R = Math.min(u * 0.3, (y1 - y0 - need) / 2), cx = W / 2, cy = Math.max(y0 + R, Math.min(H * 0.45, y1 - need - R)), C = TAU * R;
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('width', W); svg.setAttribute('height', H);
   svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible;';
@@ -55593,7 +55638,8 @@ function cnSteps(api) {
   const ITEMS = ['질문 카드 펼치기', '비슷한 것끼리 묶기', '묶음에 이름 붙이기', '가장 궁금한 묶음 고르기'];   // 단계
   const LOOP = 6;                                                                     // 한 바퀴 길이(초)
   const sk = slKit(api), W = sk.W, H = sk.H, u = sk.u, fg = api.fg, ac = api.accent;
-  const face = sk.face('Paperlogy'), body = sk.face('Pretendard Variable'), TAU = Math.PI * 2, n = ITEMS.length;
+  const ITEMS_ = sk.keep(ITEMS);   // 비운 칸은 빼고
+  const face = sk.face('Paperlogy'), body = sk.face('Pretendard Variable'), TAU = Math.PI * 2, n = ITEMS_.length;
   const aura = sk.aura(api.root, { x: 0.85, y: 0.85 });
   const stage = sk.layer(api.root), X = sk.pad.x, Y = sk.pad.y;
   const top = sk.cardTop(stage, SERIES, PAGE);
@@ -55612,7 +55658,7 @@ function cnSteps(api) {
   head.style.cssText = `position:absolute;left:${-hs / 2}px;top:${-hs / 2}px;width:${hs}px;height:${hs}px;border-radius:50%;background:#ffffff;box-shadow:0 0 ${hs}px ${hs * 0.45}px ${ac};`;
   stage.appendChild(head);
   const ds = u * 0.05;
-  const nodes = ITEMS.map((s, i) => {
+  const nodes = ITEMS_.map((s, i) => {
     const y = y0 + i * gap, dot = document.createElement('div');
     dot.style.cssText = `position:absolute;left:${lx - ds / 2}px;top:${y - ds / 2}px;width:${ds}px;height:${ds}px;border-radius:50%;box-sizing:border-box;border:${Math.max(2, u * 0.003)}px solid ${fg};display:flex;align-items:center;justify-content:center;font:700 ${ds * 0.46}px/1 ${body};font-variant-numeric:tabular-nums;`;
     dot.textContent = i + 1;
@@ -55676,8 +55722,8 @@ function cnTip(api) {
   comet.setAttribute('stroke-dasharray', `${cl} ${P - cl}`);
   stage.appendChild(svg);
   const tag = sk.text(stage, LABEL, `left:${bx + u * 0.05}px;top:${by - u * 0.03}px;padding:${u * 0.012}px ${u * 0.026}px;border-radius:999px;background:${ac};color:${api.on(ac)};font:800 ${u * 0.028}px/1 ${body};letter-spacing:.2em;`);
-  const tl = TIP.split('\n'), fs = u * 0.07, inner = bh - u * 0.18;
-  const tipTop = by + bh / 2 - tl.length * fs * 1.3 / 2 - u * 0.03;
+  const tl = TIP.split('\n'), room = bh - u * 0.2, fs = Math.min(u * 0.07, room / (tl.length * 1.3));   // 상자가 낮으면 글자를 줄여 안에 담음
+  const tipTop = by + u * 0.06 + (room - tl.length * fs * 1.3) / 2;
   const tips = tl.map((s, i) => { const el = sk.text(stage, s, `left:${bx + u * 0.06}px;top:${tipTop + i * fs * 1.3}px;white-space:nowrap;font:800 ${fs}px/1.3 ${face};letter-spacing:-0.035em;color:${fg};`); sk.fit(el, bw - u * 0.12); return el; });
   const shines = tips.map(el => sk.shine(el, fg, sk.gleam()));
   sk.text(stage, NOTE, `left:${bx + u * 0.06}px;top:${by + bh - u * 0.1}px;font:500 ${u * 0.032}px/1.3 ${body};color:${fg};opacity:.6;`);
@@ -55708,7 +55754,7 @@ function cnSave(api) {
   const top = sk.cardTop(stage, SERIES, PAGE);
   top.line.set(1);
   // 책갈피
-  const bw = u * 0.2, bh = bw * 1.32, bx = X, byy = top.bottom + u * 0.12, id = 'cnsv' + Math.floor(api.rand(9)() * 1e6);
+  const low = H / W < 1.1, bw = u * (low ? 0.13 : 0.2), bh = bw * 1.32, bx = X, byy = top.bottom + u * (low ? 0.08 : 0.12), id = 'cnsv' + Math.floor(api.rand(9)() * 1e6);
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('width', bw); svg.setAttribute('height', bh); svg.setAttribute('viewBox', '0 0 100 132');
   svg.style.cssText = `position:absolute;left:${bx}px;top:${byy}px;overflow:visible;transform-origin:50% 100%;`;
@@ -55717,10 +55763,10 @@ function cnSave(api) {
   stage.appendChild(svg);
   const rect = svg.querySelector('rect');
   const star = sk.star(stage, u * 0.07, sk.dark ? '#ffffff' : ac);
-  const lines = TITLE.split('\n'), ts = u * 0.105, lh = ts * 1.22, ty = byy + bh + u * 0.08;
+  const ly = H - Y - u * 0.07;
+  const lines = TITLE.split('\n'), ty = byy + bh + u * 0.08, ts = Math.min(u * 0.105, (ly - u * 0.08 - ty) / (lines.length * 1.22)), lh = ts * 1.22;   // 정사각처럼 낮은 판에서는 제목이 줄어 아래 줄과 겹치지 않음
   const rows = lines.map((s, i) => { const el = sk.text(stage, s, `left:${X}px;top:${ty + i * lh}px;white-space:nowrap;font:800 ${ts}px/1.22 ${face};letter-spacing:-0.04em;color:${fg};`); sk.fit(el, W - X * 2); return el; });
   const shines = rows.map(el => sk.shine(el, fg, sk.gleam()));
-  const ly = H - Y - u * 0.07;
   const line = sk.hair(stage, X, ly - u * 0.035, W - X * 2, { alpha: sk.dark ? 0.26 : 0.16, spark: false });
   line.set(1);
   sk.text(stage, NEXT, `left:${X}px;top:${ly}px;font:600 ${u * 0.032}px/1.3 ${body};color:${fg};`);
@@ -58578,7 +58624,7 @@ const QM_REG = [
       Object.keys(opts.set || {}).forEach(k => {
         const v = opts.set[k];
         if (keys.indexOf(k) >= 0) set[k] = v;
-        else if (Array.isArray(v)) v.forEach((x, i) => { if (keys.indexOf(k + '#' + i) >= 0) set[k + '#' + i] = x; });
+        else if (Array.isArray(v)) { const flat = []; (function walk(a) { a.forEach(x => Array.isArray(x) ? walk(x) : flat.push(x)); })(v); flat.forEach((x, i) => { if (keys.indexOf(k + '#' + i) >= 0) set[k + '#' + i] = x; }); }
         else if (keys.indexOf(k + '#0') >= 0) set[k + '#0'] = v;
       });
       baskApply({ id: id, set: set, words: opts.words, font: opts.font, point: opts.point, bg: opts.bg }, true);
@@ -58605,7 +58651,7 @@ const QM_REG = [
     Object.keys(given || {}).forEach(k => {
       const v = given[k];
       if (keys.indexOf(k) >= 0) set[k] = v;
-      else if (Array.isArray(v)) v.forEach((x, i) => { if (keys.indexOf(k + '#' + i) >= 0) set[k + '#' + i] = x; });
+      else if (Array.isArray(v)) { const flat = []; (function walk(list) { list.forEach(x => Array.isArray(x) ? walk(x) : flat.push(x)); })(v); flat.forEach((x, i) => { if (keys.indexOf(k + '#' + i) >= 0) set[k + '#' + i] = x; }); }   // [[이름, 설명], …]도 차례대로 펼쳐 넣음
       else if (keys.indexOf(k + '#0') >= 0) set[k + '#0'] = v;
     });
     return set;
@@ -58699,7 +58745,7 @@ const QM_REG = [
   // 작업실 파일(parts/studio.js)이 쓰는 안쪽 손잡이
   window.__qml = {
     MOTIONS: MOTIONS, CATS: CATS, SUBS: SUBS, catName: catName, motionOf: motionOf, fieldsFor: fieldsFor, isGl: isGl, still: still, poster: poster, isStill: isStill,
-    labMake: labMake, labSource: labSource, labWith: labWith, encodeMotion: encodeMotion, encodeSequence: encodeSequence, handOver: handOver, zip: qmZip,
+    labMake: labMake, labSource: labSource, labWith: labWith, labSet: labSet, encodeMotion: encodeMotion, encodeSequence: encodeSequence, handOver: handOver, zip: qmZip,
     fontLines: fontLines, engineSource: () => qmEngine.toString(), FPS: FPS, SIZE: SIZE, RATIOS: RATIOS, KFONTS: KFONTS, LOOK: LOOK, SEED: SEED, BG: BG,
     openMotion: id => { if (motionOf(id)) choose(id); }
   };
@@ -58726,6 +58772,222 @@ const QM_REG = [
   applyFilter();
   if (linked) openWin();
 })();
+/* =====================================================================
+   작업실 예시: 디자인 테마 이름이 붙은 추천 구성 (주제색 · 글꼴 · 장면 조합 · 그 테마에 맞는 문구)
+   items: [모션 id, 고칠 문구(상수 이름: 값), 낱말 목록(있으면)]
+   ===================================================================== */
+// 주제색: 색 8개 = 밝은 색 → 진한 색, [5] 포인트(채움), [6] 펜(빨간 펜 표시), [7] 글자. 오렌지·청록·보라·네온은 쓰지 않음
+const QM_PALETTES = [
+  { id: 'navy', ko: '쿼카 네이비', bg: '#ffffff', colors: ['#ffffff', '#e8edf7', '#c9d4ea', '#c8cbd2', '#70747e', '#1f3460', '#e03a3e', '#111216'] },
+  { id: 'slate', ko: '차분한 회청', bg: '#eef1f5', colors: ['#ffffff', '#e2e7ef', '#c8d1de', '#b8bfca', '#6b7686', '#3b4a63', '#b4566b', '#1b2230'] },
+  { id: 'wine', ko: '버건디', bg: '#ffffff', colors: ['#ffffff', '#f6e7ea', '#e6c5cc', '#c8cbd2', '#70747e', '#6e1a2f', '#1f3460', '#141012'] },
+  { id: 'rose', ko: '로즈 베이지', bg: '#faf5f2', colors: ['#ffffff', '#f6e6e8', '#ecc9cf', '#cfc6c4', '#7a6f6d', '#b4566b', '#1f3460', '#2a1a1d'] },
+  { id: 'yellow', ko: '레고 노랑', bg: '#ffffff', colors: ['#ffffff', '#fff6c2', '#ffe766', '#c8cbd2', '#70747e', '#fcdb10', '#e03a3e', '#111111'] },
+  { id: 'blackYellow', ko: '검정 · 노랑', bg: '#121212', colors: ['#f5f5f7', '#2a2a2a', '#3a3a3a', '#8a8d94', '#b9bcc2', '#fcdb10', '#ff6b6b', '#121212'] },
+  { id: 'forest', ko: '숲 초록', bg: '#f4f2ea', colors: ['#ffffff', '#e6ece2', '#cddcc9', '#c4c7bd', '#6f7568', '#2f5a3f', '#b3473a', '#16201a'] },
+  { id: 'sky', ko: '하늘 파랑', bg: '#ffffff', colors: ['#ffffff', '#e7f0fd', '#c7dbfa', '#c8cbd2', '#70747e', '#2f6fdb', '#e03a3e', '#0f1a2c'] },
+  { id: 'mustard', ko: '머스터드', bg: '#f6f1e6', colors: ['#ffffff', '#f6ecd2', '#efd99a', '#c9c4b6', '#6f6a5e', '#e2b33c', '#1f3460', '#1c1a14'] },
+  { id: 'mono', ko: '흑백 신문', bg: '#f7f7f5', colors: ['#ffffff', '#ececea', '#d6d6d3', '#bdbdb9', '#6d6d69', '#141414', '#c0392b', '#141414'] },
+  { id: 'black', ko: '검정 무대', bg: '#111214', colors: ['#f5f5f7', '#2a2b2f', '#3a3c42', '#8a8d94', '#b9bcc2', '#ffffff', '#ff6b6b', '#111214'] },
+  { id: 'paper', ko: '종이 · 버건디', bg: '#f5f1ec', colors: ['#ffffff', '#f3ece6', '#e5d6cf', '#c59ca3', '#9c5263', '#6e1a2f', '#1f3460', '#1a1416'] }
+];
+
+const QM_PRESETS = {
+  ppt: [
+    { id: 'calm', ko: '차분한 연수용', mood: '회청빛 바탕에 부리 글꼴. 조용히, 깊게 듣는 교원 연수', theme: 'slate', font: 'MaruBuri', items: [
+      ['sl-section', { TOP: '2026 하반기 교원 연수 · 1강', TITLE: '생성형 AI와 함께하는\n수업 설계의 첫걸음', WHO: '쿼카연구회 · 두목쿼카' }],
+      ['sl-index', { CRUMB: '오늘의 흐름', TITLE: '90분, 이렇게 함께해요', ITEMS: [['열기', '지금 교실에서 AI는 어디에'], ['원리', '생성형 AI가 답을 만드는 방식'], ['설계', '수업 속 AI의 자리 정하기'], ['실습', '발문 카드로 수업 한 장면 짜기'], ['나눔', '모둠별로 설계안 돌려 읽기'], ['정리', '내 교실에 가져갈 한 가지']], NOW: 1 }],
+      ['sl-compare', { CRUMB: '관점 바꾸기', TITLE: '도구로서의 AI, 동료로서의 AI', LEFT: '도구로서의 AI', LEFT_ITEMS: ['정답을 빨리 찾아 준다', '교사가 결과만 확인한다', '수업 흐름 밖에 놓인다'], RIGHT: '생각의 동료로서의 AI', RIGHT_ITEMS: ['학생의 질문을 넓혀 준다', '교사가 과정을 함께 본다', '수업 흐름 안에 자리 잡는다'] }],
+      ['sl-cycle', { TITLE: '수업 속 AI 활용의 순환', CENTER: '성찰', ITEMS: ['질문', '탐색', '비교', '판단', '표현'], NOTE: 'AI는 답을 주지 않아요. 사고의 길을 안내해요.' }],
+      ['sl-quote', { CRUMB: '오늘의 한 문장', QUOTE: '“좋은 질문은 답보다\n오래 교실에 남는다”', KEY: '오래', NOTE: '질문을 남기는 수업을 설계해요' }],
+      ['sl-activity', { TAG: '모둠 실습', TITLE: '발문 카드로\n수업 한 장면 짜기', META: ['20분', '모둠 4명', '발문 카드'], ITEMS: ['단원과 성취기준을 하나 고른다', 'AI에게 묻기 전 학생 질문을 먼저 쓴다', 'AI가 들어갈 자리를 한 곳 정한다', '돌려 읽고 한 줄씩 덧붙인다'] }],
+      ['sl-table', { CRUMB: '정리', TITLE: '내 교실에 가져갈 것', HEAD: ['오늘 배운 것', '다음 주에 해 볼 것'], ROWS: [['AI의 자리를 먼저 정하기', '한 차시에 한 장면만 넣어 보기'], ['학생 질문이 먼저', '수업 시작 5분 질문 쓰기'], ['과정을 남기는 기록', 'AI 대화에 한 줄 성찰 남기기']] }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '혼자 버티는 교실 말고, 함께 배우는 교실', CONTACT: '쿼카연구회 · 두목쿼카' }]
+    ] },
+    { id: 'share', ko: '현장 수업 나눔', mood: '네이비 채움과 빨간 펜. 사진과 숫자로 보여 주는 수업 사례', theme: 'navy', font: '', items: [
+      ['sl-cover', {}], ['sl-index', {}], ['sl-case', {}], ['sl-points', {}], ['sl-gallery', {}], ['sl-change', {}], ['sl-flow', {}], ['sl-quote', {}], ['sl-thanks', {}]
+    ] },
+    { id: 'contest', ko: '단정한 연구대회 발표', mood: '버건디 포인트와 단단한 고딕. 심사위원 앞에서 또렷하게', theme: 'wine', font: 'Paperlogy', items: [
+      ['sl-cover', { TAG: '2026 수업혁신사례연구대회', TITLE: '질문이 자라는\n교실 이야기', KEY: '질문', SUB: '학생 질문 중심 AI 융합 프로젝트 수업', WHO: '발표 · 두목쿼카' }],
+      ['sl-index', { CRUMB: '발표 순서', TITLE: '이렇게 말씀드릴게요', ITEMS: [['문제 인식', '질문이 사라진 교실'], ['연구 설계', '질문 중심 수업 모형'], ['실천 1', '질문 노트와 질문 지도'], ['실천 2', 'AI와 함께 탐구하기'], ['변화', '학생과 교사의 변화'], ['일반화', '다른 교실로 나누기']], NOW: 0 }],
+      ['sl-case', { BANNER: '실천 사례 (1) 질문 지도 만들기 · 6학년 사회', ITEMS: [['성취기준', '우리 사회의 문제를 탐구하고 해결 방안을 제안한다.'], ['탐구 문제', '우리 동네의 불편, 누구에게 어떤 문제일까?'], ['흐름', '질문 쓰기 → 묶기 → 탐구 계획 → AI와 자료 찾기 → 제안 발표']] }],
+      ['sl-change', { TAG: '설문 비교 · 예시', TITLE: '스스로 질문하는 힘은 달라졌을까요?', ITEM: '나는 수업 중에 궁금한 것을 질문으로 만들 수 있다', BEFORE: ['사전', '2.9'], AFTER: ['사후', '4.1'], MAX: 5, UNIT: '점', NOTE: '예시 값 · 실제 결과로 바꿔 주세요' }],
+      ['sl-growth', { CRUMB: '연구 과정', TITLE: '한 학기 연구 발자국', ITEMS: [['3월', '문제 인식과 사전 조사'], ['5월', '질문 중심 모형 설계'], ['7월', '1차 실천과 수정'], ['10월', '2차 실천과 일반화']] }],
+      ['sl-table', { CRUMB: '성과와 과제', TITLE: '연구의 성과와 남은 과제', HEAD: ['성과', '남은 과제'], ROWS: [['질문 노트가 수업의 출발점이 됨', '질문의 깊이를 보는 기준 다듬기'], ['모둠 안 대화 시간이 늘어남', '말이 적은 학생의 참여 방법'], ['AI를 과정 도구로 쓰는 문화', '학년 간 연계와 확산']] }],
+      ['sl-statement', { LINES: ['수업은 정답을 주는 시간이 아니라', '질문을 키우는 시간입니다.'], KEY: '질문을 키우는' }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '경청해 주셔서 고맙습니다', CONTACT: '발표 · 두목쿼카' }]
+    ] },
+    { id: 'parents', ko: '다정한 학부모 설명회', mood: '로즈 포인트와 둥근 글꼴. 처음 만나는 부모님께 따뜻하게', theme: 'rose', font: 'Cafe24Ssurround', items: [
+      ['sl-cover', { TAG: '2026 학부모 설명회', TITLE: '함께 키우는\n우리 반 1년', KEY: '함께', SUB: '6학년 2반 학급 교육과정 안내', WHO: '담임 교사 · 두목쿼카' }],
+      ['sl-question', { CRUMB: '오늘의 첫 질문', QUESTION: '우리 아이가 올해\n가장 많이 하길 바라는 말은?', HINT: '옆자리 부모님과 잠깐 나눠 주세요', SECONDS: 30 }],
+      ['sl-keywords', { TITLE: '우리 반이 아끼는 세 가지', ITEMS: [['마음 나누기', '오늘 내 마음은\n어떤 날씨인가요?'], ['질문하기', '궁금한 건\n참지 않아요'], ['함께하기', '혼자보다\n같이 가요']], FOOT: '사회정서 · 질문 · 협력이 한 해의 바탕이 돼요' }],
+      ['sl-gallery', { CRUMB: '우리 반 한 장면', TITLE: '아이들은 이렇게 지내요', ITEMS: ['아침 마음 체크인', '모둠 프로젝트', '교실 밖 수업'] }],
+      ['sl-table', { CRUMB: '한 해 일정', TITLE: '함께할 행사를 미리 알려 드려요', HEAD: ['언제', '무엇을'], ROWS: [['4월', '학부모 상담 주간'], ['7월', '프로젝트 발표회'], ['12월', '한 해 작품 전시']] }],
+      ['sl-activity', { TAG: '가정에서 함께', TITLE: '집에서 이렇게\n도와주세요', META: ['하루 10분', '온 가족', '대화'], ITEMS: ['오늘 가장 궁금했던 것 물어보기', '정답 대신 생각을 칭찬하기', '하루 한 번 마음 날씨 묻기', '주말엔 함께 책 한 권 읽기'] }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '1년 동안 함께 키워 가요', CONTACT: '6학년 2반 · 두목쿼카' }]
+    ] },
+    { id: 'maker', ko: '레고 노랑 메이커 수업', mood: '노랑 채움과 빨간 펜. 사진 가득한 피지컬 AI 수업 나눔', theme: 'yellow', font: 'GmarketSans', items: [
+      ['sl-section', { TOP: '피지컬 AI 수업 적용 사례', TITLE: '작은 레고 실험실\nLIFE-BOT 수업 이야기', WHO: '쿼카연구회 · 두목쿼카' }],
+      ['sl-case', {}], ['sl-points', {}], ['sl-gallery', {}], ['sl-change', {}], ['sl-flow', {}], ['sl-keywords', {}], ['sl-thanks', {}]
+    ] },
+    { id: 'keynote', ko: '강렬한 키노트', mood: '검정 무대에 노랑 한 줄. 큰 글자로 쾅 박는 기조 강연', theme: 'blackYellow', font: 'Black Han Sans', items: [
+      ['sl-statement', { LINES: ['AI는 답을 주지 않는다.', '사고의 길을 안내한다.'], KEY: '사고의 길' }],
+      ['sl-question', { CRUMB: '', QUESTION: '우리는 이제\n무엇을 가르쳐야 할까?', HINT: '30초 동안 떠올려 보세요', SECONDS: 30 }],
+      ['sl-number', { CRUMB: '하나의 숫자', NUMBER: '1', UNIT: '교시', TITLE: '하루에 한 교시만 바꿔 보세요', NOTE: '전부 바꾸지 않아도 돼요.\n한 교시가 교실을 바꿔요.' }],
+      ['sl-compare', { CRUMB: '어제와 내일', TITLE: '기능을 배우는 수업에서 생각을 배우는 수업으로', LEFT: '기능 중심', LEFT_ITEMS: ['도구 사용법 익히기', '결과물 완성하기', '정답 맞히기'], RIGHT: '생각 중심', RIGHT_ITEMS: ['왜 쓰는지 묻기', '과정을 설명하기', '다른 문제에 옮겨 쓰기'] }],
+      ['sl-flow', { TITLE: 'FROM TOOL TO THINKING', ITEMS: ['사용', '이해', '질문', '설계', '전이\n(Transfer)'], POINT: 'Today’s Point!', BASE: '익숙한 AI 활용' }],
+      ['sl-quote', { CRUMB: '', QUOTE: '“기술은 바뀌어도\n질문하는 힘은 남는다”', KEY: '질문하는 힘', NOTE: '이것이 우리가 가르칠 것!' }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '함께 질문하는 교실에서 만나요', CONTACT: 'QUOKA · 두목쿼카' }]
+    ] },
+    { id: 'forest', ko: '숲속 생태 프로젝트', mood: '숲 초록과 함렛 글꼴. 계절이 흐르는 프로젝트 기록', theme: 'forest', font: 'Hahmlet', items: [
+      ['sl-cover', { TAG: '학교 숲 프로젝트', TITLE: '우리 학교 숲의\n사계절 관찰 일기', KEY: '사계절', SUB: '5학년 과학 · 국어 · 미술 통합 프로젝트', WHO: '쿼카연구회 · 두목쿼카' }],
+      ['sl-growth', { CRUMB: '한 해의 흐름', TITLE: '숲과 함께 자란 1년', ITEMS: [['봄', '새싹 지도 그리기'], ['여름', '곤충 관찰 일지'], ['가을', '열매와 씨앗 도감'], ['겨울', '숲 이야기 전시회']] }],
+      ['sl-photo', { CRUMB: '관찰 활동', TITLE: '돋보기로 본 우리 숲', ITEMS: ['관찰한 것을 그림과 글로 남기기', 'AI로 이름과 특징 확인하기', '친구 기록과 비교해 보기'] }],
+      ['sl-gallery', { CRUMB: '계절 기록', TITLE: '아이들이 찍은 숲', ITEMS: ['봄의 새싹', '여름의 그늘', '가을의 열매'] }],
+      ['sl-cycle', { TITLE: '관찰에서 실천까지', CENTER: '숲', ITEMS: ['관찰', '기록', '질문', '탐구', '실천'], NOTE: '보는 눈이 자라면 지키는 손이 생겨요' }],
+      ['sl-quote', { CRUMB: '아이의 한 줄', QUOTE: '“숲은 매일 조금씩\n다른 얼굴을 보여 줘요”', KEY: '다른 얼굴', NOTE: '관찰이 쌓이면 질문이 생겨요' }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '숲처럼 천천히, 함께 자라요', CONTACT: '쿼카연구회 · 두목쿼카' }]
+    ] },
+    { id: 'meetup', ko: '산뜻한 연구회 정기 모임', mood: '하늘 파랑과 원티드 산스. 선생님들이 모이는 날의 안내', theme: 'sky', font: 'Wanted Sans Variable', items: [
+      ['sl-cover', { TAG: '쿼카연구회 정기 모임', TITLE: '혼자 말고\n함께 연구해요', KEY: '함께', SUB: '오늘 나눌 이야기와 활동 안내', WHO: '쿼카연구회 운영진' }],
+      ['sl-index', { CRUMB: '오늘의 순서', TITLE: '세 시간, 이렇게 보내요', ITEMS: [['인사', '새로 오신 선생님 소개'], ['나눔 1', 'AI 융합 수업 사례'], ['나눔 2', '사회정서 수업 사례'], ['쉬는 시간', '다과와 수다'], ['워크숍', '모둠별 수업 설계'], ['마무리', '다음 달 계획']], NOW: 0 }],
+      ['sl-table', { CRUMB: '안내', TITLE: '오늘 함께할 일정', HEAD: ['시간', '내용'], ROWS: [['14:00', '인사와 사례 나눔'], ['15:10', '모둠 워크숍'], ['16:40', '정리와 다음 모임 안내']] }],
+      ['sl-keywords', { TITLE: '올해 우리가 붙잡을 세 가지', ITEMS: [['현장성', '교실에서\n바로 쓰는 것'], ['공동체', '혼자 버티지 않고\n함께 만드는 것'], ['나눔', '만든 것을\n기꺼이 나누는 것']], FOOT: '결국 사람이 남고, 관계가 수업의 힘이 돼요' }],
+      ['sl-activity', { TAG: '모둠 워크숍', TITLE: '함께 짜는\n수업 한 장면', META: ['40분', '모둠 4~5명', '노트북'], ITEMS: ['모둠별로 단원 하나 고르기', '학생 질문 먼저 적어 보기', 'AI가 들어갈 자리 정하기', '설계안 한 장으로 나누기'] }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '다음 달에도 함께해요', CONTACT: 'Q.U.O.K.A 쿼카연구회' }]
+    ] },
+    { id: 'student', ko: '또박또박 학생 발표', mood: '머스터드 채움과 주아체. 학생이 직접 하는 탐구 발표', theme: 'mustard', font: 'BMJUA', items: [
+      ['sl-cover', { TAG: '우리 모둠 탐구 발표', TITLE: '교실 소음,\n줄일 수 있을까?', KEY: '소음', SUB: '6학년 2반 3모둠의 생활 속 문제 해결', WHO: '발표 · 3모둠' }],
+      ['sl-question', { CRUMB: '우리의 궁금증', QUESTION: '쉬는 시간 교실은\n왜 이렇게 시끄러울까?', HINT: '여러분의 생각도 들려주세요', SECONDS: 30 }],
+      ['sl-points', { CRUMB: '탐구 과정', TITLE: '우리는 이렇게 알아봤어요', ITEMS: [['소음 재기', '태블릿 앱으로 시간마다\n소리 크기를 쟀어요.'], ['원인 찾기', '언제, 어디서 가장 시끄러운지\n지도를 그렸어요.'], ['해결책 만들기', '소리 신호등과\n조용한 구역을 만들었어요.']], PHOTO: '측정하는 모습' }],
+      ['sl-photo', { CRUMB: '우리가 만든 것', TITLE: '소리 신호등', ITEMS: ['소리가 커지면 빨간 불이 켜져요', '친구들이 스스로 목소리를 줄여요', '쉬는 시간마다 한 주 동안 써 봤어요'] }],
+      ['sl-change', { TAG: '측정 결과 · 예시', TITLE: '소리 신호등을 쓰고 나서 달라졌을까요?', ITEM: '쉬는 시간 평균 소리 크기', BEFORE: ['쓰기 전', '72'], AFTER: ['쓴 뒤', '61'], MAX: 100, UNIT: 'dB', NOTE: '예시 값 · 우리 모둠이 잰 값을 넣어요' }],
+      ['sl-growth', { CRUMB: '다음 계획', TITLE: '앞으로 해 볼 것', ITEMS: [['1주', '다른 반에 빌려주기'], ['2주', '점심시간에도 재 보기'], ['3주', '조용한 구역 늘리기'], ['4주', '결과를 학교에 알리기']] }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '들어 주셔서 고맙습니다!', CONTACT: '6학년 2반 3모둠' }]
+    ] },
+    { id: 'policy', ko: '흑백 신문 브리핑', mood: '흑백 신문 결에 빨간 펜. 교육 정책을 차분히 짚는 칼럼 발표', theme: 'mono', font: 'Hahmlet', items: [
+      ['sl-section', { TOP: '교육 정책 칼럼 브리핑', TITLE: '학교의 시간을\n지켜 주세요', WHO: '현장 교사 · 두목쿼카' }],
+      ['sl-statement', { LINES: ['새로운 사업보다', '검증된 수업이 먼저입니다.'], KEY: '검증된 수업' }],
+      ['sl-compare', { CRUMB: '현장에서 본 두 장면', TITLE: '행정의 시간과 수업의 시간', LEFT: '지금의 학교', LEFT_ITEMS: ['공문과 보고가 수업 준비를 앞선다', '해마다 새 사업이 더해진다', '교사는 혼자 버틴다'], RIGHT: '바라는 학교', RIGHT_ITEMS: ['수업 준비가 먼저인 하루', '검증된 것을 오래 이어 간다', '함께 회복하는 공동체'] }],
+      ['sl-quote', { CRUMB: '현장의 목소리', QUOTE: '“교사를 행정의 말단이 아니라\n교육의 동료로 불러 주세요”', KEY: '교육의 동료', NOTE: '이것이 오늘의 부탁입니다' }],
+      ['sl-table', { CRUMB: '제안', TITLE: '세 가지를 제안합니다', HEAD: ['문제', '제안'], ROWS: [['사업이 많아 수업 준비가 밀림', '신규보다 검증, 사업 수 줄이기'], ['혼자 감당하는 교실 문제', '함께 대응하는 지원 체계'], ['현장 의견이 늦게 닿음', '정책 설계 단계부터 교사 참여']] }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '교사가 혼자 견디지 않는 학교를 위해', CONTACT: '현장 교사 · 두목쿼카' }]
+    ] },
+    { id: 'night', ko: '검정 무대 쇼케이스', mood: '검정 무대와 흰 채움. 해커톤·성과 발표를 영화처럼', theme: 'black', font: 'Paperlogy', items: [
+      ['sl-cover', { TAG: 'TEACHER’S AI HACKATHON', TITLE: '선생님이 만든\nAI 수업 도구', KEY: 'AI', SUB: '해커톤 결과 발표회', WHO: '쿼카연구회' }],
+      ['sl-number', { CRUMB: '하루의 기록', NUMBER: '8', UNIT: '시간', TITLE: '하루 동안 만들고 고쳤어요', NOTE: '아이디어에서 시연까지\n모둠별로 함께' }],
+      ['sl-gallery', { CRUMB: '결과물', TITLE: '우리가 만든 것들', ITEMS: ['질문 카드 생성기', '감정 체크인 대시보드', '실험 기록 도우미'] }],
+      ['sl-keywords', { TITLE: '해커톤에서 배운 세 가지', ITEMS: [['작게', '한 기능부터\n완성해요'], ['같이', '혼자보다\n빠르게 배워요'], ['교실', '쓸 사람을\n먼저 떠올려요']], FOOT: '만드는 교사가 수업을 바꿔요' }],
+      ['sl-statement', { LINES: ['만들어 본 교사는', '수업을 다르게 봅니다.'], KEY: '다르게' }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '다음 해커톤에서 또 만나요', CONTACT: 'Q.U.O.K.A' }]
+    ] },
+    { id: 'notebook', ko: '종이 노트 회고', mood: '종이 바탕과 알림장 글꼴. 한 학기를 돌아보는 담백한 회고', theme: 'paper', font: 'HakgyoansimAllimjang', items: [
+      ['sl-section', { TOP: '2026 1학기 돌아보기', TITLE: '한 학기,\n우리는 이렇게 자랐어요', WHO: '6학년 2반 · 두목쿼카' }],
+      ['sl-growth', { CRUMB: '돌아보기', TITLE: '한 학기 발자국', ITEMS: [['3월', '첫 만남, 마음 날씨'], ['4월', '질문 노트 시작'], ['6월', '모둠 프로젝트'], ['7월', '학기말 발표회']] }],
+      ['sl-table', { CRUMB: '잘된 것과 아쉬운 것', TITLE: '돌아보니 이랬어요', HEAD: ['잘된 것', '아쉬운 것'], ROWS: [['아침 마음 체크인이 자리 잡음', '바쁜 날엔 건너뛴 날이 많음'], ['질문하는 학생이 늘어남', '질문을 다루는 시간이 짧았음'], ['모둠 안 역할이 고르게 돎', '발표 준비 시간이 부족했음']] }],
+      ['sl-quote', { CRUMB: '학생의 한 줄', QUOTE: '“틀려도 괜찮다는 걸\n우리 반에서 배웠어요”', KEY: '틀려도 괜찮다', NOTE: '이 한 줄이 한 학기의 보람!' }],
+      ['sl-activity', { TAG: '2학기에는', TITLE: '이것만은\n꼭 해 볼게요', META: ['매주', '우리 반', '약속'], ITEMS: ['질문 다루는 시간 따로 두기', '발표 준비를 미리 나누기', '마음 체크인 이어 가기', '작은 성공을 함께 축하하기'] }],
+      ['sl-thanks', { TITLE: 'THANK\nYOU', SUB: '2학기에도 함께해요', CONTACT: '6학년 2반' }]
+    ] }
+  ],
+  carousel: [
+    { id: 'tips', ko: '수업 팁 카드뉴스', mood: '네이비와 페이퍼로지. 저장하고 싶어지는 수업 팁 6장', theme: 'navy', font: 'Paperlogy', items: [
+      ['cn-hook', {}], ['cn-problem', {}], ['cn-one-point', {}], ['cn-list', {}], ['cn-tip', {}], ['cn-save', {}]
+    ] },
+    { id: 'story', ko: '종이 위 수업 이야기', mood: '종이 바탕과 버건디. 사진 한 장으로 시작하는 수업 기록', theme: 'paper', font: 'Paperlogy', items: [
+      ['cn-photo-cover', {}], ['cn-before-after', {}], ['cn-number', {}], ['cn-steps', {}], ['cn-save', {}]
+    ] },
+    { id: 'family', ko: '다정한 가정 편지', mood: '로즈 베이지와 둥근 글꼴. 부모님께 보내는 대화법 카드', theme: 'rose', font: 'Cafe24Ssurround', items: [
+      ['cn-hook', { SERIES: '우리 반 가정 편지', KICKER: 'FAMILY NOTE', TITLE: '집에서 하는\n10분 대화법', KEY: '10분', SWIPE: '넘겨 보기' }],
+      ['cn-problem', { SERIES: '우리 반 가정 편지', KICKER: 'CHECK', TITLE: '혹시 이렇게\n묻고 있나요?', ITEMS: ['오늘 학교 어땠어?', '숙제는 다 했니?', '오늘 몇 점 받았어?'] }],
+      ['cn-list', { SERIES: '우리 반 가정 편지', KICKER: 'TRY THIS', TITLE: '이렇게 바꿔\n물어봐 주세요', ITEMS: [['오늘 웃은 순간은?', '기분을 먼저 물어요'], ['궁금했던 건 뭐야?', '질문을 칭찬해요'], ['친구랑 뭐 했어?', '관계를 살펴요']] }],
+      ['cn-tip', { SERIES: '우리 반 가정 편지', LABEL: 'TIP', TITLE: '대답이 짧을 때', TIP: '“그랬구나”로 받고\n“그래서 어떻게 됐어?”\n한 번만 더 물어요', NOTE: '캐묻지 말고 기다려 주세요' }],
+      ['cn-save', { SERIES: '우리 반 가정 편지', TITLE: '저장해 두고\n저녁 식탁에서\n꺼내 보세요', NEXT: '다음 편지 · 주말 독서 습관', NAME: '6학년 2반' }]
+    ] },
+    { id: 'recruit', ko: '강렬한 연구회 모집', mood: '검정 바탕에 노랑, 검은고딕. 한눈에 꽂히는 모집 카드', theme: 'blackYellow', font: 'Black Han Sans', items: [
+      ['cn-hook', { SERIES: '쿼카연구회', KICKER: 'JOIN US', TITLE: '혼자 밤새던\n수업 준비, 이제 함께', KEY: '함께', SWIPE: '넘겨 보기' }],
+      ['cn-number', { SERIES: '쿼카연구회', KICKER: 'EVERY MONTH', NUMBER: '1', UNIT: '번', TITLE: '한 달에 한 번 모여요', NOTE: '사례 나눔 · 워크숍 · 수다' }],
+      ['cn-list', { SERIES: '쿼카연구회', KICKER: 'WHAT WE DO', TITLE: '이런 걸\n함께해요', ITEMS: [['수업 나눔', '교실 사례를 함께 봐요'], ['함께 만들기', '수업 자료를 같이 만들어요'], ['연수와 해커톤', '배운 걸 바로 써 봐요']] }],
+      ['cn-one-point', { SERIES: '쿼카연구회', KICKER: 'OUR WAY', TEXT: '귀엽지만 가볍지 않게,\n실용적이지만\n따뜻하게', KEY: '따뜻하게', NOTE: '쿼카연구회가 일하는 방식' }],
+      ['cn-save', { SERIES: '쿼카연구회', TITLE: '함께할\n선생님을\n기다려요', NEXT: '신청 · 연구회 공지방', NAME: 'Q.U.O.K.A' }]
+    ] },
+    { id: 'brief', ko: '흑백 정책 한 장', mood: '흑백 신문 결과 함렛. 정책 이야기를 차분하게 정리', theme: 'mono', font: 'Hahmlet', items: [
+      ['cn-hook', { SERIES: '교육 정책 한 장', KICKER: 'BRIEFING', TITLE: '학교의 시간은\n누가 지키나요?', KEY: '시간', SWIPE: '넘겨 보기' }],
+      ['cn-before-after', { SERIES: '교육 정책 한 장', TITLE: '바라는 변화', BEFORE: ['NOW', '사업이 늘수록\n수업 준비가 밀린다'], AFTER: ['NEXT', '검증된 수업을\n오래 이어 간다'] }],
+      ['cn-steps', { SERIES: '교육 정책 한 장', KICKER: 'PROPOSAL', TITLE: '세 걸음\n제안', ITEMS: ['신규 사업보다 검증 먼저', '설계 단계부터 현장 교사와', '혼자 말고 함께 대응하는 체계', ''] }],
+      ['cn-one-point', { SERIES: '교육 정책 한 장', KICKER: 'ONE LINE', TEXT: '교사를 행정의\n말단이 아니라\n교육의 동료로', KEY: '교육의 동료', NOTE: '현장에서 드리는 부탁' }],
+      ['cn-save', { SERIES: '교육 정책 한 장', TITLE: '함께 읽고\n함께\n이야기해요', NEXT: '다음 장 · 교권과 회복', NAME: '현장 교사' }]
+    ] },
+    { id: 'woods', ko: '숲 초록 생태 기록', mood: '숲 초록과 함렛. 계절을 따라가는 관찰 카드', theme: 'forest', font: 'Hahmlet', items: [
+      ['cn-photo-cover', { SERIES: '학교 숲 일기', KICKER: 'FIELD NOTE', TITLE: '우리 학교 숲의\n가을 기록', SUB: '5학년 과학 · 미술 통합' }],
+      ['cn-steps', { SERIES: '학교 숲 일기', KICKER: 'HOW WE DID', TITLE: '숲 관찰은\n이렇게', ITEMS: ['돋보기로 가까이 보기', '그림과 글로 남기기', 'AI로 이름 확인하기', '친구 기록과 비교하기'] }],
+      ['cn-one-point', { SERIES: '학교 숲 일기', KICKER: 'WHAT WE FOUND', TEXT: '같은 나무도\n매일 조금씩\n달라져요', KEY: '매일', NOTE: '관찰이 쌓이면 질문이 생겨요' }],
+      ['cn-tip', { SERIES: '학교 숲 일기', LABEL: 'TIP', TITLE: '관찰 기록 꿀팁', TIP: '“예쁘다” 대신\n색·모양·냄새를\n하나씩 적어요', NOTE: '감각 낱말 카드를 함께 주면 좋아요' }],
+      ['cn-save', { SERIES: '학교 숲 일기', TITLE: '숲처럼\n천천히\n함께 자라요', NEXT: '다음 기록 · 겨울 숲', NAME: '5학년 숲 탐사대' }]
+    ] },
+    { id: 'kids', ko: '또박또박 학생 탐구', mood: '머스터드와 주아체. 학생이 만든 탐구 보고 카드', theme: 'mustard', font: 'BMJUA', items: [
+      ['cn-hook', { SERIES: '3모둠 탐구 보고', KICKER: 'OUR QUESTION', TITLE: '쉬는 시간 교실은\n왜 시끄러울까?', KEY: '시끄러울까', SWIPE: '넘겨 보기' }],
+      ['cn-problem', { SERIES: '3모둠 탐구 보고', KICKER: 'WE NOTICED', TITLE: '우리가\n발견한 것', ITEMS: ['점심 직후가 가장 시끄럽다', '교실 뒤쪽이 더 시끄럽다', '큰 소리는 웃음소리가 많다'] }],
+      ['cn-number', { SERIES: '3모둠 탐구 보고', KICKER: 'WE MADE', NUMBER: '1', UNIT: '개', TITLE: '소리 신호등을 만들었어요', NOTE: '소리가 커지면 빨간 불!' }],
+      ['cn-before-after', { SERIES: '3모둠 탐구 보고', TITLE: '써 보니 달라졌어요', BEFORE: ['BEFORE', '누가 조용히 하라고\n해야 조용해짐'], AFTER: ['AFTER', '신호등을 보고\n스스로 줄임'] }],
+      ['cn-save', { SERIES: '3모둠 탐구 보고', TITLE: '우리 반에도\n써 보고 싶다면\n저장!', NEXT: '다음 보고 · 점심시간 측정', NAME: '6학년 2반 3모둠' }]
+    ] },
+    { id: 'edutech', ko: '산뜻한 에듀테크 꿀팁', mood: '하늘 파랑과 원티드 산스. AI 도구를 수업에 넣는 요령', theme: 'sky', font: 'Wanted Sans Variable', items: [
+      ['cn-hook', { SERIES: '에듀테크 한 장', KICKER: 'EDUTECH TIP', TITLE: 'AI 도구, 수업에\n딱 한 장면만', KEY: '한 장면', SWIPE: '넘겨 보기' }],
+      ['cn-list', { SERIES: '에듀테크 한 장', KICKER: 'WHERE', TITLE: 'AI가 들어가기\n좋은 자리', ITEMS: [['질문 넓히기', '학생 질문을 더 많이'], ['자료 비교', '여러 답을 나란히'], ['되돌아보기', '과정을 한 줄로']] }],
+      ['cn-tip', { SERIES: '에듀테크 한 장', LABEL: 'TIP', TITLE: '프롬프트 한 줄 꿀팁', TIP: '“답을 알려 줘” 대신\n“생각해 볼 질문을\n세 개 만들어 줘”', NOTE: '답보다 질문을 받게 해요' }],
+      ['cn-steps', { SERIES: '에듀테크 한 장', KICKER: 'IN CLASS', TITLE: '수업에서는\n이 순서로', ITEMS: ['학생 질문 먼저 쓰기', 'AI에게 질문 넓히기', '친구와 비교하고 고르기', '한 줄 성찰 남기기'] }],
+      ['cn-save', { SERIES: '에듀테크 한 장', TITLE: '저장해 두고\n다음 수업에\n써 보세요', NEXT: '다음 장 · 하이러닝 꿀팁', NAME: '쿼카연구회' }]
+    ] }
+  ],
+  movie: [
+    { id: 'shorts', ko: '쇼츠 20초', mood: '모션마다 제 색. 훅에서 마무리까지 세로 숏폼', theme: 'own', font: '', ratio: '9 / 16', items: [
+      ['text-sandwich', {}], ['sf-question-hook', {}], ['letter-zoom', {}], ['screen-dive', {}], ['sf-big-number', {}], ['sf-quiet-sentence', {}]
+    ] },
+    { id: 'promo', ko: '가로 홍보 영상', mood: '밝은 가로 화면. 타이틀 → 화면 시연 → 흐름 → 데이터', theme: 'own', font: '', ratio: '16 / 9', items: [
+      ['title-card', {}], ['browser-mock', {}], ['flow-chart', {}], ['donut-build', {}], ['end-card', {}]
+    ] },
+    { id: 'calm-train', ko: '차분한 연수 예고', mood: '회청빛과 부리 글꼴로 통일한 가로 예고편', theme: 'slate', font: 'MaruBuri', ratio: '16 / 9', items: [
+      ['chapter-card', {}, ['01', '생성형 AI와 수업 설계', 'TRAINING', '90분 동안 함께 설계해요']],
+      ['sl-question', { CRUMB: '', QUESTION: 'AI가 들어간 수업,\n무엇이 달라질까요?', HINT: '연수에서 함께 찾아봐요' }],
+      ['step-flow', { TITLE: '연수는 이렇게 흘러가요', STEPS: ['열기', '교실 속 AI를 돌아봐요', '원리', '답이 만들어지는 방식', '설계', '수업 한 장면 짜기', '나눔', '설계안 돌려 읽기'] }],
+      ['quote-card', {}, ['좋은 질문은 답보다\n오래 교실에 남는다', '쿼카연구회', 'QUOTE']],
+      ['end-card', {}, ['연수에서\n만나요', '토요일 오후 2시 · 온라인', '쿼카연구회', 'QUOKA LAB · 2026']]
+    ] },
+    { id: 'recap', ko: '행사 스케치', mood: '날짜 타이틀과 사진 아코디언. 하루를 돌아보는 가로 영상', theme: 'own', font: '', ratio: '16 / 9', items: [
+      ['date-title', { DATE: ['2026', '10', '24'], TITLE: '가을 수업\n나눔의 날', SUB: '함께해 주신 선생님들 고맙습니다', LABEL: 'EVENT RECAP' }],
+      ['photo-accordion', { HEAD: 'EVENT ARCHIVE', TITLES: ['여는 인사', '사례 나눔', '모둠 워크숍', '다과와 수다', '작품 전시', '단체 사진'] }],
+      ['lower-third', {}, ['두목쿼카', '쿼카연구회 · 여는 인사', 'QUOKA LAB']],
+      ['grid-zoom', { TITLE: '함께 만든 / 하루의 기록', LABEL: 'QUOKA ARCHIVE — 2026' }],
+      ['end-card', {}, ['함께해 주셔서\n고맙습니다', '다음 나눔의 날에 또 만나요', '쿼카연구회', 'QUOKA LAB · 2026']]
+    ] },
+    { id: 'vlog', ko: '수업 브이로그 쇼츠', mood: '알약 자막과 화면 다이브. 교실 하루를 세로로', theme: 'own', font: '', ratio: '9 / 16', items: [
+      ['sf-hook-title', { KICKER: '6학년 수업 브이로그', TITLE: '질문 하나로 / *40분이 순삭' }],
+      ['screen-dive', { CAPTIONS: ['질문 쓰는 시간', '모둠 토론', 'AI와 자료 찾기'], LABEL: 'QUOKA — 수업 브이로그' }],
+      ['sf-pill-lines', { LINES: ['아이들이 / *먼저* 물었어요', '선생님은 / 기다렸어요', '그게 다였어요'] }],
+      ['sf-counter-roll', { TARGET: 40, UNIT: '분', KICKER: '오늘 질문한 시간', LINES: ['질문이 쌓이면', '*수업이 보여요'] }],
+      ['circle-pop', { CAPTIONS: ['질문 노트', '모둠 발표', '한 줄 성찰'] }],
+      ['sf-poem-lines', {}]
+    ] },
+    { id: 'join', ko: '강렬한 모집 쇼츠', mood: '검정·노랑과 검은고딕. 3초 안에 꽂히는 연구회 모집', theme: 'blackYellow', font: 'Black Han Sans', ratio: '9 / 16', items: [
+      ['shard-title', { TITLE: '함께', SUB: '혼자 밤새던 수업 준비, 이제 함께' }],
+      ['sf-question-hook', { TEXT: '수업 준비, / *혼자* 하세요?', SUB: '쿼카연구회에서 같이 해요' }],
+      ['sf-big-number', { LINES: ['한 달에 *1번 / 모여요', '수업 사례 *3개를 / 나눠요', '오늘부터 / *함께* 시작'] }],
+      ['wc-live-merge', { QUESTION: '연구회 하면 떠오르는 낱말은?' }],
+      ['end-card', {}, ['함께할 선생님을\n기다려요', '연구회 공지방에서 신청하세요', '쿼카연구회', 'Q.U.O.K.A']]
+    ] },
+    { id: 'notice', ko: '다정한 학부모 공지', mood: '로즈와 둥근 글꼴. 정사각 공지 영상', theme: 'rose', font: 'Cafe24Ssurround', ratio: '1 / 1', items: [
+      ['cn-hook', { SERIES: '우리 반 가정 편지', KICKER: 'NOTICE', TITLE: '다음 주\n학부모 상담 안내', KEY: '상담', SWIPE: '끝까지 봐 주세요' }],
+      ['cn-steps', { SERIES: '우리 반 가정 편지', KICKER: 'HOW', TITLE: '신청은\n이렇게', ITEMS: ['알림장 링크 열기', '편한 시간 고르기', '상담 방법 고르기', '신청 완료 확인'] }],
+      ['cn-tip', { SERIES: '우리 반 가정 편지', LABEL: 'TIP', TITLE: '미리 적어 두면 좋아요', TIP: '아이의 요즘 관심사\n집에서의 고민 한 가지\n궁금한 점 두 개', NOTE: '짧게 적어 오셔도 충분해요' }],
+      ['cn-save', { SERIES: '우리 반 가정 편지', TITLE: '편한 마음으로\n오세요', NEXT: '상담 주간 · 넷째 주', NAME: '6학년 2반' }]
+    ] },
+    { id: 'kinetic', ko: '키네틱 오프닝', mood: '큰 글자가 주인공. 강연·행사 여는 가로 오프닝', theme: 'own', font: '', ratio: '16 / 9', items: [
+      ['camera-ride', { PHRASES: ['혼자', '말고', '함께', '연구해요'], CAPTION: '혼자 말고 함께 연구해요', LABEL: 'QUOKA LAB' }],
+      ['headline-slam', {}], ['big-letter', {}], ['title-card', {}], ['end-card', {}]
+    ] }
+  ]
+};
 /* =====================================================================
    작업실: 모션 PPT · 모션 캐러셀 · 모션 영상 — 모션랩의 모션으로 추천 구성을 깔아 두고, 선생님이 문구·순서·색을 손봅니다
    (이 사이트 화면용. qmDeckPlayer만은 'HTML 파일로 저장'한 발표 파일에도 그대로 들어갑니다)
@@ -58908,48 +59170,20 @@ function qmDeckPlayer(host, deck, opt) {
     carousel: { ko: '모션 캐러셀', ratio: '4 / 5', ratios: ['4 / 5', '1 / 1', '9 / 16'], unit: '장', present: '넘겨 보기', exportLabel: '카드 영상 모두 받기', cats: ['cardnews', 'kinetic', 'text', 'class', 'data', 'video', 'card', 'cloud', 'shorts', 'bg'] },
     movie: { ko: '모션 영상', ratio: '9 / 16', ratios: ['9 / 16', '16 / 9', '1 / 1', '4 / 5'], unit: '장면', present: '이어 보기', exportLabel: '영상으로 저장', cats: ['video', 'kinetic', 'text', 'shorts', 'card', 'cloud', 'data', 'bg', 'landing', 'class', 'cardnews', 'slide'] }
   };
-  // 주제색: 흰 바탕 + 포인트 색 '채움'(띠·알약·번호 원·상자). 색 8개 = 밝은 색 → 진한 색, [5] 포인트, [6] 펜(빨간 펜 표시), [7] 글자
-  // 포인트 색 칸에서 아무 색이나 고르면 채움 위 글자색(검정·흰색)은 저절로 맞춰집니다
-  const THEMES = [
-    { id: 'navy', ko: '쿼카 네이비', bg: '#ffffff', colors: ["#ffffff", "#e8edf7", "#c9d4ea", "#c8cbd2", "#70747e", "#1f3460", "#e03a3e", "#111216"] },
-    { id: 'yellow', ko: '노랑', bg: '#ffffff', colors: ["#ffffff", "#fff6c2", "#ffe766", "#c8cbd2", "#70747e", "#fcdb10", "#e03a3e", "#111111"] },
-    { id: 'wine', ko: '버건디', bg: '#ffffff', colors: ["#ffffff", "#f6e7ea", "#e6c5cc", "#c8cbd2", "#70747e", "#6e1a2f", "#1f3460", "#141012"] },
-    { id: 'paper', ko: '종이', bg: '#f5f1ec', colors: ["#ffffff", "#f3ece6", "#e5d6cf", "#c59ca3", "#9c5263", "#6e1a2f", "#1f3460", "#1a1416"] },
-    { id: 'black', ko: '검정 무대', bg: '#111214', colors: ["#f5f5f7", "#2a2b2f", "#3a3c42", "#8a8d94", "#b9bcc2", "#ffffff", "#ff6b6b", "#111214"] },
-    { id: 'own', ko: '모션마다 제 색', own: true }
-  ];
+  // 주제색과 예시(디자인 테마 이름이 붙은 추천 구성)는 presets.js의 QM_PALETTES · QM_PRESETS
+  const THEMES = QM_PALETTES.concat([{ id: 'own', ko: '모션마다 제 색', own: true }]);
   const themeOf = id => { const t = THEMES.find(x => x.id === id) || THEMES[0]; return t.own ? null : { bg: t.bg, colors: t.colors }; };
-  // 추천 구성: 모드마다 처음 열 때 깔아 두는 틀. 없는 모션은 빠지고, 같은 자리에 적힌 다음 후보가 들어갑니다
-  const PICK = list => list.find(has) || null;
-  const TEMPLATES = {
-    ppt: [
-      { id: 'share', ko: '수업 사례 나눔', note: '표지 → 차시 흐름 → 사례 → 목표 → 사진 → 전후 숫자 → 흐름 → 감사', theme: 'navy', items: [
-        ['sl-cover'], ['sl-index'], ['sl-case'], ['sl-points'], ['sl-gallery', 'sl-photo'], ['sl-change'], ['sl-flow'], ['sl-quote'], ['sl-thanks'] ] },
-      { id: 'training', ko: '연수 · 강의', note: '구역 → 질문 → 비교 → 관점 셋 → 순환 → 활동 → 한 문장 → 감사', theme: 'yellow', items: [
-        ['sl-section'], ['sl-question'], ['sl-compare'], ['sl-keywords'], ['sl-cycle'], ['sl-activity'], ['sl-table'], ['sl-statement'], ['sl-thanks'] ] }
-    ],
-    carousel: [
-      { id: 'tips', ko: '수업 팁 카드뉴스', note: '훅 → 문제 → 핵심 → 목록 → 팁 → 저장', theme: 'navy', items: [
-        ['cn-hook'], ['cn-problem'], ['cn-one-point'], ['cn-list'], ['cn-tip'], ['cn-save'] ] },
-      { id: 'story', ko: '수업 이야기', note: '사진 표지 → 전/후 → 숫자 → 단계 → 저장', theme: 'paper', items: [
-        ['cn-photo-cover'], ['cn-before-after'], ['cn-number'], ['cn-steps'], ['cn-save'] ] }
-    ],
-    movie: [
-      { id: 'shorts', ko: '쇼츠 20초', note: '훅 → 질문 → 큰 낱말 → 화면 → 숫자 → 마무리', theme: 'own', ratio: '9 / 16', items: [
-        ['text-sandwich', 'sf-hook-title'], ['sf-question-hook', 'sf-search-hook'], ['letter-zoom', 'sf-hormozi-rise'], ['screen-dive', 'phone-scroll'], ['sf-big-number', 'sf-counter-roll'], ['sf-quiet-sentence', 'sf-poem-lines'] ] },
-      { id: 'promo', ko: '가로 홍보 영상', note: '타이틀 → 화면 시연 → 흐름 → 데이터 → 마무리', theme: 'own', ratio: '16 / 9', items: [
-        ['title-card', 'word-title'], ['browser-mock', 'prompt-box'], ['flow-chart', 'step-flow'], ['donut-build', 'versus-bars'], ['end-card'] ] }
-    ]
-  };
+  const TEMPLATES = QM_PRESETS;
   // ---- 저장 (이 브라우저에만) ----
   const KEY = 'qmlStudio1';
   let store = {};
   try { store = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { store = {}; }
   const saveStore = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} };
+  // 예시 하나로 새 구성 만들기. 예시의 문구(상수 이름: 값)는 문구 칸 열쇠(이름#번호)로 바꿔 둠
   function fresh(mode, tpl) {
     const M = MODES[mode], T = tpl || TEMPLATES[mode][0];
-    const items = T.items.map(alts => PICK(alts)).filter(Boolean).map(id => ({ id: id, set: {}, dur: 0, bg: null }));
-    return { v: 1, mode: mode, title: T.ko, template: T.id, ratio: T.ratio || M.ratio, theme: T.theme || 'navy', point: '', font: '', items: items, sel: 0 };
+    const items = T.items.filter(x => has(x[0])).map(x => ({ id: x[0], set: Q.labSet(Q.motionOf(x[0]), x[1] || {}), words: x[2] ? x[2].slice() : undefined, dur: 0, bg: null }));
+    return { v: 2, mode: mode, title: T.ko, template: T.id, ratio: T.ratio || M.ratio, theme: T.theme || 'navy', point: '', font: T.font || '', items: items, sel: 0, dirty: false };
   }
   // ---- 화면 만들기 ----
   const root = document.createElement('div');
@@ -58960,7 +59194,7 @@ function qmDeckPlayer(host, deck, opt) {
     <div class="seg st-modes" role="group" aria-label="작업실"><button type="button" data-mode="ppt">모션 PPT</button><button type="button" data-mode="carousel">모션 캐러셀</button><button type="button" data-mode="movie">모션 영상</button></div>
     <input class="st-title" id="stTitle" type="text" aria-label="작품 이름" spellcheck="false">
     <span class="st-sp"></span>
-    <label class="st-pick"><span>추천 틀</span><select id="stTpl"></select></label>
+    <button class="btn st-galbtn" data-x="gallery" type="button" id="stGalBtn">예시 고르기 <b id="stGalN"></b></button>
     <button class="btn" data-x="play" type="button" id="stPlay"></button>
     <button class="cta" data-x="export" type="button" id="stExport"><span></span></button>
   </header>
@@ -58988,7 +59222,8 @@ function qmDeckPlayer(host, deck, opt) {
         <div class="st-row"><button class="btn" data-x="pics" type="button">사진 고르기</button><small id="stPicN"></small></div><input type="file" id="stPicks" accept="image/*" multiple hidden></section>
     </aside>
   </div>
-  <div class="st-picker" id="stPicker" hidden><div class="st-pk"><header><b id="stPkTitle"></b><div class="seg" id="stPkCats"></div><input type="search" id="stPkQ" placeholder="이름으로 찾기"><button class="btn" data-x="pkClose" type="button">닫기</button></header><div class="st-pk-grid" id="stPkGrid"></div></div></div>`;
+  <div class="st-picker" id="stPicker" hidden><div class="st-pk"><header><b id="stPkTitle"></b><div class="seg" id="stPkCats"></div><input type="search" id="stPkQ" placeholder="이름으로 찾기"><button class="btn" data-x="pkClose" type="button">닫기</button></header><div class="st-pk-grid" id="stPkGrid"></div></div></div>
+  <div class="st-gal" id="stGal" hidden><div class="st-gal-in"><header><div><b id="stGalTitle"></b><p class="hint">디자인 테마마다 색 · 글꼴 · 장면 조합 · 문구까지 깔아 둔 예시예요. 골라서 시작하고 문구만 바꾸세요.</p></div><button class="btn" data-x="galClose" type="button">닫기</button></header><div class="st-gal-grid" id="stGalGrid"></div></div></div>`;
   document.body.appendChild(root);
   // 위 막대에 작업실 단추 + 첫 화면의 작업실 카드(data-open)
   const nav = document.querySelector('.nav-links');
@@ -59000,14 +59235,26 @@ function qmDeckPlayer(host, deck, opt) {
   document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-open]'); if (b && !root.contains(b)) open(b.dataset.open); });
   let mode = 'ppt', doc = null, stageEng = [], thumbEngs = [], picks = [], editTimer = 0, job = null;
   const say = t => { $('stSay').textContent = t || ''; };
-  const optsOf = (it, d) => ({ set: it.set, words: it.words, font: d.font || undefined, point: d.point || undefined, theme: themeOf(d.theme) || undefined, images: picks });
+  // 캐러셀은 카드 쪽 번호(PAGE)를 차례대로 저절로 채움 (직접 고친 카드는 그대로)
+  const pad2 = n => String(n).padStart(2, '0');
+  // 영상·PPT에 카드가 섞이면 카드끼리만 번호를 셈
+  const hasPage = id => { const m = metaOf(id); return !!m && !m.ext && Q.fieldsFor(m).some(g => g.name === 'PAGE'); };
+  const setOf = (it, d) => {
+    if ('PAGE#0' in (it.set || {}) || !hasPage(it.id)) return it.set;
+    const list = d.mode === 'carousel' ? d.items : d.items.filter(x => hasPage(x.id));
+    return Object.assign({}, it.set, { 'PAGE#0': pad2(list.indexOf(it) + 1) + ' / ' + pad2(list.length) });
+  };
+  const optsOf = (it, d) => ({ set: setOf(it, d), words: it.words, font: d.font || undefined, point: d.point || undefined, theme: themeOf(d.theme) || undefined, images: picks });
   const metaOf = id => Q.motionOf(id);
   function open(m) {
     mode = m;
-    doc = store[mode] || (store[mode] = fresh(mode));
+    const first = !store[mode] || (store[mode].v || 1) < 2;
+    if (first) store[mode] = fresh(mode);
+    doc = store[mode];
     root.hidden = false;
     document.documentElement.style.overflow = 'hidden';
     paintAll();
+    if (first) galTimer = setTimeout(gallery, 60);
     if (location.hash !== '#studio-' + mode) history.replaceState(null, '', '#studio-' + mode);
   }
   function close() {
@@ -59080,7 +59327,7 @@ function qmDeckPlayer(host, deck, opt) {
         if (a === 'down' && i < doc.items.length - 1) { doc.items.splice(i + 1, 0, doc.items.splice(i, 1)[0]); doc.sel = i + 1; }
         if (a === 'dup') { doc.items.splice(i + 1, 0, JSON.parse(JSON.stringify(it))); doc.sel = i + 1; }
         if (a === 'del') { doc.items.splice(i, 1); doc.sel = Math.max(0, Math.min(doc.sel, doc.items.length - 1)); }
-        saveStore(); paintAll();
+        doc.dirty = true; saveStore(); paintAll();
       });
       // 썸네일은 보일 때 만듦
       const th = li.querySelector('.st-thin');
@@ -59136,14 +59383,14 @@ function qmDeckPlayer(host, deck, opt) {
     });
   }
   const loopOf = it => { const m = metaOf(it.id); if (!m || m.ext) return 6; const g = Q.fieldsFor(m).find(x => x.name === 'LOOP'); return g && g.items[0] ? g.items[0].value : 6; };
-  function edited() { saveStore(); clearTimeout(editTimer); editTimer = setTimeout(() => { paintStage(); paintList(); }, 260); }
+  function edited() { doc.dirty = true; saveStore(); clearTimeout(editTimer); editTimer = setTimeout(() => { paintStage(); paintList(); }, 260); }
   function paintHead() {
     const M = MODES[mode];
     root.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === mode));
     $('stTitle').value = doc.title;
     $('stPlay').textContent = M.present;
     $('stExport').firstChild.textContent = M.exportLabel;
-    const sel = $('stTpl'); sel.innerHTML = '<option value="">— 지금 구성 —</option>' + TEMPLATES[mode].map(t => `<option value="${t.id}">${esc(t.ko)} · ${esc(t.note)}</option>`).join('');
+    $('stGalN').textContent = TEMPLATES[mode].length;
     $('stTheme').innerHTML = THEMES.map(t => `<option value="${t.id}"${t.id === doc.theme ? ' selected' : ''}>${t.ko}</option>`).join('');
     $('stFont').innerHTML = '<option value="">장면마다 제 글꼴</option>' + Object.keys(Q.KFONTS).map(k => `<option value="${esc(k)}"${k === doc.font ? ' selected' : ''}>${esc(Q.KFONTS[k].ko)}</option>`).join('');
     const th0 = themeOf(doc.theme);
@@ -59186,7 +59433,54 @@ function qmDeckPlayer(host, deck, opt) {
     if (pkFor === 'bg') { doc.items[doc.sel].bg = id; }
     else if (pkFor === 'add') { doc.items.splice(doc.sel + 1, 0, { id: id, set: {}, dur: 0, bg: null }); doc.sel = Math.min(doc.items.length - 1, doc.sel + 1); }
     else { const it = doc.items[doc.sel]; it.id = id; it.set = {}; it.words = undefined; }
-    saveStore(); paintAll();
+    doc.dirty = true; saveStore(); paintAll();
+  }
+  // ---- 예시 고르기 (디자인 테마 이름이 붙은 추천 구성) ----
+  let galEngs = [], galObs = null, galTimer = 0;
+  function closeGallery() { clearTimeout(galTimer); $('stGal').hidden = true; galEngs.forEach(e => e.destroy()); galEngs = []; if (galObs) galObs.disconnect(); }
+  function gallery() {
+    const list = TEMPLATES[mode], grid = $('stGalGrid');
+    $('stGalTitle').textContent = MODES[mode].ko + ' 예시 ' + list.length + '가지';
+    galEngs.forEach(e => e.destroy()); galEngs = []; grid.textContent = '';
+    if (galObs) galObs.disconnect();
+    galObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !e.target.made) { e.target.made = true; galThumb(e.target); } }), { root: grid, rootMargin: '240px' });
+    list.forEach(T => {
+      const b = document.createElement('button'), th = themeOf(T.theme), n = T.items.filter(x => has(x[0])).length;
+      b.type = 'button'; b.className = 'st-gal-card' + (doc && doc.template === T.id ? ' on' : ''); b.T = T;
+      const sw = th ? '<i class="st-gal-sw">' + [th.bg, th.colors[5], th.colors[6], th.colors[7]].map(c => `<em style="background:${c}"></em>`).join('') + '</i>' : '<i>모션마다 제 색</i>';
+      const font = T.font && Q.KFONTS[T.font] ? Q.KFONTS[T.font].ko : '장면마다 제 글꼴';
+      b.innerHTML = `<div class="st-gal-th"></div><div class="st-gal-meta"><b>${esc(T.ko)}</b><small>${esc(T.mood || '')}</small><span class="st-gal-tags">${sw}<i>${esc(font)}</i><i>${n}${MODES[mode].unit}${T.ratio ? ' · ' + T.ratio.replace(/ /g, '') : ''}</i></span></div>`;
+      b.addEventListener('click', () => applyTemplate(T));
+      grid.appendChild(b); galObs.observe(b);
+    });
+    $('stGal').hidden = false;
+  }
+  // 예시 미리보기: 가로 장면은 첫 장 하나를 꽉 차게, 세로·정사각 장면은 앞 장 2~3개를 나란히 (조합이 한눈에)
+  function galThumb(b) {
+    const T = b.T, xs = T.items.filter(y => has(y[0])); if (!xs.length) return;
+    const ratio = T.ratio || MODES[mode].ratio, holder = b.querySelector('.st-gal-th');
+    const part = ratio.split('/').map(Number), ar = part[0] / part[1], big = 560, bh = big / ar, W0 = holder.clientWidth || 300, H0 = holder.clientHeight || 190;
+    const th = themeOf(T.theme); if (th) holder.style.background = th.bg;
+    const count = Math.min(xs.length, ar > 1.2 ? 1 : ar > 0.7 ? 2 : 3), pad = count > 1 ? 10 : 0, gap = 8;
+    const k = count > 1 ? Math.min((H0 - pad * 2) / bh, (W0 - pad * 2 - gap * (count - 1)) / (big * count)) : Math.max(W0 / big, H0 / bh);
+    const left0 = (W0 - (big * k * count + gap * (count - 1))) / 2;
+    xs.slice(0, count).forEach((x, i) => {
+      const m = metaOf(x[0]), inner = document.createElement('div'), host = document.createElement('div');
+      inner.style.cssText = `position:absolute;left:${left0 + i * (big * k + gap)}px;top:${(H0 - bh * k) / 2}px;width:${big}px;height:${bh}px;transform:scale(${k});transform-origin:0 0;overflow:hidden;` + (count > 1 ? `border-radius:${10 / k}px;box-shadow:0 ${6 / k}px ${18 / k}px -${8 / k}px rgba(0,0,0,.45);` : '');
+      host.style.cssText = 'position:absolute;inset:0;';
+      inner.appendChild(host); holder.appendChild(inner);
+      if (Q.isStill(m)) { Q.poster(host, Object.assign(Q.still(m), { ratio: ratio }), m); return; }
+      const pg = mode === 'carousel' ? xs : xs.filter(y => hasPage(y[0])), set = hasPage(x[0]) ? Object.assign({ 'PAGE#0': pad2(pg.indexOf(x) + 1) + ' / ' + pad2(pg.length) }, Q.labSet(m, x[1] || {})) : (x[1] || {});
+      const made = Q.labMake(x[0], { set: set, words: x[2], font: T.font || undefined, theme: th || undefined, ratio: ratio });
+      const slide = m.cat === 'slide';
+      galEngs.push(qmEngine(host, Object.assign({}, made.cfg, { ratio: ratio, autoplay: false, startAt: slide ? 9 : (m.at || 4), cue: slide ? { step: 99, at: -99 } : null, page: slide ? i + 1 : 0 }), made.fn));
+    });
+  }
+  function applyTemplate(T) {
+    if (doc && doc.dirty && doc.items.length && !confirm('지금 고친 구성을 지우고 예시 「' + T.ko + '」로 바꿀까요?')) return;
+    closeGallery();
+    doc = store[mode] = fresh(mode, T); saveStore(); paintAll();
+    say('예시 「' + T.ko + '」를 깔았어요. 왼쪽에서 장을 고르고 오른쪽 문구 칸만 바꾸면 돼요.');
   }
   // ---- 발표 · 넘겨 보기 · 이어 보기 ----
   function deckOf(d) {
@@ -59274,6 +59568,8 @@ function qmDeckPlayer(host, deck, opt) {
     const x = b.dataset.x;
     if (x === 'back') close();
     else if (x === 'add') picker('add');
+    else if (x === 'gallery') gallery();
+    else if (x === 'galClose') closeGallery();
     else if (x === 'swap') picker('swap');
     else if (x === 'bg') picker('bg');
     else if (x === 'bgOff') { doc.items[doc.sel].bg = null; saveStore(); paintAll(); }
@@ -59291,11 +59587,7 @@ function qmDeckPlayer(host, deck, opt) {
   $('stFont').addEventListener('change', e => { doc.font = e.target.value; edited(); });
   $('stPoint').addEventListener('input', e => { doc.point = e.target.value; edited(); });
   $('stDur').addEventListener('input', e => { const it = doc.items[doc.sel]; if (it) { it.dur = Math.max(1, Math.min(30, +e.target.value || 0)); saveStore(); } });
-  $('stTpl').addEventListener('change', e => {
-    const t = TEMPLATES[mode].find(x => x.id === e.target.value); if (!t) return;
-    if (doc.items.length && !confirm('지금 구성을 지우고 추천 틀 「' + t.ko + '」로 바꿀까요?')) { e.target.value = ''; return; }
-    doc = store[mode] = fresh(mode, t); saveStore(); paintAll();
-  });
+  $('stGal').addEventListener('click', e => { if (e.target.id === 'stGal') closeGallery(); });
   $('stPkQ').addEventListener('input', paintPicker);
   $('stPicks').addEventListener('change', e => {
     picks.forEach(p => URL.revokeObjectURL(p.url));
@@ -59306,7 +59598,7 @@ function qmDeckPlayer(host, deck, opt) {
   // 주소 끝이 #studio-ppt 등이면 바로 엶
   const m0 = /^#studio-(ppt|carousel|movie)$/.exec(location.hash);
   if (m0) open(m0[1]);
-  window.quokaStudio = { open: open, close: close, doc: () => doc, templates: TEMPLATES };
+  window.quokaStudio = { open: open, close: close, doc: () => doc, templates: TEMPLATES, gallery: () => gallery(), apply: (m, id) => { if (m !== mode || !doc || root.hidden) open(m); const T = TEMPLATES[mode].find(t => t.id === id); if (T) { doc.dirty = false; applyTemplate(T); } } };
 })();
 </script>
 
