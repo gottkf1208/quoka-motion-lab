@@ -36,6 +36,10 @@
 
 투명 형식을 고르면 엔진에 `bg: 'transparent'`가 들어가고(`api.clear`), 미리보기 바탕이 체크무늬로 바뀝니다.
 
+## AI(클로드 등)가 골라 쓰기: catalog/
+
+`catalog/` 폴더에 AI가 읽는 목록이 있습니다: `motions.json`(모든 모션의 쓰임새·비율·밝기·고칠 칸), 묶음별 썸네일 판 `sheets/*.jpg`, 후보 뽑기 `pick.py`, 영상 뽑기 `render.py`. 사이트에서는 `quokaLab.catalog()`, `quokaLab.html(id, opts)`, `quokaLab.code(id, opts)`로 같은 일을 합니다. 자세한 것은 `catalog/README.md`.
+
 ## 바구니: 여러 개를 한 번에
 
 모션 창 위쪽 **바구니에 담기**로 모션을 모아 두었다가 한꺼번에 받거나 링크로 넘깁니다.

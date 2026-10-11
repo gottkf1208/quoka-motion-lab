@@ -285,6 +285,8 @@ input[type="color"]::-moz-color-swatch { border: 0; }
 .sw { width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
 .sw[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(0,0,0,.14), 0 0 0 2px var(--bg), 0 0 0 3.5px var(--accent); }
 input[type="text"] { width: 100%; height: 34px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--track); font: 500 12.5px var(--mono); }
+.cloud-row { align-items: start; padding-top: 10px; }
+#cloudWords { width: 100%; min-height: 92px; padding: 10px 14px; border: 0; border-radius: 14px; background: var(--track); font: 400 13px/1.55 var(--body); color: var(--ink); resize: vertical; }
 pre { margin: 0; max-height: 260px; overflow: auto; padding: 14px 16px; border-radius: 14px; background: var(--panel); font: 400 12px/1.7 var(--mono); tab-size: 2; white-space: pre; }
 
 @media (max-width: 860px) {
@@ -602,6 +604,11 @@ ffmpeg -i out.mp4 -i voice.wav -c:v copy -c:a aac -b:a 192k -shortest out_audio.
               <input type="text" id="words" spellcheck="false" autocomplete="off">
             </div>
             <p class="hint" id="wordsNote" hidden>쉼표로 나눠 여러 낱말을 넣을 수 있어요. 줄을 바꿀 자리에는 \n이라고 적습니다. 비워 두면 기본 낱말이 나옵니다.</p>
+            <div class="row first cloud-row" id="cloudRow" hidden>
+              <label for="cloudWords">낱말</label>
+              <textarea id="cloudWords" rows="4" spellcheck="false"></textarea>
+            </div>
+            <p class="hint" id="cloudNote" hidden>학생 응답을 그대로 붙여 넣으세요(쉼표나 줄바꿈으로 나눠요). 같은 낱말이 여러 번 나오면 그만큼 커지고, ‘협력:5’처럼 숫자로 무게를 줄 수도 있어요. 비워 두면 예시 낱말이 나옵니다.</p>
             <div id="textFields"></div>
             <p class="hint" id="textNote" hidden>고친 문구는 미리보기와 복사되는 코드, 저장되는 영상에 그대로 들어갑니다. 칸 수는 그대로 두고 내용만 바꿀 수 있어요.</p>
             <button class="textlink" id="btnTextReset" type="button" hidden>처음 문구로 되돌리기</button>
@@ -1218,6 +1225,89 @@ function lpKit(api) {
     }
   };
   return lp;
+}
+/* =====================================================================
+   워드클라우드 공통 도구 — 낱말 읽기(무게 세기), 글자 크기, 겹치지 않게 놓기
+   (이 도구를 쓰는 모션의 코드에 함께 들어갑니다)
+   ===================================================================== */
+function wcKit(api) {
+  const clamp = x => Math.max(0, Math.min(1, x));
+  const wc = {
+    // 낱말 목록 읽기. 한 칸에 '협력:5' 또는 '협력 5'처럼 무게를 적거나, 같은 낱말을 여러 번 넣으면 그만큼 무게가 쌓입니다
+    // (학생 응답을 쉼표로 그대로 붙여 넣으면 많이 나온 낱말이 커짐). 돌려주는 값: [{ text, w }] 무게 큰 순서
+    parse(list) {
+      const map = new Map();
+      (list || []).forEach(raw => {
+        String(raw).split(/[,\n]/).forEach(part => {
+          const s = part.trim();
+          if (!s) return;
+          const m = s.match(/^(.+?)\s*[:：×x]\s*(\d+(?:\.\d+)?)$/) || s.match(/^(.+?)\s+(\d+(?:\.\d+)?)$/);
+          const text = (m ? m[1] : s).trim(), w = m ? +m[2] : 1;
+          if (text) map.set(text, (map.get(text) || 0) + w);
+        });
+      });
+      return Array.from(map, ([text, w]) => ({ text: text, w: w })).sort((a, b) => b.w - a.w || a.text.localeCompare(b.text));
+    },
+    // 무게 → 글자 크기(px). 가장 작은 것 min, 가장 큰 것 max, 그 사이는 제곱근 비율(면적이 무게에 비례하게)
+    sizes(items, min, max) {
+      const ws = items.map(it => it.w), lo = Math.min.apply(null, ws), hi = Math.max.apply(null, ws);
+      return items.map(it => hi === lo ? (min + max) / 2 : min + (max - min) * Math.sqrt((it.w - lo) / (hi - lo)));
+    },
+    // 겹치지 않게 놓기 (나선을 따라 빈자리를 찾음). 무거운 낱말부터 가운데에.
+    // items: [{ text, size }], opts: { font: 'CSS 글꼴 목록', weight: 800, W, H, pad: 낱말 사이 여백(px), rotate: [0] 또는 [0, 90] (돌릴 각도 후보),
+    //        rotateEvery: 몇 번째마다 돌릴지(기본 3), shape: (x, y) => 0~1 안에 들면 true (모양 채우기, x·y는 -1~1), seed, ratio: 나선의 가로세로 비 }
+    // 돌려주는 값: [{ text, size, x, y(가운데 기준 px), rot, w, h, i }] — 자리를 못 찾은 낱말은 빠집니다
+    // 자리가 모자라 빠지는 낱말이 많으면(10% 넘게) 글자를 0.88배씩 줄여 다시 놓습니다(최대 6번, fit: false면 안 함)
+    layout(items, opts) {
+      let scale = 1, best = [];
+      for (let k = 0; k < 6; k++) {
+        const got = wc.place(items.map(it => Object.assign({}, it, { size: it.size * scale })), opts);
+        if (got.length > best.length) best = got;
+        if ((opts && opts.fit === false) || got.length >= items.length * 0.9) return got;
+        scale *= 0.88;
+      }
+      return best;
+    },
+    place(items, opts) {
+      const o = Object.assign({ weight: 800, pad: 2, rotate: [0], rotateEvery: 3, seed: 3, W: api.W, H: api.H }, opts || {});
+      const cv = document.createElement('canvas'), g = cv.getContext('2d'), rnd = api.rand(o.seed);
+      const boxes = [], out = [], halfW = o.W / 2, halfH = o.H / 2, ratio = o.ratio || o.W / o.H;
+      const hit = (a) => boxes.some(b => a.x - a.w / 2 < b.x + b.w / 2 && a.x + a.w / 2 > b.x - b.w / 2 && a.y - a.h / 2 < b.y + b.h / 2 && a.y + a.h / 2 > b.y - b.h / 2);
+      items.forEach((it, i) => {
+        g.font = `${o.weight} ${it.size}px ${o.font || api.font}`;
+        const tw = g.measureText(it.text).width, th = it.size * 0.92;
+        const rot = o.rotate.length > 1 && i % o.rotateEvery === o.rotateEvery - 1 ? o.rotate[1 + Math.floor(rnd() * (o.rotate.length - 1))] : o.rotate[0];
+        const side = Math.abs(rot % 180) === 90;
+        const bw = (side ? th : tw) + o.pad * 2, bh = (side ? tw : th) + o.pad * 2;
+        const start = rnd() * Math.PI * 2, step = Math.max(2, it.size * 0.12);
+        for (let k = 0; k < 4000; k++) {
+          const a = start + k * 0.17, r = step * Math.sqrt(k) * 1.6;
+          const x = Math.cos(a) * r * Math.sqrt(ratio), y = Math.sin(a) * r / Math.sqrt(ratio);
+          if (Math.abs(x) + bw / 2 > halfW || Math.abs(y) + bh / 2 > halfH) { if (r > Math.max(halfW, halfH) * 1.5) break; continue; }
+          if (o.shape && !o.shape(x / halfW, y / halfH)) continue;
+          const box = { x: x, y: y, w: bw, h: bh };
+          if (hit(box)) continue;
+          boxes.push(box);
+          out.push({ text: it.text, size: it.size, x: x, y: y, rot: rot, w: bw - o.pad * 2, h: bh - o.pad * 2, i: i, wgt: it.w });
+          break;
+        }
+      });
+      return out;
+    },
+    // 자주 쓰는 모양 (x, y: -1~1). 원·하트·말풍선·구름
+    shapes: {
+      circle: (x, y) => x * x + y * y <= 1,
+      heart: (x, y) => { y = -y * 1.15 + 0.25; x *= 1.1; const q = x * x + y * y - 1; return q * q * q - x * x * y * y * y <= 0; },
+      bubble: (x, y) => (x * x) / 1 + (y * y) / 0.62 <= 1 || (x > 0.25 && x < 0.62 && y > 0.45 && y < 0.95 && y - 0.45 < (0.62 - x) * 1.4),
+      cloud: (x, y) => [[-0.45, 0.15, 0.48], [0.05, -0.15, 0.58], [0.52, 0.12, 0.45], [0, 0.32, 0.5]].some(c => (x - c[0]) ** 2 + ((y - c[1]) * 1.25) ** 2 <= c[2] * c[2])
+    },
+    clamp: clamp,
+    seg: (t, a, b) => clamp((t - a) / (b - a)),
+    out: x => 1 - Math.pow(1 - clamp(x), 4),
+    expo: x => { x = clamp(x); return x >= 1 ? 1 : 1 - Math.pow(2, -10 * x); },
+    io: x => { x = clamp(x); return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; }
+  };
+  return wc;
 }
 // 1. 스프레드 로우: 한 장 → 여러 줄로 펼침 → 줄마다 반대로 흐름 → 다시 한 장
 function spreadRows(api) {
@@ -49103,6 +49193,7 @@ const QM_REG = [
 (function () {
   const CATS = [
     { id: 'card', ko: '카드 쇼케이스', sub: '내 이미지를 넣어 돌리는 3D 쇼케이스' },
+    { id: 'cloud', ko: '워드클라우드', sub: '학생 응답을 붙여 넣으면 많이 나온 말이 크게. 움직이는 낱말 구름' },
     { id: 'landing', ko: '랜딩페이지', sub: '홈페이지 첫 화면·버튼·카드·스크롤에 쓰는 움직임. 창에서 마우스를 올리면 직접 반응해요' },
     { id: 'talk', ko: '알림·대화', sub: '알림, 말풍선, 토스트' },
     { id: 'button', ko: '버튼·입력', sub: '버튼, 토글, 입력창' },
@@ -49116,6 +49207,7 @@ const QM_REG = [
   ];
   // 종류 안의 작은 묶음 (접었다 펴는 칸). 여기 없는 종류는 묶음 없이 한 판에 보여 줍니다
   const SUBS = {
+    cloud: [['flat', '평면 배치'], ['space', '3D·공간'], ['physics', '물리·움직임'], ['shape', '모양·포스터'], ['live', '실시간 응답']],
     landing: [['hero', '히어로 배경'], ['headline', '첫 문장'], ['cta', '버튼·CTA'], ['cursor', '커서·호버'], ['bento', '카드·벤토'], ['scroll', '스크롤 연출'], ['marquee', '흐르는 띠'], ['stat', '숫자·지표'], ['nav', '내비·메뉴'], ['section', '섹션·마무리']],
     card: [['space', '3D 공간'], ['stack', '쌓기·넘기기'], ['grid', '격자·벽'], ['flow', '흐름·띠'], ['spread', '펼치기·모으기'], ['dump', '포토 덤프']],
     talk: [['notice', '알림'], ['chat', '대화·반응']],
@@ -49287,6 +49379,7 @@ const QM_REG = [
     };
   });
   const HAVE = ALL.filter(m => m.uses.indexOf('g') < 0 || window.THREE).concat(EXT);   // three.js를 못 불러오면 3D 모션은 빼고 보여 줍니다
+  for (let i = CATS.length - 1; i >= 0; i--) if (!HAVE.some(m => m.cat === CATS[i].id)) CATS.splice(i, 1);   // 아직 모션이 없는 종류는 숨김
   // 모션마다 들어갈 묶음을 정함: ThreeUI 원본은 threeui, 적힌 것이 없으면 그 종류의 첫 묶음(직접 만든 것)
   HAVE.forEach(m => {
     const list = SUBS[m.cat];
@@ -49706,7 +49799,11 @@ const QM_REG = [
     $('modeSeg').querySelector('[data-v="embed"]').hidden = !!m.ext;   // ThreeUI 원본은 파일 하나라서 '코드' 칸이 따로 없음
     paintMode(modeOf(m));
     $('btnPlay').hidden = !!m.ext;
-    $('wordsRow').hidden = $('wordsNote').hidden = m.uses.indexOf('t') < 0;
+    const isCloud = m.cat === 'cloud';
+    $('wordsRow').hidden = $('wordsNote').hidden = m.uses.indexOf('t') < 0 || isCloud;
+    $('cloudRow').hidden = $('cloudNote').hidden = !isCloud;
+    $('cloudWords').value = state.wordsBy[m.id] || '';
+    $('cloudWords').placeholder = (m.words || []).join(', ');
     $('words').value = state.wordsBy[m.id] || '';
     $('words').placeholder = (m.words || []).map(w => w.replace(/\n/g, '\\n')).join(', ');
     $('bg').value = bgOf(m);
@@ -49898,6 +49995,7 @@ const QM_REG = [
     paintValues(); save(); mount(); renderCode();
   });
   $('words').addEventListener('input', e => { state.wordsBy[current().id] = e.target.value; save(); paintReset(); retext(); });
+  $('cloudWords').addEventListener('input', e => { state.wordsBy[current().id] = e.target.value; save(); paintReset(); retext(); });   // 워드클라우드: 쉼표·줄바꿈 그대로 (낱말 구름 도구가 나눠 셈)
 
   /* ---- 글꼴·포인트 색 고르기 ---- */
   const FONT_GROUPS = [
@@ -50063,6 +50161,7 @@ const QM_REG = [
     delete state.textBy[m.id];
     delete state.wordsBy[m.id];
     $('words').value = '';
+    $('cloudWords').value = '';
     save(); paintFields(); mount(); renderCode(); paintVideo();
   });
 
@@ -50966,6 +51065,66 @@ const QM_REG = [
     })
   };
   baskReady = true;
+
+  /* ---- AI(클로드 등)가 읽는 손잡이: 목록 · 코드 뽑기 (바구니 quokaBasket과 함께 씀) ----
+     quokaLab.catalog()          → 모든 모션의 쓰임새·비율·밝기·고칠 칸 목록
+     quokaLab.html(id, opts)     → 그 파일 하나로 돌아가는 HTML (Promise). opts = { set: {TITLE: '…'}, words: [...], ratio: '9 / 16', font, point: '#rrggbb', bg: '#rrggbb', transparent: true, player: true }
+     quokaLab.code(id, opts)     → 내 페이지에 붙일 코드 조각 (Promise) */
+  // 쓰임새(역할)와 층: overlay = 투명으로 저장해 영상 위에 얹는 것, full = 화면 전체 장면, web = 웹페이지용 조각
+  const LAB_ROLE = {
+    'video/caption': ['자막·이름표', 'overlay'], 'video/mark': ['강조·주석', 'overlay'], 'video/screen': ['화면 시연', 'full'], 'video/title': ['오프닝·타이틀', 'full'],
+    'video/cut': ['화면 전환', 'full'], 'video/chart': ['차트·데이터', 'full'], 'video/frame': ['틀·배경', 'full'],
+    shorts: ['숏폼 자막', 'overlay'], cloud: ['워드클라우드', 'full'], kinetic: ['큰 문구(키네틱)', 'full'], text: ['문구 등장', 'full'], card: ['사진 쇼케이스', 'full'], talk: ['알림·대화', 'full'],
+    button: ['UI 조각', 'web'], data: ['숫자·차트', 'full'], class: ['수업·기록(문구류)', 'full'], bg: ['배경 장면', 'full'],
+    'landing/hero': ['히어로 배경', 'full'], 'landing/headline': ['첫 문장', 'full'], 'landing/scroll': ['스크롤 연출', 'web'], landing: ['랜딩 조각', 'web']
+  };
+  const labTone = hex => { const c = /^#[0-9a-f]{6}$/i.test(hex) ? hex : '#000000', v = (parseInt(c.slice(1, 3), 16) * 299 + parseInt(c.slice(3, 5), 16) * 587 + parseInt(c.slice(5, 7), 16) * 114) / 1000; return v > 140 ? 'light' : 'dark'; };
+  function labCatalog() {
+    return MOTIONS.map(m => {
+      const subs = SUBS[m.cat] || [], sub = subs.find(x => x[0] === m.sub), r = LAB_ROLE[m.cat + '/' + m.sub] || LAB_ROLE[m.cat] || ['기타', 'full'];
+      const fields = m.ext ? [] : fieldsFor(m).map(g => ({ name: g.name, label: g.label, items: g.items.map(it => ({ key: it.key, kind: it.kind, value: it.value })) }));
+      const loopField = fields.find(g => g.name === 'LOOP'), loop = loopField && loopField.items.length === 1 && loopField.items[0].kind === 'num' ? loopField.items[0].value : 6;
+      const u = m.uses || '';
+      return {
+        id: m.id, ko: m.ko, en: m.en, cat: m.cat, catKo: catName(m.cat), sub: m.sub || '', subKo: sub ? sub[1] : '', role: r[0], layer: r[1],
+        desc: m.desc, ratio: m.ratio || '1 / 1', tone: labTone(m.bg || BG), bg: m.bg || BG, at: AT[m.id] || m.at || 4, loop: loop, fresh: !!m.pin,
+        threeui: !!m.ext, webgl: isGl(m), images: u.indexOf('i') >= 0, words: u.indexOf('t') >= 0, mouse: u.indexOf('p') >= 0, scroll: u.indexOf('s') >= 0, once: u.indexOf('o') >= 0,
+        fonts: m.kfonts || [], fields: fields
+      };
+    });
+  }
+  // 지금 창 설정을 잠깐 바꿔 코드를 만들고 되돌림 (창에서 고친 값·저장된 설정은 그대로 남음)
+  function labBuild(id, opts, full) {
+    const m = motionOf(id);
+    if (!m) return Promise.reject(new Error('없는 모션 id: ' + id));
+    if (m.ext) return source(m);
+    opts = opts || {};
+    const keep = { id: state.id, text: state.textBy[id], words: state.wordsBy[id], ratio: state.ratioBy[id], font: state.fontBy[id], point: state.pointBy[id], bg: state.bgBy[id], mark: bask.seeded[id] };
+    try {
+      delete state.textBy[id]; delete state.wordsBy[id]; delete state.fontBy[id]; delete state.pointBy[id]; delete state.bgBy[id]; delete bask.seeded[id];
+      // set은 {'LINES#0': '…'}처럼 칸 이름 그대로도, {LINES: ['…', '…'], TITLE: '…'}처럼 상수 이름으로도 받음 (배열은 앞 칸부터 차례로)
+      const keys = fieldsFor(m).reduce((a, g) => a.concat(g.items.map(it => it.key)), []), set = {};
+      Object.keys(opts.set || {}).forEach(k => {
+        const v = opts.set[k];
+        if (keys.indexOf(k) >= 0) set[k] = v;
+        else if (Array.isArray(v)) v.forEach((x, i) => { if (keys.indexOf(k + '#' + i) >= 0) set[k + '#' + i] = x; });
+        else if (keys.indexOf(k + '#0') >= 0) set[k + '#0'] = v;
+      });
+      baskApply({ id: id, set: set, words: opts.words, font: opts.font, point: opts.point, bg: opts.bg }, true);
+      if (RATIOS.indexOf(opts.ratio) >= 0) state.ratioBy[id] = opts.ratio; else delete state.ratioBy[id];
+      state.id = id;
+      let out = buildCode(full);
+      if (opts.transparent) out = out.replace(/(\n\s*bg: )'#[0-9a-fA-F]{6}',/, "$1'transparent',");
+      if (opts.player) out = out.replace("\n  qmEngine(document.getElementById(", "\n  window.qmPlayer = qmEngine(document.getElementById(");
+      return Promise.resolve(out);
+    } catch (e) { return Promise.reject(e); }
+    finally {
+      state.id = keep.id;
+      [['textBy', 'text'], ['wordsBy', 'words'], ['ratioBy', 'ratio'], ['fontBy', 'font'], ['pointBy', 'point'], ['bgBy', 'bg']].forEach(p => { if (keep[p[1]] === undefined) delete state[p[0]][id]; else state[p[0]][id] = keep[p[1]]; });
+      if (keep.mark === undefined) delete bask.seeded[id]; else bask.seeded[id] = keep.mark;
+    }
+  }
+  window.quokaLab = { version: 1, catalog: labCatalog, html: (id, opts) => labBuild(id, opts, true), code: (id, opts) => labBuild(id, opts, false) };
   // 주소 끝에 #basket=… 이 붙어 오면 그 바구니를 엽니다 (지금 바구니가 비어 있지 않으면 먼저 물어봄)
   function baskFromHash() {
     if (!/^#basket=/.test(location.hash)) return;
