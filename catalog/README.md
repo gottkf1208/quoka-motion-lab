@@ -20,7 +20,7 @@ python3 catalog/pick.py roles
 
 ## motions.json의 칸
 
-- `role`: 쓰임새. 숏폼 자막 · 자막·이름표 · 강조·주석 · 오프닝·타이틀 · 큰 문구(키네틱) · 문구 등장 · 화면 시연 · 알림·대화 · 화면 전환 · 차트·데이터 · 숫자·차트 · 사진 쇼케이스 · 수업·기록(문구류) · 배경 장면 · 히어로 배경 · 첫 문장 · 워드클라우드 · 틀·배경 · UI 조각 · 랜딩 조각 · 스크롤 연출
+- `role`: 쓰임새. 숏폼 자막 · 자막·이름표 · 강조·주석 · 오프닝·타이틀 · 큰 문구(키네틱) · 문구 등장 · 화면 시연 · 알림·대화 · 화면 전환 · 차트·데이터 · 숫자·차트 · 사진 쇼케이스 · 수업·기록(문구류) · 배경 장면 · 히어로 배경 · 첫 문장 · 워드클라우드 · 발표 장면(모션 PPT) · 캐러셀 카드 · 틀·배경 · UI 조각 · 랜딩 조각 · 스크롤 연출
 - `layer`: `overlay` = 투명으로 뽑아 영상 위에 얹는 것(자막·강조) · `full` = 화면 전체 장면 · `web` = 웹페이지 조각(영상에는 잘 안 맞음)
 - `ratio`: 처음 만든 비율. 다른 비율로도 돌아가지만 이 비율이 가장 예쁨
 - `tone`: 바탕이 `dark`/`light`. 한 작품 안에서는 한쪽으로 맞추는 게 좋음
@@ -35,6 +35,11 @@ python3 catalog/pick.py roles
 - `await quokaLab.html(id, { set, words, ratio: '9 / 16', font, point: '#rrggbb', bg, transparent, player })` → 그 파일 하나로 돌아가는 HTML (`player: true`면 `window.qmPlayer.seek(초)`로 한 장씩 찍을 수 있음)
 - `await quokaLab.code(id, opts)` → 내 페이지에 붙일 코드 조각
 - `quokaBasket.load(seed)` · `quokaBasket.get()` · `quokaBasket.waitConfirm(ms)` · `quokaBasket.link()` → 바구니(선생님이 사이트에서 모아 한꺼번에 받기). seed = `{ title, note, by: 'claude', ratio, slots: [{ label, mode, dur, options: [{ id, why, words, set, scrim }] }] }`
+
+## 모션 PPT 장면(발표 장면)
+
+- `cat: slide` 장면은 단계가 있습니다(`frame.steps`). 영상으로 뽑으면 시간표대로 저절로 펼쳐지고, 사이트의 모션 PPT 작업실·저장한 HTML에서는 '다음 효과'로 한 단계씩 넘깁니다.
+- 색 8개 중 [5]가 채움 포인트 색(띠·알약·번호 원·상자), [6]이 빨간 펜 색입니다. `point`로 포인트 색만 바꾸면 채움 위 글자색은 저절로 맞춰집니다.
 
 ## 고를 때 지킬 것 (요약)
 
