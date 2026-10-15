@@ -55973,7 +55973,17 @@ void main() {
   frame.dispose = () => { live = false; sh.dispose(); };
   // 그림 둘(장면·깊이)이 도착하면 셰이더에 넣고 지금 장면을 다시 그림 (멈춘 썸네일도 바로 채워짐)
   const load = path => new Promise(ok => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => ok(im); im.onerror = () => ok(null); im.src = wsUrl(path); });
-  const ready = Promise.all([load(wide && o.imgWide ? o.imgWide : o.img), load(wide && o.depthWide ? o.depthWide : o.depth)]).then(pair => {
+  const src = wide && o.imgWide ? o.imgWide : o.img, dep = wide && o.depthWide ? o.depthWide : o.depth;
+  // 아티팩트판(QM_PACK)은 그림과 깊이를 위아래로 붙인 파일 하나(…p.webp)를 받아 둘로 자름
+  const both = typeof QM_PACK !== 'undefined' && QM_PACK
+    ? load(src.replace(/\.webp$/, 'p.webp')).then(im => {
+        if (!im) return [null, null];
+        const w = im.naturalWidth, h = Math.floor(im.naturalHeight / 2);
+        const cut = y => { const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(im, 0, y, w, h, 0, 0, w, h); return c; };
+        return [cut(0), cut(h)];
+      })
+    : Promise.all([load(src), load(dep)]);
+  const ready = both.then(pair => {
     if (!live || !pair[0] || !pair[1]) return;
     sh.image('uImg', pair[0], 0); sh.image('uDep', pair[1], 1);
     if (wide && !o.imgWide) {   // 양옆을 채울 아주 흐린 색: 그림을 두 번에 걸쳐 4×12로 줄임
@@ -55982,7 +55992,7 @@ void main() {
       a.getContext('2d').drawImage(pair[0], 0, 0, 32, 96); b.getContext('2d').drawImage(a, 0, 0, 4, 12);
       sh.image('uSoft', b, 2);
     }
-    sh.set('uImgSize', [pair[0].naturalWidth, pair[0].naturalHeight]); sh.set('uReady', 1);
+    sh.set('uImgSize', [pair[0].naturalWidth || pair[0].width, pair[0].naturalHeight || pair[0].height]); sh.set('uReady', 1);
     sh.draw(last);
   });
   const L = window.qmLoads = window.qmLoads || [];   // 영상으로 뽑을 때 그림이 다 도착할 때까지 기다리게 (도착하면 목록에서 빠짐)
