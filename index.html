@@ -55967,15 +55967,16 @@ void main() {
   sh.set('uMove', o.move); sh.set('uAmt', o.depthAmt); sh.set('uFocus', o.focus == null ? 0.5 : o.focus);
   sh.set('uFx', o.fx || 0); sh.set('uFxAmt', o.fxAmt == null ? 1 : o.fxAmt); sh.set('uFxCol', laRGB(o.fxColor || c[0])); sh.set('uFxCol2', laRGB(o.fxColor2 || '#ffffff'));
   sh.set('uLight', o.light || [0.5, 0.2]); sh.set('uGlow', o.glow == null ? 1 : o.glow); sh.set('uReady', 0);
-  sh.set('uFit', wide && !o.imgWide ? 1 : 0);
+  const pk = typeof QM_PACK !== 'undefined' && QM_PACK, fit = wide && (!o.imgWide || pk);   // 아티팩트판(QM_PACK)은 가로 그림 없이 세로 그림 + 양옆 채움
+  sh.set('uFit', fit ? 1 : 0);
   let last = 0, live = true;
   const frame = t => { last = t; sh.draw(t); };
   frame.dispose = () => { live = false; sh.dispose(); };
   // 그림 둘(장면·깊이)이 도착하면 셰이더에 넣고 지금 장면을 다시 그림 (멈춘 썸네일도 바로 채워짐)
   const load = path => new Promise(ok => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => ok(im); im.onerror = () => ok(null); im.src = wsUrl(path); });
-  const src = wide && o.imgWide ? o.imgWide : o.img, dep = wide && o.depthWide ? o.depthWide : o.depth;
+  const src = fit ? o.img : wide && o.imgWide ? o.imgWide : o.img, dep = fit ? o.depth : wide && o.depthWide ? o.depthWide : o.depth;
   // 아티팩트판(QM_PACK)은 그림과 깊이를 위아래로 붙인 파일 하나(…p.webp)를 받아 둘로 자름
-  const both = typeof QM_PACK !== 'undefined' && QM_PACK
+  const both = pk
     ? load(src.replace(/\.webp$/, 'p.webp')).then(im => {
         if (!im) return [null, null];
         const w = im.naturalWidth, h = Math.floor(im.naturalHeight / 2);
@@ -55986,7 +55987,7 @@ void main() {
   const ready = both.then(pair => {
     if (!live || !pair[0] || !pair[1]) return;
     sh.image('uImg', pair[0], 0); sh.image('uDep', pair[1], 1);
-    if (wide && !o.imgWide) {   // 양옆을 채울 아주 흐린 색: 그림을 두 번에 걸쳐 4×12로 줄임
+    if (fit) {   // 양옆을 채울 아주 흐린 색: 그림을 두 번에 걸쳐 4×12로 줄임
       const a = document.createElement('canvas'), b = document.createElement('canvas');
       a.width = 32; a.height = 96; b.width = 4; b.height = 12;
       a.getContext('2d').drawImage(pair[0], 0, 0, 32, 96); b.getContext('2d').drawImage(a, 0, 0, 4, 12);
@@ -56008,7 +56009,7 @@ function wsSpring(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.7;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/spring-v.webp', depth: 'scenes/spring-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f4b6c8', light: [0.5, 0.12], glow: 0.25 });
+  return wsScene(api, { img: 'scenes/spring-v.webp', depth: 'scenes/spring-vd.png', imgWide: 'scenes/spring-h.webp', depthWide: 'scenes/spring-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f4b6c8', light: [0.5, 0.12], glow: 0.25 });
 }
 // 여름 바닷가: 클레이 미니어처 바닷가 마을, 물빛이 반짝여요. 위쪽 하늘이 글자 자리예요.
 function wsSummer(api) {
@@ -56026,7 +56027,7 @@ function wsAutumn(api) {
   const EFFECT = true;   // 낙엽 효과 켜기
   const AMOUNT = 0.6;    // 낙엽 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/autumn-v.webp', depth: 'scenes/autumn-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 6, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6bf3c', light: [0.7, 0.15], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/autumn-v.webp', depth: 'scenes/autumn-vd.png', imgWide: 'scenes/autumn-h.webp', depthWide: 'scenes/autumn-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 6, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6bf3c', light: [0.7, 0.15], glow: 0.3 });
 }
 // 장마 창밖: 빗방울 맺힌 교실 창 너머 초록 운동장, 비가 조용히 내려요.
 function wsRain(api) {
@@ -56035,7 +56036,7 @@ function wsRain(api) {
   const EFFECT = true;   // 빗줄기 효과 켜기
   const AMOUNT = 0.9;    // 빗줄기 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/rain-v.webp', depth: 'scenes/rain-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 4, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#dfe8f0', light: [0.5, 0.3], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/rain-v.webp', depth: 'scenes/rain-vd.png', imgWide: 'scenes/rain-h.webp', depthWide: 'scenes/rain-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 4, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#dfe8f0', light: [0.5, 0.3], glow: 0.0 });
 }
 // 운동회 날: 클레이 미니어처 운동회 운동장 위로 색종이 조각이 흩날려요.
 function wsSportsday(api) {
@@ -56044,7 +56045,7 @@ function wsSportsday(api) {
   const EFFECT = false;   // 색종이 효과 켜기
   const AMOUNT = 0.45;    // 색종이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/sportsday-v.webp', depth: 'scenes/sportsday-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f2b9c5', fxColor2: '#b9d4ec', light: [0.5, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/sportsday-v.webp', depth: 'scenes/sportsday-vd.png', imgWide: 'scenes/sportsday-h.webp', depthWide: 'scenes/sportsday-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f2b9c5', fxColor2: '#b9d4ec', light: [0.5, 0.15], glow: 0.2 });
 }
 // 크리스마스 창가: 김 서린 창가의 작은 트리와 전구, 창밖에 눈이 내려요.
 function wsChristmas(api) {
@@ -56053,7 +56054,7 @@ function wsChristmas(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.7;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/christmas-v.webp', depth: 'scenes/christmas-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.55], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/christmas-v.webp', depth: 'scenes/christmas-vd.png', imgWide: 'scenes/christmas-h.webp', depthWide: 'scenes/christmas-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.55], glow: 0.35 });
 }
 // 설날 한옥 마을: 눈 덮인 한옥 마을 미니어처, 새벽 하늘에 눈이 살짝 날려요.
 function wsSeollal(api) {
@@ -56062,7 +56063,7 @@ function wsSeollal(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.45;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/seollal-v.webp', depth: 'scenes/seollal-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/seollal-v.webp', depth: 'scenes/seollal-vd.png', imgWide: 'scenes/seollal-h.webp', depthWide: 'scenes/seollal-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.15], glow: 0.2 });
 }
 // 첫눈 마을: 종이를 겹친 겨울 마을 위로 눈이 내리고 달빛이 은은해요.
 function wsWinter(api) {
@@ -56071,7 +56072,7 @@ function wsWinter(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.8;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/winter-v.webp', depth: 'scenes/winter-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.72, 0.3], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/winter-v.webp', depth: 'scenes/winter-vd.png', imgWide: 'scenes/winter-h.webp', depthWide: 'scenes/winter-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.72, 0.3], glow: 0.35 });
 }
 // 아침 교실: 햇살 드는 빈 교실, 빛줄기 속에 먼지가 반짝여요. 칠판 쪽이 글자 자리예요.
 function wsClassroom(api) {
@@ -56080,7 +56081,7 @@ function wsClassroom(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/classroom-v.webp', depth: 'scenes/classroom-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff1d6', light: [0.3, 0.3], glow: 0.45 });
+  return wsScene(api, { img: 'scenes/classroom-v.webp', depth: 'scenes/classroom-vd.png', imgWide: 'scenes/classroom-h.webp', depthWide: 'scenes/classroom-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff1d6', light: [0.3, 0.3], glow: 0.45 });
 }
 // 학교 도서관: 책장 사이로 들어오는 빛줄기와 떠다니는 먼지.
 function wsLibrary(api) {
@@ -56089,7 +56090,7 @@ function wsLibrary(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/library-v.webp', depth: 'scenes/library-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff0d0', light: [0.6, 0.25], glow: 0.45 });
+  return wsScene(api, { img: 'scenes/library-v.webp', depth: 'scenes/library-vd.png', imgWide: 'scenes/library-h.webp', depthWide: 'scenes/library-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff0d0', light: [0.6, 0.25], glow: 0.45 });
 }
 // 과학실: 클레이 미니어처 과학실, 유리 기구가 반짝여요.
 function wsScience(api) {
@@ -56098,7 +56099,7 @@ function wsScience(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.35;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/science-v.webp', depth: 'scenes/science-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/science-v.webp', depth: 'scenes/science-vd.png', imgWide: 'scenes/science-h.webp', depthWide: 'scenes/science-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
 }
 // 미술실: 햇살 가득한 미술실, 이젤과 캔버스 위로 빛 먼지가 떠다녀요.
 function wsArtroom(api) {
@@ -56107,7 +56108,7 @@ function wsArtroom(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/artroom-v.webp', depth: 'scenes/artroom-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff4e0', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/artroom-v.webp', depth: 'scenes/artroom-vd.png', imgWide: 'scenes/artroom-h.webp', depthWide: 'scenes/artroom-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff4e0', light: [0.5, 0.3], glow: 0.4 });
 }
 // 음악실: 오후의 음악실, 피아노 위로 긴 창 그림자와 빛 먼지.
 function wsMusic(api) {
@@ -56116,7 +56117,7 @@ function wsMusic(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/music-v.webp', depth: 'scenes/music-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe9c8', light: [0.35, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/music-v.webp', depth: 'scenes/music-vd.png', imgWide: 'scenes/music-h.webp', depthWide: 'scenes/music-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe9c8', light: [0.35, 0.3], glow: 0.4 });
 }
 // 운동장 디오라마: 위에서 내려다본 클레이 운동장, 꽃잎이 바람에 날려요.
 function wsField(api) {
@@ -56125,7 +56126,7 @@ function wsField(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.35;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/field-v.webp', depth: 'scenes/field-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/field-v.webp', depth: 'scenes/field-vd.png', imgWide: 'scenes/field-h.webp', depthWide: 'scenes/field-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.2], glow: 0.15 });
 }
 // 체육관: 빈 체육관 마루 위로 높은 창의 빛줄기와 먼지.
 function wsGym(api) {
@@ -56134,7 +56135,7 @@ function wsGym(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/gym-v.webp', depth: 'scenes/gym-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff0d8', light: [0.65, 0.2], glow: 0.45 });
+  return wsScene(api, { img: 'scenes/gym-v.webp', depth: 'scenes/gym-vd.png', imgWide: 'scenes/gym-h.webp', depthWide: 'scenes/gym-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff0d8', light: [0.65, 0.2], glow: 0.45 });
 }
 // 학교 텃밭: 클레이 미니어처 텃밭, 새싹 위로 햇빛이 반짝여요.
 function wsGarden(api) {
@@ -56143,7 +56144,7 @@ function wsGarden(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/garden-v.webp', depth: 'scenes/garden-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/garden-v.webp', depth: 'scenes/garden-vd.png', imgWide: 'scenes/garden-h.webp', depthWide: 'scenes/garden-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.15], glow: 0.2 });
 }
 // 무대 스포트라이트: 버건디 커튼 사이 스포트라이트, 빛줄기 속 먼지가 반짝여요.
 function wsStage(api) {
@@ -56152,7 +56153,7 @@ function wsStage(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/stage-v.webp', depth: 'scenes/stage-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.4, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe6b8', light: [0.5, 0.42], glow: 0.6 });
+  return wsScene(api, { img: 'scenes/stage-v.webp', depth: 'scenes/stage-vd.png', imgWide: 'scenes/stage-h.webp', depthWide: 'scenes/stage-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.4, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe6b8', light: [0.5, 0.42], glow: 0.6 });
 }
 // 시상식 무대: 네이비 무대 위 샴페인 골드 조명, 색종이가 천천히 내려와요.
 function wsAward(api) {
@@ -56161,7 +56162,7 @@ function wsAward(api) {
   const EFFECT = false;   // 색종이 효과 켜기
   const AMOUNT = 0.5;    // 색종이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/award-v.webp', depth: 'scenes/award-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6d29a', fxColor2: '#ffffff', light: [0.5, 0.2], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/award-v.webp', depth: 'scenes/award-vd.png', imgWide: 'scenes/award-h.webp', depthWide: 'scenes/award-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6d29a', fxColor2: '#ffffff', light: [0.5, 0.2], glow: 0.3 });
 }
 // 별빛 언덕: 은하수 아래 언덕 위 나무 한 그루, 별이 반짝여요.
 function wsStarry(api) {
@@ -56170,7 +56171,7 @@ function wsStarry(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.6;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/starry-v.webp', depth: 'scenes/starry-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/starry-v.webp', depth: 'scenes/starry-vd.png', imgWide: 'scenes/starry-h.webp', depthWide: 'scenes/starry-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
 }
 // 새벽 등대: 종이를 겹친 새벽 바다와 등대, 별이 깜빡여요.
 function wsLighthouse(api) {
@@ -56179,7 +56180,7 @@ function wsLighthouse(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/lighthouse-v.webp', depth: 'scenes/lighthouse-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/lighthouse-v.webp', depth: 'scenes/lighthouse-vd.png', imgWide: 'scenes/lighthouse-h.webp', depthWide: 'scenes/lighthouse-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.2], glow: 0.2 });
 }
 // 우주 창밖: 우주정거장 창 너머 지구와 별이 반짝여요.
 function wsSpace(api) {
@@ -56188,7 +56189,7 @@ function wsSpace(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.5;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/space-v.webp', depth: 'scenes/space-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/space-v.webp', depth: 'scenes/space-vd.png', imgWide: 'scenes/space-h.webp', depthWide: 'scenes/space-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
 }
 // 빈 영화관: 버건디 좌석 너머 스크린 빛, 영사기 빛줄기 속 먼지.
 function wsTheater(api) {
@@ -56197,7 +56198,7 @@ function wsTheater(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/theater-v.webp', depth: 'scenes/theater-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f3efe6', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/theater-v.webp', depth: 'scenes/theater-vd.png', imgWide: 'scenes/theater-h.webp', depthWide: 'scenes/theater-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f3efe6', light: [0.5, 0.3], glow: 0.4 });
 }
 // 숲속 빛줄기: 안개 낀 숲에 쏟아지는 빛줄기, 빛 먼지가 떠다녀요.
 function wsForest(api) {
@@ -56206,7 +56207,7 @@ function wsForest(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/forest-v.webp', depth: 'scenes/forest-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3cc', light: [0.5, 0.2], glow: 0.45 });
+  return wsScene(api, { img: 'scenes/forest-v.webp', depth: 'scenes/forest-vd.png', imgWide: 'scenes/forest-h.webp', depthWide: 'scenes/forest-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3cc', light: [0.5, 0.2], glow: 0.45 });
 }
 // 구름 위: 종이를 겹친 구름 바다 위 아침 하늘이 반짝여요.
 function wsClouds(api) {
@@ -56215,7 +56216,7 @@ function wsClouds(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/clouds-v.webp', depth: 'scenes/clouds-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/clouds-v.webp', depth: 'scenes/clouds-vd.png', imgWide: 'scenes/clouds-h.webp', depthWide: 'scenes/clouds-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
 }
 // 비 오는 창가 책상: 빗방울 맺힌 창가 책상, 머그컵과 노트. 비가 조용히 내려요.
 function wsRaindesk(api) {
@@ -56224,7 +56225,7 @@ function wsRaindesk(api) {
   const EFFECT = true;   // 빗줄기 효과 켜기
   const AMOUNT = 0.8;    // 빗줄기 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/raindesk-v.webp', depth: 'scenes/raindesk-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 4, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e3ebf2', light: [0.5, 0.3], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/raindesk-v.webp', depth: 'scenes/raindesk-vd.png', imgWide: 'scenes/raindesk-h.webp', depthWide: 'scenes/raindesk-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.5, fx: 4, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e3ebf2', light: [0.5, 0.3], glow: 0.0 });
 }
 // 다락방: 지붕 창이 있는 아늑한 다락방, 스탠드 불빛 속 먼지.
 function wsAttic(api) {
@@ -56233,7 +56234,7 @@ function wsAttic(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/attic-v.webp', depth: 'scenes/attic-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe2b0', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/attic-v.webp', depth: 'scenes/attic-vd.png', imgWide: 'scenes/attic-h.webp', depthWide: 'scenes/attic-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe2b0', light: [0.5, 0.3], glow: 0.4 });
 }
 // 캠핑 모닥불: 별 가득한 밤 숲속 모닥불, 불빛 알갱이가 떠다녀요.
 function wsCampfire(api) {
@@ -56242,7 +56243,7 @@ function wsCampfire(api) {
   const EFFECT = true;   // 불빛 알갱이 효과 켜기
   const AMOUNT = 0.5;    // 불빛 알갱이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/campfire-v.webp', depth: 'scenes/campfire-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffcf7a', light: [0.5, 0.7], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/campfire-v.webp', depth: 'scenes/campfire-vd.png', imgWide: 'scenes/campfire-h.webp', depthWide: 'scenes/campfire-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffcf7a', light: [0.5, 0.7], glow: 0.35 });
 }
 // 아침 카페: 햇살 드는 카페 창가 라테와 크루아상, 빛 먼지가 반짝여요.
 function wsCafe(api) {
@@ -56251,7 +56252,7 @@ function wsCafe(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/cafe-v.webp', depth: 'scenes/cafe-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3dc', light: [0.65, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/cafe-v.webp', depth: 'scenes/cafe-vd.png', imgWide: 'scenes/cafe-h.webp', depthWide: 'scenes/cafe-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3dc', light: [0.65, 0.3], glow: 0.4 });
 }
 // 유리 온실: 햇살 가득한 유리 온실, 식물 사이로 빛 먼지가 떠다녀요.
 function wsGreenhouse(api) {
@@ -56260,7 +56261,7 @@ function wsGreenhouse(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/greenhouse-v.webp', depth: 'scenes/greenhouse-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe8', light: [0.5, 0.2], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/greenhouse-v.webp', depth: 'scenes/greenhouse-vd.png', imgWide: 'scenes/greenhouse-h.webp', depthWide: 'scenes/greenhouse-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe8', light: [0.5, 0.2], glow: 0.4 });
 }
 // 봄 소풍: 잔디 위 피크닉 담요, 머리 위로 꽃잎이 흩날려요.
 function wsPicnic(api) {
@@ -56269,7 +56270,7 @@ function wsPicnic(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.6;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/picnic-v.webp', depth: 'scenes/picnic-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f7c9d4', light: [0.5, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/picnic-v.webp', depth: 'scenes/picnic-vd.png', imgWide: 'scenes/picnic-h.webp', depthWide: 'scenes/picnic-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f7c9d4', light: [0.5, 0.15], glow: 0.2 });
 }
 // 개학 첫날 교문: 새싹 돋은 3월 아침 교문, 꽃잎이 살짝 날려요.
 function wsFirstday(api) {
@@ -56278,7 +56279,7 @@ function wsFirstday(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.35;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/firstday-v.webp', depth: 'scenes/firstday-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/firstday-v.webp', depth: 'scenes/firstday-vd.png', imgWide: 'scenes/firstday-h.webp', depthWide: 'scenes/firstday-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.2 });
 }
 // 밤 벚꽃길: 가로등 아래 하얗게 빛나는 밤 벚꽃길, 꽃잎이 흩날려요.
 function wsCherrynight(api) {
@@ -56287,7 +56288,7 @@ function wsCherrynight(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.6;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/cherrynight-v.webp', depth: 'scenes/cherrynight-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fde9ef', light: [0.5, 0.3], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/cherrynight-v.webp', depth: 'scenes/cherrynight-vd.png', imgWide: 'scenes/cherrynight-h.webp', depthWide: 'scenes/cherrynight-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fde9ef', light: [0.5, 0.3], glow: 0.3 });
 }
 // 수국 길: 비 그친 오후 푸른 수국 돌담길, 물방울이 반짝여요.
 function wsHydrangea(api) {
@@ -56296,7 +56297,7 @@ function wsHydrangea(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.35;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/hydrangea-v.webp', depth: 'scenes/hydrangea-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/hydrangea-v.webp', depth: 'scenes/hydrangea-vd.png', imgWide: 'scenes/hydrangea-h.webp', depthWide: 'scenes/hydrangea-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
 }
 // 가을 들판: 황금 들판과 허수아비, 높은 하늘 아래 잎이 날려요.
 function wsHarvest(api) {
@@ -56305,7 +56306,7 @@ function wsHarvest(api) {
   const EFFECT = true;   // 낙엽 효과 켜기
   const AMOUNT = 0.4;    // 낙엽 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/harvest-v.webp', depth: 'scenes/harvest-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 6, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e2b84a', light: [0.6, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/harvest-v.webp', depth: 'scenes/harvest-vd.png', imgWide: 'scenes/harvest-h.webp', depthWide: 'scenes/harvest-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 6, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e2b84a', light: [0.6, 0.15], glow: 0.2 });
 }
 // 한가위 보름달: 종이를 겹친 한옥 마당 위 큰 보름달, 별이 깜빡여요.
 function wsChuseok(api) {
@@ -56314,7 +56315,7 @@ function wsChuseok(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/chuseok-v.webp', depth: 'scenes/chuseok-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.25], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/chuseok-v.webp', depth: 'scenes/chuseok-vd.png', imgWide: 'scenes/chuseok-h.webp', depthWide: 'scenes/chuseok-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.25], glow: 0.35 });
 }
 // 눈 내린 운동장: 클레이 미니어처 운동장에 눈이 소복이 내려요.
 function wsSnowyard(api) {
@@ -56323,7 +56324,7 @@ function wsSnowyard(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.6;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/snowyard-v.webp', depth: 'scenes/snowyard-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.15], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/snowyard-v.webp', depth: 'scenes/snowyard-vd.png', imgWide: 'scenes/snowyard-h.webp', depthWide: 'scenes/snowyard-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.15], glow: 0.2 });
 }
 // 아침 복도: 햇살이 길게 드는 학교 복도, 빛 먼지가 떠다녀요.
 function wsHallway(api) {
@@ -56332,7 +56333,7 @@ function wsHallway(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/hallway-v.webp', depth: 'scenes/hallway-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff1d6', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/hallway-v.webp', depth: 'scenes/hallway-vd.png', imgWide: 'scenes/hallway-h.webp', depthWide: 'scenes/hallway-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff1d6', light: [0.5, 0.3], glow: 0.4 });
 }
 // AI 컴퓨터실: 모니터가 은은하게 빛나는 컴퓨터실, 빛 알갱이가 반짝여요.
 function wsComputer(api) {
@@ -56341,14 +56342,14 @@ function wsComputer(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.35;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/computer-v.webp', depth: 'scenes/computer-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eaf4ff', light: [0.5, 0.3], glow: 0.25 });
+  return wsScene(api, { img: 'scenes/computer-v.webp', depth: 'scenes/computer-vd.png', imgWide: 'scenes/computer-h.webp', depthWide: 'scenes/computer-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eaf4ff', light: [0.5, 0.3], glow: 0.25 });
 }
 // 학교 옥상 하늘: 옥상 너머 여름 하늘과 뭉게구름이 천천히 움직여요.
 function wsRooftop(api) {
   const MOVE = 0.8;      // 카메라 움직임 (0~2)
   const DEPTH = 1.0;     // 입체감 (0~2)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/rooftop-v.webp', depth: 'scenes/rooftop-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 0, light: [0.5, 0.2], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/rooftop-v.webp', depth: 'scenes/rooftop-vd.png', imgWide: 'scenes/rooftop-h.webp', depthWide: 'scenes/rooftop-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 0, light: [0.5, 0.2], glow: 0.0 });
 }
 // 사물함 복도: 파스텔 사물함이 줄지은 복도, 빛 먼지가 떠다녀요.
 function wsLockers(api) {
@@ -56357,7 +56358,7 @@ function wsLockers(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.5;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/lockers-v.webp', depth: 'scenes/lockers-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6e6', light: [0.5, 0.3], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/lockers-v.webp', depth: 'scenes/lockers-vd.png', imgWide: 'scenes/lockers-h.webp', depthWide: 'scenes/lockers-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6e6', light: [0.5, 0.3], glow: 0.3 });
 }
 // 졸업식 강당: 꽃다발이 놓인 빈 강당, 색종이가 천천히 내려와요.
 function wsGraduation(api) {
@@ -56366,7 +56367,7 @@ function wsGraduation(api) {
   const EFFECT = false;   // 색종이 효과 켜기
   const AMOUNT = 0.4;    // 색종이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/graduation-v.webp', depth: 'scenes/graduation-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f3d9a4', fxColor2: '#ffffff', light: [0.5, 0.25], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/graduation-v.webp', depth: 'scenes/graduation-vd.png', imgWide: 'scenes/graduation-h.webp', depthWide: 'scenes/graduation-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f3d9a4', fxColor2: '#ffffff', light: [0.5, 0.25], glow: 0.3 });
 }
 // 칠판과 분필: 깨끗한 초록 칠판, 분필 가루가 빛 속에 떠다녀요.
 function wsChalkboard(api) {
@@ -56375,7 +56376,7 @@ function wsChalkboard(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/chalkboard-v.webp', depth: 'scenes/chalkboard-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.3, 0.3], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/chalkboard-v.webp', depth: 'scenes/chalkboard-vd.png', imgWide: 'scenes/chalkboard-h.webp', depthWide: 'scenes/chalkboard-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.3, 0.3], glow: 0.3 });
 }
 // 콘서트 무대: 하얀 빛줄기가 떨어지는 빈 무대, 먼지가 반짝여요.
 function wsConcert(api) {
@@ -56384,7 +56385,7 @@ function wsConcert(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/concert-v.webp', depth: 'scenes/concert-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f4f1ea', light: [0.5, 0.3], glow: 0.5 });
+  return wsScene(api, { img: 'scenes/concert-v.webp', depth: 'scenes/concert-vd.png', imgWide: 'scenes/concert-h.webp', depthWide: 'scenes/concert-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f4f1ea', light: [0.5, 0.3], glow: 0.5 });
 }
 // 미술관 전시실: 빈 액자에 떨어지는 스포트 조명, 빛 먼지가 떠다녀요.
 function wsMuseum(api) {
@@ -56393,7 +56394,7 @@ function wsMuseum(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/museum-v.webp', depth: 'scenes/museum-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6e6', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/museum-v.webp', depth: 'scenes/museum-vd.png', imgWide: 'scenes/museum-h.webp', depthWide: 'scenes/museum-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6e6', light: [0.5, 0.3], glow: 0.4 });
 }
 // 빛의 문: 계단 끝 열린 문 너머로 쏟아지는 빛, 빛 알갱이가 떠올라요.
 function wsLightdoor(api) {
@@ -56402,7 +56403,7 @@ function wsLightdoor(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.8;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/lightdoor-v.webp', depth: 'scenes/lightdoor-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.35], glow: 0.6 });
+  return wsScene(api, { img: 'scenes/lightdoor-v.webp', depth: 'scenes/lightdoor-vd.png', imgWide: 'scenes/lightdoor-h.webp', depthWide: 'scenes/lightdoor-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.35], glow: 0.6 });
 }
 // 달빛 호수: 고요한 밤 호수 위 달빛이 흔들리고 별이 깜빡여요.
 function wsMoonlake(api) {
@@ -56411,7 +56412,7 @@ function wsMoonlake(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/moonlake-v.webp', depth: 'scenes/moonlake-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.25], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/moonlake-v.webp', depth: 'scenes/moonlake-vd.png', imgWide: 'scenes/moonlake-h.webp', depthWide: 'scenes/moonlake-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.25], glow: 0.3 });
 }
 // 아침 빵집: 갓 구운 빵이 놓인 진열대, 햇살 속 빛 먼지.
 function wsBakery(api) {
@@ -56420,7 +56421,7 @@ function wsBakery(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/bakery-v.webp', depth: 'scenes/bakery-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff1d6', light: [0.6, 0.25], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/bakery-v.webp', depth: 'scenes/bakery-vd.png', imgWide: 'scenes/bakery-h.webp', depthWide: 'scenes/bakery-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff1d6', light: [0.6, 0.25], glow: 0.4 });
 }
 // 북카페: 책장 가득한 북카페, 스탠드 불빛 속 먼지가 떠다녀요.
 function wsBookcafe(api) {
@@ -56429,7 +56430,7 @@ function wsBookcafe(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/bookcafe-v.webp', depth: 'scenes/bookcafe-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe9c4', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/bookcafe-v.webp', depth: 'scenes/bookcafe-vd.png', imgWide: 'scenes/bookcafe-h.webp', depthWide: 'scenes/bookcafe-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe9c4', light: [0.5, 0.3], glow: 0.4 });
 }
 // 햇살 주방: 햇살 드는 하얀 주방 식탁, 빛 먼지가 반짝여요.
 function wsKitchen(api) {
@@ -56438,7 +56439,7 @@ function wsKitchen(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.5;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/kitchen-v.webp', depth: 'scenes/kitchen-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6e6', light: [0.65, 0.25], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/kitchen-v.webp', depth: 'scenes/kitchen-vd.png', imgWide: 'scenes/kitchen-h.webp', depthWide: 'scenes/kitchen-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6e6', light: [0.65, 0.25], glow: 0.4 });
 }
 // 겨울 거실: 담요와 코코아가 놓인 창가, 창밖에 눈이 내려요.
 function wsLivingroom(api) {
@@ -56447,7 +56448,7 @@ function wsLivingroom(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.5;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/livingroom-v.webp', depth: 'scenes/livingroom-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.25], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/livingroom-v.webp', depth: 'scenes/livingroom-vd.png', imgWide: 'scenes/livingroom-h.webp', depthWide: 'scenes/livingroom-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.25], glow: 0.2 });
 }
 // 화분 베란다: 화분 가득한 아침 베란다, 햇빛이 반짝여요.
 function wsBalcony(api) {
@@ -56456,7 +56457,7 @@ function wsBalcony(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/balcony-v.webp', depth: 'scenes/balcony-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/balcony-v.webp', depth: 'scenes/balcony-vd.png', imgWide: 'scenes/balcony-h.webp', depthWide: 'scenes/balcony-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.2], glow: 0.2 });
 }
 // 밤 공부 책상: 스탠드가 켜진 공부 책상, 불빛 속 먼지가 떠다녀요.
 function wsStudydesk(api) {
@@ -56465,7 +56466,7 @@ function wsStudydesk(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.5;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/studydesk-v.webp', depth: 'scenes/studydesk-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe2b0', light: [0.5, 0.3], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/studydesk-v.webp', depth: 'scenes/studydesk-vd.png', imgWide: 'scenes/studydesk-h.webp', depthWide: 'scenes/studydesk-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffe2b0', light: [0.5, 0.3], glow: 0.4 });
 }
 // 들꽃 언덕: 들꽃 언덕과 뭉게구름, 꽃잎이 바람에 날려요.
 function wsMeadow(api) {
@@ -56474,7 +56475,7 @@ function wsMeadow(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.4;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/meadow-v.webp', depth: 'scenes/meadow-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/meadow-v.webp', depth: 'scenes/meadow-vd.png', imgWide: 'scenes/meadow-h.webp', depthWide: 'scenes/meadow-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.15 });
 }
 // 맑은 바다: 투명한 바다와 하얀 모래, 물빛이 반짝여요.
 function wsSea(api) {
@@ -56483,14 +56484,14 @@ function wsSea(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.45;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/sea-v.webp', depth: 'scenes/sea-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/sea-v.webp', depth: 'scenes/sea-vd.png', imgWide: 'scenes/sea-h.webp', depthWide: 'scenes/sea-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.2 });
 }
 // 안개 능선: 종이를 겹친 안개 능선이 겹겹이 천천히 움직여요.
 function wsMountain(api) {
   const MOVE = 0.8;      // 카메라 움직임 (0~2)
   const DEPTH = 0.9;     // 입체감 (0~2)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/mountain-v.webp', depth: 'scenes/mountain-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 0, light: [0.5, 0.2], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/mountain-v.webp', depth: 'scenes/mountain-vd.png', imgWide: 'scenes/mountain-h.webp', depthWide: 'scenes/mountain-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 0, light: [0.5, 0.2], glow: 0.0 });
 }
 // 대나무 숲: 대나무 숲 사이 빛줄기, 빛 먼지가 떠다녀요.
 function wsBamboo(api) {
@@ -56499,7 +56500,7 @@ function wsBamboo(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/bamboo-v.webp', depth: 'scenes/bamboo-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f5f8e6', light: [0.5, 0.2], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/bamboo-v.webp', depth: 'scenes/bamboo-vd.png', imgWide: 'scenes/bamboo-h.webp', depthWide: 'scenes/bamboo-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f5f8e6', light: [0.5, 0.2], glow: 0.4 });
 }
 // 잔잔한 호수: 숲으로 둘러싸인 맑은 호수, 물빛이 반짝여요.
 function wsLake(api) {
@@ -56508,7 +56509,7 @@ function wsLake(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/lake-v.webp', depth: 'scenes/lake-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/lake-v.webp', depth: 'scenes/lake-vd.png', imgWide: 'scenes/lake-h.webp', depthWide: 'scenes/lake-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
 }
 // 유채꽃 들판: 노란 유채꽃 너머 파란 바다, 꽃잎이 바람에 날려요.
 function wsCanola(api) {
@@ -56517,7 +56518,7 @@ function wsCanola(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.4;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/canola-v.webp', depth: 'scenes/canola-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6e27a', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/canola-v.webp', depth: 'scenes/canola-vd.png', imgWide: 'scenes/canola-h.webp', depthWide: 'scenes/canola-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6e27a', light: [0.5, 0.15], glow: 0.15 });
 }
 // 숲속 폭포: 이끼 낀 바위 사이 작은 폭포, 물보라가 반짝여요.
 function wsWaterfall(api) {
@@ -56526,7 +56527,7 @@ function wsWaterfall(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/waterfall-v.webp', depth: 'scenes/waterfall-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/waterfall-v.webp', depth: 'scenes/waterfall-vd.png', imgWide: 'scenes/waterfall-h.webp', depthWide: 'scenes/waterfall-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.2 });
 }
 // 억새 들판: 은빛 억새 언덕 위로 역광 속 빛 먼지가 떠다녀요.
 function wsReeds(api) {
@@ -56535,7 +56536,7 @@ function wsReeds(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/reeds-v.webp', depth: 'scenes/reeds-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.6, 0.2], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/reeds-v.webp', depth: 'scenes/reeds-vd.png', imgWide: 'scenes/reeds-h.webp', depthWide: 'scenes/reeds-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.6, 0.2], glow: 0.4 });
 }
 // 바닷속 햇빛: 바닷속으로 쏟아지는 햇빛 줄기, 작은 거품이 떠올라요.
 function wsUnderwater(api) {
@@ -56544,7 +56545,7 @@ function wsUnderwater(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.7;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/underwater-v.webp', depth: 'scenes/underwater-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eaf6ff', light: [0.5, 0.15], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/underwater-v.webp', depth: 'scenes/underwater-vd.png', imgWide: 'scenes/underwater-h.webp', depthWide: 'scenes/underwater-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eaf6ff', light: [0.5, 0.15], glow: 0.4 });
 }
 // 눈 덮인 숲: 종이를 겹친 눈 덮인 전나무 숲에 눈이 내려요.
 function wsSnowforest(api) {
@@ -56553,7 +56554,7 @@ function wsSnowforest(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.6;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/snowforest-v.webp', depth: 'scenes/snowforest-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/snowforest-v.webp', depth: 'scenes/snowforest-vd.png', imgWide: 'scenes/snowforest-h.webp', depthWide: 'scenes/snowforest-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
 }
 // 튤립 풍차: 클레이 미니어처 튤립 들판과 풍차, 꽃잎이 날려요.
 function wsTulip(api) {
@@ -56562,7 +56563,7 @@ function wsTulip(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.35;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/tulip-v.webp', depth: 'scenes/tulip-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6c9d2', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/tulip-v.webp', depth: 'scenes/tulip-vd.png', imgWide: 'scenes/tulip-h.webp', depthWide: 'scenes/tulip-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6c9d2', light: [0.5, 0.15], glow: 0.15 });
 }
 // 연꽃 연못: 여름 아침 연꽃 연못, 수면의 빛이 반짝여요.
 function wsLotus(api) {
@@ -56571,7 +56572,7 @@ function wsLotus(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.35;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/lotus-v.webp', depth: 'scenes/lotus-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/lotus-v.webp', depth: 'scenes/lotus-vd.png', imgWide: 'scenes/lotus-h.webp', depthWide: 'scenes/lotus-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
 }
 // 서울 야경: 흐릿한 도시 불빛 보케, 별처럼 반짝여요.
 function wsSeoulnight(api) {
@@ -56580,7 +56581,7 @@ function wsSeoulnight(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/seoulnight-v.webp', depth: 'scenes/seoulnight-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/seoulnight-v.webp', depth: 'scenes/seoulnight-vd.png', imgWide: 'scenes/seoulnight-h.webp', depthWide: 'scenes/seoulnight-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.2], glow: 0.15 });
 }
 // 아침 골목길: 햇살 드는 동네 골목길, 꽃잎이 살짝 날려요.
 function wsAlley(api) {
@@ -56589,7 +56590,7 @@ function wsAlley(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.25;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/alley-v.webp', depth: 'scenes/alley-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/alley-v.webp', depth: 'scenes/alley-vd.png', imgWide: 'scenes/alley-h.webp', depthWide: 'scenes/alley-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.15 });
 }
 // 기차 창밖: 기차 창밖으로 초록 들판이 펼쳐지고 빛이 반짝여요.
 function wsTrain(api) {
@@ -56598,7 +56599,7 @@ function wsTrain(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.25;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/train-v.webp', depth: 'scenes/train-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/train-v.webp', depth: 'scenes/train-vd.png', imgWide: 'scenes/train-h.webp', depthWide: 'scenes/train-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
 }
 // 비 오는 정류장: 비 오는 밤 정류장, 젖은 길에 불빛이 번지고 비가 내려요.
 function wsBusstop(api) {
@@ -56607,7 +56608,7 @@ function wsBusstop(api) {
   const EFFECT = true;   // 빗줄기 효과 켜기
   const AMOUNT = 0.8;    // 빗줄기 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/busstop-v.webp', depth: 'scenes/busstop-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 4, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e3ebf2', light: [0.5, 0.3], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/busstop-v.webp', depth: 'scenes/busstop-vd.png', imgWide: 'scenes/busstop-h.webp', depthWide: 'scenes/busstop-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 4, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e3ebf2', light: [0.5, 0.3], glow: 0.0 });
 }
 // 한강 새벽: 푸른 새벽 강물과 다리, 물빛이 반짝여요.
 function wsHangang(api) {
@@ -56616,7 +56617,7 @@ function wsHangang(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/hangang-v.webp', depth: 'scenes/hangang-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/hangang-v.webp', depth: 'scenes/hangang-vd.png', imgWide: 'scenes/hangang-h.webp', depthWide: 'scenes/hangang-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.15 });
 }
 // 전통시장 등불: 등불이 줄지어 걸린 시장 골목, 불빛 알갱이가 떠다녀요.
 function wsMarket(api) {
@@ -56625,7 +56626,7 @@ function wsMarket(api) {
   const EFFECT = true;   // 불빛 알갱이 효과 켜기
   const AMOUNT = 0.4;    // 불빛 알갱이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/market-v.webp', depth: 'scenes/market-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffd99a', light: [0.5, 0.3], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/market-v.webp', depth: 'scenes/market-vd.png', imgWide: 'scenes/market-h.webp', depthWide: 'scenes/market-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffd99a', light: [0.5, 0.3], glow: 0.3 });
 }
 // 유럽 골목 카페: 수채로 그린 햇살 골목 카페, 꽃잎이 살짝 날려요.
 function wsEurope(api) {
@@ -56634,7 +56635,7 @@ function wsEurope(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.25;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/europe-v.webp', depth: 'scenes/europe-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6d3da', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/europe-v.webp', depth: 'scenes/europe-vd.png', imgWide: 'scenes/europe-h.webp', depthWide: 'scenes/europe-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6d3da', light: [0.5, 0.15], glow: 0.15 });
 }
 // 공항 창밖: 공항 유리창 너머 활주로와 아침 하늘, 빛이 반짝여요.
 function wsAirport(api) {
@@ -56643,7 +56644,7 @@ function wsAirport(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.25;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/airport-v.webp', depth: 'scenes/airport-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/airport-v.webp', depth: 'scenes/airport-vd.png', imgWide: 'scenes/airport-h.webp', depthWide: 'scenes/airport-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
 }
 // 지하철 승강장: 깨끗한 승강장으로 열차 빛이 들어와요.
 function wsSubway(api) {
@@ -56652,7 +56653,7 @@ function wsSubway(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.4;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/subway-v.webp', depth: 'scenes/subway-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eef3ff', light: [0.5, 0.35], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/subway-v.webp', depth: 'scenes/subway-vd.png', imgWide: 'scenes/subway-h.webp', depthWide: 'scenes/subway-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eef3ff', light: [0.5, 0.35], glow: 0.3 });
 }
 // 저녁 옥상: 푸른 저녁 도시 옥상, 첫 별이 깜빡여요.
 function wsBluehour(api) {
@@ -56661,7 +56662,7 @@ function wsBluehour(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.45;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/bluehour-v.webp', depth: 'scenes/bluehour-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/bluehour-v.webp', depth: 'scenes/bluehour-vd.png', imgWide: 'scenes/bluehour-h.webp', depthWide: 'scenes/bluehour-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
 }
 // 한옥 골목: 기와지붕 너머 파란 하늘, 꽃잎이 살짝 날려요.
 function wsBukchon(api) {
@@ -56670,7 +56671,7 @@ function wsBukchon(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.25;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/bukchon-v.webp', depth: 'scenes/bukchon-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/bukchon-v.webp', depth: 'scenes/bukchon-vd.png', imgWide: 'scenes/bukchon-h.webp', depthWide: 'scenes/bukchon-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fbe3ea', light: [0.5, 0.15], glow: 0.15 });
 }
 // 미니어처 도시: 차분한 색 클레이 미니어처 도시, 햇빛이 반짝여요.
 function wsToycity(api) {
@@ -56679,7 +56680,7 @@ function wsToycity(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/toycity-v.webp', depth: 'scenes/toycity-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/toycity-v.webp', depth: 'scenes/toycity-vd.png', imgWide: 'scenes/toycity-h.webp', depthWide: 'scenes/toycity-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.15], glow: 0.15 });
 }
 // 하늘섬: 구름 사이 떠 있는 풀밭 섬, 반짝이는 빛 알갱이.
 function wsSkyisland(api) {
@@ -56688,7 +56689,7 @@ function wsSkyisland(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/skyisland-v.webp', depth: 'scenes/skyisland-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/skyisland-v.webp', depth: 'scenes/skyisland-vd.png', imgWide: 'scenes/skyisland-h.webp', depthWide: 'scenes/skyisland-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
 }
 // 구름 위 성: 종이를 겹친 구름 위 하얀 성, 별이 깜빡여요.
 function wsCloudcastle(api) {
@@ -56697,7 +56698,7 @@ function wsCloudcastle(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/cloudcastle-v.webp', depth: 'scenes/cloudcastle-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.2], glow: 0.25 });
+  return wsScene(api, { img: 'scenes/cloudcastle-v.webp', depth: 'scenes/cloudcastle-vd.png', imgWide: 'scenes/cloudcastle-h.webp', depthWide: 'scenes/cloudcastle-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.2], glow: 0.25 });
 }
 // 버섯 숲: 빛나는 버섯과 반딧불이 떠다니는 밤 숲.
 function wsMushroom(api) {
@@ -56706,7 +56707,7 @@ function wsMushroom(api) {
   const EFFECT = true;   // 불빛 알갱이 효과 켜기
   const AMOUNT = 0.5;    // 불빛 알갱이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/mushroom-v.webp', depth: 'scenes/mushroom-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e8f5b0', light: [0.5, 0.5], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/mushroom-v.webp', depth: 'scenes/mushroom-vd.png', imgWide: 'scenes/mushroom-h.webp', depthWide: 'scenes/mushroom-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e8f5b0', light: [0.5, 0.5], glow: 0.3 });
 }
 // 하늘 고래: 종이를 겹친 구름 사이를 고래가 헤엄치고 별이 깜빡여요.
 function wsSkywhale(api) {
@@ -56715,7 +56716,7 @@ function wsSkywhale(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/skywhale-v.webp', depth: 'scenes/skywhale-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/skywhale-v.webp', depth: 'scenes/skywhale-vd.png', imgWide: 'scenes/skywhale-h.webp', depthWide: 'scenes/skywhale-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.2 });
 }
 // 마법 도서관: 책이 떠다니는 마법 도서관, 빛 알갱이가 반짝여요.
 function wsMagiclibrary(api) {
@@ -56724,7 +56725,7 @@ function wsMagiclibrary(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.5;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/magiclibrary-v.webp', depth: 'scenes/magiclibrary-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.3], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/magiclibrary-v.webp', depth: 'scenes/magiclibrary-vd.png', imgWide: 'scenes/magiclibrary-h.webp', depthWide: 'scenes/magiclibrary-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3d6', light: [0.5, 0.3], glow: 0.35 });
 }
 // 마카롱 마을: 파스텔 마카롱으로 지은 클레이 마을, 색종이가 날려요.
 function wsMacaron(api) {
@@ -56733,7 +56734,7 @@ function wsMacaron(api) {
   const EFFECT = false;   // 색종이 효과 켜기
   const AMOUNT = 0.35;    // 색종이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/macaron-v.webp', depth: 'scenes/macaron-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6c9d2', fxColor2: '#cfe3f5', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/macaron-v.webp', depth: 'scenes/macaron-vd.png', imgWide: 'scenes/macaron-h.webp', depthWide: 'scenes/macaron-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 8, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6c9d2', fxColor2: '#cfe3f5', light: [0.5, 0.15], glow: 0.15 });
 }
 // 나무 위 집: 거대한 나무 위 작은 집, 잎 사이 빛 먼지.
 function wsTreehouse(api) {
@@ -56742,7 +56743,7 @@ function wsTreehouse(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/treehouse-v.webp', depth: 'scenes/treehouse-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.2], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/treehouse-v.webp', depth: 'scenes/treehouse-vd.png', imgWide: 'scenes/treehouse-h.webp', depthWide: 'scenes/treehouse-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.2], glow: 0.35 });
 }
 // 달 그네: 초승달 그네와 별 장식, 별이 반짝여요.
 function wsMoonswing(api) {
@@ -56751,7 +56752,7 @@ function wsMoonswing(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.5;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/moonswing-v.webp', depth: 'scenes/moonswing-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.25], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/moonswing-v.webp', depth: 'scenes/moonswing-vd.png', imgWide: 'scenes/moonswing-h.webp', depthWide: 'scenes/moonswing-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff6dc', light: [0.5, 0.25], glow: 0.3 });
 }
 // 스노볼 마을: 유리 스노볼 속 겨울 마을에 눈이 내려요.
 function wsSnowglobe(api) {
@@ -56760,7 +56761,7 @@ function wsSnowglobe(api) {
   const EFFECT = true;   // 눈 효과 켜기
   const AMOUNT = 0.6;    // 눈 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/snowglobe-v.webp', depth: 'scenes/snowglobe-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/snowglobe-v.webp', depth: 'scenes/snowglobe-vd.png', imgWide: 'scenes/snowglobe-h.webp', depthWide: 'scenes/snowglobe-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 2, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.2 });
 }
 // 찻잔 속 정원: 찻잔 안 작은 정원, 꽃잎이 살짝 날려요.
 function wsTeagarden(api) {
@@ -56769,7 +56770,7 @@ function wsTeagarden(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.3;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/teagarden-v.webp', depth: 'scenes/teagarden-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6d3da', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/teagarden-v.webp', depth: 'scenes/teagarden-vd.png', imgWide: 'scenes/teagarden-h.webp', depthWide: 'scenes/teagarden-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6d3da', light: [0.5, 0.15], glow: 0.15 });
 }
 // 풍등 강가: 하늘로 떠오르는 풍등, 따뜻한 불빛 알갱이가 떠다녀요.
 function wsLanterns(api) {
@@ -56778,7 +56779,7 @@ function wsLanterns(api) {
   const EFFECT = true;   // 불빛 알갱이 효과 켜기
   const AMOUNT = 0.5;    // 불빛 알갱이 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/lanterns-v.webp', depth: 'scenes/lanterns-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffd99a', light: [0.5, 0.3], glow: 0.35 });
+  return wsScene(api, { img: 'scenes/lanterns-v.webp', depth: 'scenes/lanterns-vd.png', imgWide: 'scenes/lanterns-h.webp', depthWide: 'scenes/lanterns-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 5, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffd99a', light: [0.5, 0.3], glow: 0.35 });
 }
 // 시계탑 마을: 수채로 그린 시계탑 언덕 마을, 꽃잎이 살짝 날려요.
 function wsClocktower(api) {
@@ -56787,7 +56788,7 @@ function wsClocktower(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.25;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/clocktower-v.webp', depth: 'scenes/clocktower-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6d3da', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/clocktower-v.webp', depth: 'scenes/clocktower-vd.png', imgWide: 'scenes/clocktower-h.webp', depthWide: 'scenes/clocktower-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#f6d3da', light: [0.5, 0.15], glow: 0.15 });
 }
 // 미래 실험실: 하얀 미래 실험실, 하늘색 빛 알갱이가 반짝여요.
 function wsFuturelab(api) {
@@ -56796,7 +56797,7 @@ function wsFuturelab(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/futurelab-v.webp', depth: 'scenes/futurelab-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6f3ff', light: [0.5, 0.3], glow: 0.25 });
+  return wsScene(api, { img: 'scenes/futurelab-v.webp', depth: 'scenes/futurelab-vd.png', imgWide: 'scenes/futurelab-h.webp', depthWide: 'scenes/futurelab-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6f3ff', light: [0.5, 0.3], glow: 0.25 });
 }
 // 로봇 교실: 장난감 로봇이 놓인 클레이 교실, 빛이 반짝여요.
 function wsRobotclass(api) {
@@ -56805,7 +56806,7 @@ function wsRobotclass(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.3;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/robotclass-v.webp', depth: 'scenes/robotclass-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/robotclass-v.webp', depth: 'scenes/robotclass-vd.png', imgWide: 'scenes/robotclass-h.webp', depthWide: 'scenes/robotclass-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fffbe6', light: [0.5, 0.2], glow: 0.15 });
 }
 // 고리 행성: 별 가득한 우주의 고리 행성, 별이 깜빡여요.
 function wsPlanet(api) {
@@ -56814,7 +56815,7 @@ function wsPlanet(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.5;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/planet-v.webp', depth: 'scenes/planet-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/planet-v.webp', depth: 'scenes/planet-vd.png', imgWide: 'scenes/planet-h.webp', depthWide: 'scenes/planet-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.3], glow: 0.0 });
 }
 // 달 기지: 지구가 뜬 하늘 아래 달 기지, 별이 깜빡여요.
 function wsMoonbase(api) {
@@ -56823,7 +56824,7 @@ function wsMoonbase(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.45;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/moonbase-v.webp', depth: 'scenes/moonbase-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/moonbase-v.webp', depth: 'scenes/moonbase-vd.png', imgWide: 'scenes/moonbase-h.webp', depthWide: 'scenes/moonbase-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
 }
 // 현미경 속 세포: 현미경으로 본 투명한 세포, 작은 알갱이가 떠다녀요.
 function wsCells(api) {
@@ -56832,7 +56833,7 @@ function wsCells(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.5;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/cells-v.webp', depth: 'scenes/cells-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eef8ff', light: [0.5, 0.4], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/cells-v.webp', depth: 'scenes/cells-vd.png', imgWide: 'scenes/cells-h.webp', depthWide: 'scenes/cells-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eef8ff', light: [0.5, 0.4], glow: 0.2 });
 }
 // 회로 도시: 도시처럼 보이는 회로 기판, 빛 알갱이가 반짝여요.
 function wsCircuit(api) {
@@ -56841,7 +56842,7 @@ function wsCircuit(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.4;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/circuit-v.webp', depth: 'scenes/circuit-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eaf4ff', light: [0.5, 0.3], glow: 0.2 });
+  return wsScene(api, { img: 'scenes/circuit-v.webp', depth: 'scenes/circuit-vd.png', imgWide: 'scenes/circuit-h.webp', depthWide: 'scenes/circuit-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#eaf4ff', light: [0.5, 0.3], glow: 0.2 });
 }
 // 천문대: 천문대 돔 위 은하수, 별이 반짝여요.
 function wsObservatory(api) {
@@ -56850,7 +56851,7 @@ function wsObservatory(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.6;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/observatory-v.webp', depth: 'scenes/observatory-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
+  return wsScene(api, { img: 'scenes/observatory-v.webp', depth: 'scenes/observatory-vd.png', imgWide: 'scenes/observatory-h.webp', depthWide: 'scenes/observatory-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.0 });
 }
 // 로켓 발사대: 새벽 발사대의 클레이 로켓, 별이 깜빡여요.
 function wsRocket(api) {
@@ -56859,7 +56860,7 @@ function wsRocket(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.35;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/rocket-v.webp', depth: 'scenes/rocket-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/rocket-v.webp', depth: 'scenes/rocket-vd.png', imgWide: 'scenes/rocket-h.webp', depthWide: 'scenes/rocket-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.2], glow: 0.15 });
 }
 // 풍력 언덕: 초록 언덕 위 하얀 풍력 발전기, 꽃잎이 바람에 날려요.
 function wsWindfarm(api) {
@@ -56868,7 +56869,7 @@ function wsWindfarm(api) {
   const EFFECT = true;   // 꽃잎 효과 켜기
   const AMOUNT = 0.25;    // 꽃잎 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/windfarm-v.webp', depth: 'scenes/windfarm-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.15], glow: 0.15 });
+  return wsScene(api, { img: 'scenes/windfarm-v.webp', depth: 'scenes/windfarm-vd.png', imgWide: 'scenes/windfarm-h.webp', depthWide: 'scenes/windfarm-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 1, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#ffffff', light: [0.5, 0.15], glow: 0.15 });
 }
 // 홀로그램 교실: 책상 위 지구 홀로그램, 하늘색 빛 알갱이가 떠올라요.
 function wsHologram(api) {
@@ -56877,7 +56878,7 @@ function wsHologram(api) {
   const EFFECT = false;   // 반짝임 효과 켜기
   const AMOUNT = 0.45;    // 반짝임 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/hologram-v.webp', depth: 'scenes/hologram-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#dff0ff', light: [0.5, 0.4], glow: 0.3 });
+  return wsScene(api, { img: 'scenes/hologram-v.webp', depth: 'scenes/hologram-vd.png', imgWide: 'scenes/hologram-h.webp', depthWide: 'scenes/hologram-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 7, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#dff0ff', light: [0.5, 0.4], glow: 0.3 });
 }
 // 심해 탐사: 깊은 바닷속 잠수정 불빛, 플랑크톤이 떠다녀요.
 function wsDeepsea(api) {
@@ -56886,7 +56887,7 @@ function wsDeepsea(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/deepsea-v.webp', depth: 'scenes/deepsea-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6f6ff', light: [0.5, 0.4], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/deepsea-v.webp', depth: 'scenes/deepsea-vd.png', imgWide: 'scenes/deepsea-h.webp', depthWide: 'scenes/deepsea-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#e6f6ff', light: [0.5, 0.4], glow: 0.4 });
 }
 // 공룡 화석관: 천장 빛이 드는 공룡 화석 홀, 빛 먼지가 떠다녀요.
 function wsFossil(api) {
@@ -56895,7 +56896,7 @@ function wsFossil(api) {
   const EFFECT = false;   // 빛 먼지 효과 켜기
   const AMOUNT = 0.6;    // 빛 먼지 양 (0~1.5)
   const LOOP = 10;      // 한 바퀴 길이(초)
-  return wsScene(api, { img: 'scenes/fossil-v.webp', depth: 'scenes/fossil-vd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3dc', light: [0.5, 0.2], glow: 0.4 });
+  return wsScene(api, { img: 'scenes/fossil-v.webp', depth: 'scenes/fossil-vd.png', imgWide: 'scenes/fossil-h.webp', depthWide: 'scenes/fossil-hd.png', loop: LOOP, move: MOVE, depthAmt: DEPTH, focus: 0.45, fx: 3, fxAmt: EFFECT ? AMOUNT : 0, fxColor: '#fff3dc', light: [0.5, 0.2], glow: 0.4 });
 }
 
 /* WebGL 모션의 썸네일 (미리 찍어 둔 그림) */
