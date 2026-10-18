@@ -94,6 +94,385 @@
 ]
 },
 {
+"file": "sheets/cloud-flat.jpg",
+"cat": "cloud",
+"catKo": "워드클라우드",
+"sub": "flat",
+"subKo": "평면 배치",
+"ids": [
+"wc-word-wall",
+"wc-focus-pull",
+"wc-weight-tide",
+"wc-lit-rank",
+"wc-quiet-bloom",
+"wc-rank-cloud",
+"wc-vertical-cloud",
+"wc-ink-press"
+]
+},
+{
+"file": "sheets/cloud-space.jpg",
+"cat": "cloud",
+"catKo": "워드클라우드",
+"sub": "space",
+"subKo": "3D·공간",
+"ids": [
+"wc-tag-sphere",
+"wc-rank-cylinder",
+"wc-helix-stair",
+"wc-word-galaxy",
+"wc-word-tunnel",
+"wc-exploded-layers",
+"wc-data-globe",
+"wc-rack-focus"
+]
+},
+{
+"file": "sheets/cloud-physics.jpg",
+"cat": "cloud",
+"catKo": "워드클라우드",
+"sub": "physics",
+"subKo": "물리·움직임",
+"ids": [
+"wc-settle-pile",
+"wc-bubble-pack",
+"wc-magnet-tiles",
+"wc-stone-river",
+"wc-buoyant-rise",
+"wc-word-rain",
+"wc-push-part",
+"wc-float-lake"
+]
+},
+{
+"file": "sheets/cloud-shape.jpg",
+"cat": "cloud",
+"catKo": "워드클라우드",
+"sub": "shape",
+"subKo": "모양·포스터",
+"ids": [
+"wc-glyph-fill",
+"wc-rank-rings",
+"wc-swiss-grid",
+"wc-word-seal",
+"wc-word-isles",
+"wc-bubble-text",
+"wc-word-garden"
+]
+},
+{
+"file": "sheets/cloud-live.jpg",
+"cat": "cloud",
+"catKo": "워드클라우드",
+"sub": "live",
+"subKo": "실시간 응답",
+"ids": [
+"wc-live-merge",
+"wc-live-rise",
+"wc-live-race",
+"wc-live-podium",
+"wc-live-phone",
+"wc-live-slips",
+"wc-live-compare",
+"wc-live-onair"
+]
+},
+{
+"file": "sheets/slide-open.jpg",
+"cat": "slide",
+"catKo": "모션 PPT 장면",
+"sub": "open",
+"subKo": "표지·순서",
+"ids": [
+"sl-cover",
+"sl-section",
+"sl-case"
+]
+},
+{
+"file": "sheets/slide-list.jpg",
+"cat": "slide",
+"catKo": "모션 PPT 장면",
+"sub": "list",
+"subKo": "목록·내용",
+"ids": [
+"sl-index",
+"sl-points",
+"sl-flow",
+"sl-growth"
+]
+},
+{
+"file": "sheets/slide-body.jpg",
+"cat": "slide",
+"catKo": "모션 PPT 장면",
+"sub": "body",
+"subKo": "본문·비교",
+"ids": [
+"sl-compare",
+"sl-quote",
+"sl-question",
+"sl-table",
+"sl-keywords",
+"sl-cycle",
+"sl-statement"
+]
+},
+{
+"file": "sheets/slide-visual.jpg",
+"cat": "slide",
+"catKo": "모션 PPT 장면",
+"sub": "visual",
+"subKo": "숫자·사진·흐름",
+"ids": [
+"sl-change",
+"sl-number",
+"sl-photo",
+"sl-gallery"
+]
+},
+{
+"file": "sheets/slide-close.jpg",
+"cat": "slide",
+"catKo": "모션 PPT 장면",
+"sub": "close",
+"subKo": "질문·마무리",
+"ids": [
+"sl-activity",
+"sl-thanks"
+]
+},
+{
+"file": "sheets/cardnews-cover.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "cover",
+"subKo": "표지·훅",
+"ids": [
+"cn-hook",
+"cn-photo-cover",
+"cn-magazine",
+"cn-big-number",
+"cn-two-line",
+"cn-split-photo",
+"cn-follow-line",
+"cn-panorama",
+"cn-contrast",
+"cn-what-is",
+"cn-series-ep",
+"cn-swipe-peek"
+]
+},
+{
+"file": "sheets/cardnews-point.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "point",
+"subKo": "핵심 한 장",
+"ids": [
+"cn-problem",
+"cn-one-point",
+"cn-tip",
+"cn-tldr",
+"cn-one-word",
+"cn-remember",
+"cn-red-flag",
+"cn-advice",
+"cn-keywords",
+"cn-why"
+]
+},
+{
+"file": "sheets/cardnews-list.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "list",
+"subKo": "목록·체크",
+"ids": [
+"cn-list",
+"cn-checklist",
+"cn-top-five",
+"cn-two-columns",
+"cn-what-to-bring",
+"cn-do-dont",
+"cn-plan-abc",
+"cn-tag-list",
+"cn-contents",
+"cn-progress-list"
+]
+},
+{
+"file": "sheets/cardnews-step.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "step",
+"subKo": "단계·방법",
+"ids": [
+"cn-steps",
+"cn-step-number",
+"cn-arrow-steps",
+"cn-map-journey",
+"cn-layer-build",
+"cn-flowchart",
+"cn-cycle",
+"cn-process-band",
+"cn-howto-screen",
+"cn-mini-timeline"
+]
+},
+{
+"file": "sheets/cardnews-compare.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "compare",
+"subKo": "비교·전후",
+"ids": [
+"cn-before-after",
+"cn-versus",
+"cn-compare-table",
+"cn-slider",
+"cn-myth-fact",
+"cn-good-bad",
+"cn-spectrum",
+"cn-balance",
+"cn-venn",
+"cn-then-now"
+]
+},
+{
+"file": "sheets/cardnews-data.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "data",
+"subKo": "숫자·도표",
+"ids": [
+"cn-number",
+"cn-bar-chart",
+"cn-donut",
+"cn-isotype",
+"cn-line-trend",
+"cn-three-stats",
+"cn-percent-bar",
+"cn-slope",
+"cn-sparkline",
+"cn-survey"
+]
+},
+{
+"file": "sheets/cardnews-quote.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "quote",
+"subKo": "인용·한마디",
+"ids": [
+"cn-serif-quote",
+"cn-hand-quote",
+"cn-photo-quote",
+"cn-portrait-quote",
+"cn-interview",
+"cn-book-page",
+"cn-student-voices",
+"cn-speech-bubble",
+"cn-signed-note",
+"cn-pull-quote"
+]
+},
+{
+"file": "sheets/cardnews-photo.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "photo",
+"subKo": "사진·기록",
+"ids": [
+"cn-polaroid-stack",
+"cn-film-strip",
+"cn-photo-grid",
+"cn-photo-dump",
+"cn-gallery-label",
+"cn-annotated-photo",
+"cn-cutout-color",
+"cn-detail-zoom",
+"cn-magazine-spread",
+"cn-photo-diary"
+]
+},
+{
+"file": "sheets/cardnews-quiz.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "quiz",
+"subKo": "질문·퀴즈",
+"ids": [
+"cn-ox-quiz",
+"cn-four-choice",
+"cn-fill-blank",
+"cn-choose-path",
+"cn-flip-card",
+"cn-guess-number",
+"cn-match-lines",
+"cn-put-order",
+"cn-answer-next",
+"cn-think-prompt"
+]
+},
+{
+"file": "sheets/cardnews-info.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "info",
+"subKo": "안내·일정",
+"ids": [
+"cn-event-info",
+"cn-recruit",
+"cn-timetable",
+"cn-month-calendar",
+"cn-location",
+"cn-faq",
+"cn-notice",
+"cn-deadline",
+"cn-lineup",
+"cn-how-to-join"
+]
+},
+{
+"file": "sheets/cardnews-term.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "term",
+"subKo": "개념·도식",
+"ids": [
+"cn-dictionary",
+"cn-matrix",
+"cn-pyramid",
+"cn-concept-map",
+"cn-iceberg",
+"cn-funnel",
+"cn-layer-stack",
+"cn-frayer",
+"cn-acronym",
+"cn-formula"
+]
+},
+{
+"file": "sheets/cardnews-close.jpg",
+"cat": "cardnews",
+"catKo": "캐러셀 카드",
+"sub": "close",
+"subKo": "마무리·저장",
+"ids": [
+"cn-save",
+"cn-follow",
+"cn-share",
+"cn-comment",
+"cn-recap",
+"cn-next-ep",
+"cn-about",
+"cn-thanks",
+"cn-resources",
+"cn-closing-line"
+]
+},
+{
 "file": "sheets/landing-hero.jpg",
 "cat": "landing",
 "catKo": "랜딩페이지",
@@ -284,9 +663,9 @@
 ]
 },
 {
-"file": "sheets/talk-notice.jpg",
-"cat": "talk",
-"catKo": "알림·대화",
+"file": "sheets/ui-notice.jpg",
+"cat": "ui",
+"catKo": "마이크로 인터랙션",
 "sub": "notice",
 "subKo": "알림",
 "ids": [
@@ -304,9 +683,9 @@
 ]
 },
 {
-"file": "sheets/talk-chat.jpg",
-"cat": "talk",
-"catKo": "알림·대화",
+"file": "sheets/ui-chat.jpg",
+"cat": "ui",
+"catKo": "마이크로 인터랙션",
 "sub": "chat",
 "subKo": "대화·반응",
 "ids": [
@@ -322,11 +701,11 @@
 ]
 },
 {
-"file": "sheets/button-own.jpg",
-"cat": "button",
-"catKo": "버튼·입력",
-"sub": "own",
-"subKo": "직접 만든 것",
+"file": "sheets/ui-button.jpg",
+"cat": "ui",
+"catKo": "마이크로 인터랙션",
+"sub": "button",
+"subKo": "버튼·입력",
 "ids": [
 "toggle-switch",
 "click-button",
@@ -345,11 +724,32 @@
 ]
 },
 {
-"file": "sheets/button-threeui-1.jpg",
-"cat": "button",
-"catKo": "버튼·입력",
+"file": "sheets/ui-data.jpg",
+"cat": "ui",
+"catKo": "마이크로 인터랙션",
+"sub": "data",
+"subKo": "숫자·차트",
+"ids": [
+"count-up",
+"odometer",
+"countdown",
+"dday",
+"progress-bar",
+"stepper",
+"timeline",
+"donut-gauge",
+"bar-chart",
+"line-chart",
+"poll-bars",
+"heat-grid"
+]
+},
+{
+"file": "sheets/ui-threeui-1.jpg",
+"cat": "ui",
+"catKo": "마이크로 인터랙션",
 "sub": "threeui",
-"subKo": "ThreeUI 원본 · MIT",
+"subKo": "버튼 · ThreeUI 원본 · MIT",
 "ids": [
 "tu-star-portal--star-portal",
 "tu-star-portal--ignition-button",
@@ -378,11 +778,11 @@
 ]
 },
 {
-"file": "sheets/button-threeui-2.jpg",
-"cat": "button",
-"catKo": "버튼·입력",
+"file": "sheets/ui-threeui-2.jpg",
+"cat": "ui",
+"catKo": "마이크로 인터랙션",
 "sub": "threeui",
-"subKo": "ThreeUI 원본 · MIT",
+"subKo": "버튼 · ThreeUI 원본 · MIT",
 "ids": [
 "tu-rectangle-buttons--meridian-keycap-secondary",
 "tu-rectangle-buttons--halvorsen-arrow-pill",
@@ -400,30 +800,9 @@
 ]
 },
 {
-"file": "sheets/data-all.jpg",
-"cat": "data",
-"catKo": "숫자·차트",
-"sub": "",
-"subKo": "",
-"ids": [
-"count-up",
-"odometer",
-"countdown",
-"dday",
-"progress-bar",
-"stepper",
-"timeline",
-"donut-gauge",
-"bar-chart",
-"line-chart",
-"poll-bars",
-"heat-grid"
-]
-},
-{
-"file": "sheets/text-in.jpg",
+"file": "sheets/text-in-1.jpg",
 "cat": "text",
-"catKo": "글자",
+"catKo": "글자 효과",
 "sub": "in",
 "subKo": "등장",
 "ids": [
@@ -441,13 +820,32 @@
 "arc-settle",
 "center-build",
 "vertical-column",
-"read-along"
+"read-along",
+"gradual-spacing",
+"weight-rise",
+"ghost-autocomplete",
+"split-halves",
+"stroke-fill",
+"dot-resolve",
+"letter-flip-up",
+"skew-settle",
+"shuffle-in"
+]
+},
+{
+"file": "sheets/text-in-2.jpg",
+"cat": "text",
+"catKo": "글자 효과",
+"sub": "in",
+"subKo": "등장",
+"ids": [
+"count-in-title"
 ]
 },
 {
 "file": "sheets/text-mark.jpg",
 "cat": "text",
-"catKo": "글자",
+"catKo": "글자 효과",
 "sub": "mark",
 "subKo": "강조·표시",
 "ids": [
@@ -461,13 +859,18 @@
 "strike-fix",
 "redaction",
 "blueprint-lens",
-"inversion-bar"
+"inversion-bar",
+"true-focus",
+"outline-recede",
+"footnote-mark",
+"bracket-expand",
+"tooltip-gloss"
 ]
 },
 {
 "file": "sheets/text-swap.jpg",
 "cat": "text",
-"catKo": "글자",
+"catKo": "글자 효과",
 "sub": "swap",
 "subKo": "바꾸기",
 "ids": [
@@ -480,13 +883,37 @@
 "roll-over",
 "scrub-swap",
 "font-cycle",
-"prism-lines"
+"prism-lines",
+"picker-wheel",
+"slice-swap",
+"inline-odometer",
+"backspace-rewrite",
+"wipe-overwrite"
+]
+},
+{
+"file": "sheets/text-light.jpg",
+"cat": "text",
+"catKo": "글자 효과",
+"sub": "light",
+"subKo": "빛·재질",
+"ids": [
+"aurora-letters",
+"glazed-type",
+"glass-letters",
+"foil-stamp",
+"letterpress",
+"lamp-shadow",
+"outline-beam",
+"halo-sign",
+"pearl-inlay",
+"halftone-shine"
 ]
 },
 {
 "file": "sheets/text-flow.jpg",
 "cat": "text",
-"catKo": "글자",
+"catKo": "글자 효과",
 "sub": "flow",
 "subKo": "흐름·질감",
 "ids": [
@@ -549,7 +976,10 @@
 "grid-relayout",
 "align-lines",
 "pull-quote",
-"camera-ride"
+"camera-ride",
+"shape-windows",
+"grid-flicker",
+"bilingual-poster"
 ]
 },
 {
@@ -574,7 +1004,11 @@
 "rotation-field",
 "sway-columns",
 "collision-chain",
-"slide-puzzle"
+"slide-puzzle",
+"lyric-beat",
+"stretch-fill",
+"led-board",
+"plucked-strings"
 ]
 },
 {
@@ -595,7 +1029,17 @@
 "sundial-shadow",
 "depth-dolly",
 "trivision-slats",
-"corner-wrap"
+"corner-wrap",
+"text-cylinder",
+"text-sphere",
+"mobius-band",
+"helix-type",
+"extrude-turn",
+"flag-wave",
+"word-cube",
+"orbit-words",
+"paper-fold",
+"floor-type"
 ]
 },
 {
@@ -619,7 +1063,10 @@
 "xor-overlap",
 "scanimation",
 "dilate-swap",
-"gum-pull"
+"gum-pull",
+"melt-type",
+"pixel-sort",
+"rubber-stretch"
 ]
 },
 {
@@ -973,6 +1420,82 @@
 ]
 },
 {
+"file": "sheets/shorts-glass.jpg",
+"cat": "shorts",
+"catKo": "숏폼 자막",
+"sub": "glass",
+"subKo": "유리·빛",
+"ids": [
+"sf-liquid-pill",
+"sf-fluted-glass",
+"sf-border-beam",
+"sf-pearl-sheen",
+"sf-backlit-rim",
+"sf-lens-bubble",
+"sf-rays-hook",
+"sf-glass-stack",
+"sf-spotlight",
+"sf-light-write"
+]
+},
+{
+"file": "sheets/shorts-vlog.jpg",
+"cat": "shorts",
+"catKo": "숏폼 자막",
+"sub": "vlog",
+"subKo": "브이로그·일상",
+"ids": [
+"sf-timestamp-chip",
+"sf-route-line",
+"sf-location-pin",
+"sf-date-weather",
+"sf-film-date",
+"sf-rec-finder",
+"sf-story-bars",
+"sf-now-playing",
+"sf-chapter-chip",
+"sf-item-tag"
+]
+},
+{
+"file": "sheets/shorts-edu.jpg",
+"cat": "shorts",
+"catKo": "숏폼 자막",
+"sub": "edu",
+"subKo": "수업·설명",
+"ids": [
+"sf-term-card",
+"sf-keyword-rail",
+"sf-true-false",
+"sf-four-choices",
+"sf-fill-blank",
+"sf-step-dots",
+"sf-equation",
+"sf-cause-effect",
+"sf-myth-fact",
+"sf-recap-lines"
+]
+},
+{
+"file": "sheets/shorts-duo.jpg",
+"cat": "shorts",
+"catKo": "숏폼 자막",
+"sub": "duo",
+"subKo": "두 언어·대화",
+"ids": [
+"sf-duo-stack",
+"sf-translate-flip",
+"sf-gloss-ruby",
+"sf-stress-dots",
+"sf-podcast-duo",
+"sf-qa-interview",
+"sf-script-read",
+"sf-speaker-lanes",
+"sf-live-interpret",
+"sf-word-roots"
+]
+},
+{
 "file": "sheets/shorts-variety.jpg",
 "cat": "shorts",
 "catKo": "숏폼 자막",
@@ -1026,6 +1549,25 @@
 ]
 },
 {
+"file": "sheets/shorts-social.jpg",
+"cat": "shorts",
+"catKo": "숏폼 자막",
+"sub": "social",
+"subKo": "SNS 화면",
+"ids": [
+"sf-poll-sticker",
+"sf-ask-box",
+"sf-feel-slider",
+"sf-read-more",
+"sf-live-chat",
+"sf-voice-memo",
+"sf-tap-guide",
+"sf-link-sticker",
+"sf-mention-tags",
+"sf-alert-stack"
+]
+},
+{
 "file": "sheets/shorts-list.jpg",
 "cat": "shorts",
 "catKo": "숏폼 자막",
@@ -1073,6 +1615,197 @@
 "sf-crt-scanline",
 "sf-split-flap",
 "sf-block-wipe"
+]
+},
+{
+"file": "sheets/shorts-end.jpg",
+"cat": "shorts",
+"catKo": "숏폼 자막",
+"sub": "end",
+"subKo": "마무리·구독",
+"ids": [
+"sf-follow-tap",
+"sf-save-bookmark",
+"sf-comment-keyword",
+"sf-part-teaser",
+"sf-up-next",
+"sf-bell-ring",
+"sf-mini-credits",
+"sf-profile-link",
+"sf-share-plane",
+"sf-sign-off"
+]
+},
+{
+"file": "sheets/wall-season.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "season",
+"subKo": "계절·행사",
+"ids": [
+"ws-spring",
+"ws-summer",
+"ws-autumn",
+"ws-rain",
+"ws-sportsday",
+"ws-christmas",
+"ws-seollal",
+"ws-winter",
+"ws-firstday",
+"ws-cherrynight",
+"ws-hydrangea",
+"ws-harvest",
+"ws-chuseok",
+"ws-snowyard"
+]
+},
+{
+"file": "sheets/wall-school.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "school",
+"subKo": "학교·교실",
+"ids": [
+"ws-classroom",
+"ws-library",
+"ws-science",
+"ws-artroom",
+"ws-music",
+"ws-field",
+"ws-gym",
+"ws-garden",
+"ws-hallway",
+"ws-computer",
+"ws-rooftop",
+"ws-lockers",
+"ws-graduation",
+"ws-chalkboard"
+]
+},
+{
+"file": "sheets/wall-cinema.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "cinema",
+"subKo": "시네마틱 무대",
+"ids": [
+"ws-stage",
+"ws-award",
+"ws-starry",
+"ws-lighthouse",
+"ws-space",
+"ws-theater",
+"ws-forest",
+"ws-clouds",
+"ws-concert",
+"ws-museum",
+"ws-lightdoor",
+"ws-moonlake"
+]
+},
+{
+"file": "sheets/wall-cozy.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "cozy",
+"subKo": "아늑한 장면",
+"ids": [
+"ws-raindesk",
+"ws-attic",
+"ws-campfire",
+"ws-cafe",
+"ws-greenhouse",
+"ws-picnic",
+"ws-bakery",
+"ws-bookcafe",
+"ws-kitchen",
+"ws-livingroom",
+"ws-balcony",
+"ws-studydesk"
+]
+},
+{
+"file": "sheets/wall-nature.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "nature",
+"subKo": "자연·풍경",
+"ids": [
+"ws-meadow",
+"ws-sea",
+"ws-mountain",
+"ws-bamboo",
+"ws-lake",
+"ws-canola",
+"ws-waterfall",
+"ws-reeds",
+"ws-underwater",
+"ws-snowforest",
+"ws-tulip",
+"ws-lotus"
+]
+},
+{
+"file": "sheets/wall-city.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "city",
+"subKo": "도시·여행",
+"ids": [
+"ws-seoulnight",
+"ws-alley",
+"ws-train",
+"ws-busstop",
+"ws-hangang",
+"ws-market",
+"ws-europe",
+"ws-airport",
+"ws-subway",
+"ws-bluehour",
+"ws-bukchon",
+"ws-toycity"
+]
+},
+{
+"file": "sheets/wall-fantasy.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "fantasy",
+"subKo": "동화·판타지",
+"ids": [
+"ws-skyisland",
+"ws-cloudcastle",
+"ws-mushroom",
+"ws-skywhale",
+"ws-magiclibrary",
+"ws-macaron",
+"ws-treehouse",
+"ws-moonswing",
+"ws-snowglobe",
+"ws-teagarden",
+"ws-lanterns",
+"ws-clocktower"
+]
+},
+{
+"file": "sheets/wall-science.jpg",
+"cat": "wall",
+"catKo": "배경",
+"sub": "science",
+"subKo": "과학·우주",
+"ids": [
+"ws-futurelab",
+"ws-robotclass",
+"ws-planet",
+"ws-moonbase",
+"ws-cells",
+"ws-circuit",
+"ws-observatory",
+"ws-rocket",
+"ws-windfarm",
+"ws-hologram",
+"ws-deepsea",
+"ws-fossil"
 ]
 },
 {
