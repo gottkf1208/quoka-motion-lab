@@ -40,8 +40,8 @@ python3 catalog/pick.py roles
 
 - `cat: slide` 장면은 단계가 있습니다(`frame.steps`). 영상으로 뽑으면 시간표대로 저절로 펼쳐지고, 사이트의 모션 PPT 작업실·저장한 HTML에서는 '다음 효과'로 한 단계씩 넘깁니다.
 - 색 8개 중 [5]가 채움 포인트 색(띠·알약·번호 원·상자), [6]이 빨간 펜 색입니다. `point`로 포인트 색만 바꾸면 채움 위 글자색은 저절로 맞춰집니다.
-- `sub`가 디자인 테마입니다(lecture 강의안 기본 · editorial 에디토리얼 매거진 · keynote 미니멀 키노트 · swiss 스위스 그리드 · cinema 다크 시네마 · notebook 종이 노트 · glass 소프트 글래스 · bento 벤토 그리드 · press 신문 브리핑 · organic 자연·오가닉). 한 발표는 **한 sub 안에서만** 고릅니다(아래 '같은 작은 묶음은 한 번' 규칙은 PPT에는 쓰지 않음). 테마마다 표지·차례·구역·본문·비교·숫자·사진·인용·흐름·마무리가 한 벌로 맞춰져 있습니다.
-- 10장 한 묶음 템플릿 50개는 사이트의 `QM_DECKS`(id · ko · topic · theme · font · items)에 있고, `quokaStudio.use('ppt', id)`로 작업실에 깔고 `quokaStudio.peek(id)`로 발표 화면을 봅니다.
+- `sub`가 디자인입니다(50가지: lecture 강의안 기본 · editorial 에디토리얼 매거진 · keynote 미니멀 키노트 · swiss 스위스 그리드 · cinema 다크 시네마 · notebook 종이 노트 · glass 소프트 글래스 · bento 벤토 그리드 · press 신문 브리핑 · organic 자연·오가닉 · kinetic 키네틱 타이포 덱 · morph 매직 무브 · zoom 줌 캔버스 · blocks 슬라이딩 블록 · scrolly 스크롤텔링 · datastory 데이터 스토리 · brutal 네오 브루탈 · terminal 터미널·코드 · launch 다크 런칭 · aurora 오로라 라이트 · duotone 듀오톤 포스터 · split 분할 화면 · iso 아이소메트릭 · soft3d 소프트 3D 오브젝트 · blueprint 블루프린트 · maximal 타이포 맥시멀 · browser 앱 화면 데모 · device 디바이스 쇼케이스 · museum 미술관 전시 · journey 지도 여정 · quiz 퀴즈 쇼 · chat 메신저 대화 · feed 소셜 피드 · news 뉴스 방송 · sports 스포츠 중계 · dashboard 컨트롤룸 대시보드 · riso 리소그래프 · spatial 공간 UI · fold 폴딩 패널 · cube 3D 큐브 · generative 제너러티브 입자 · lineart 한 줄 드로잉 · document 문서·하이라이트 · photoessay 포토 에세이 · splitflap 스플릿 플랩 · ticket 티켓·보딩패스 · dither 디더·픽셀 · radial 원형 다이얼 · bauhaus 바우하우스 도형 · blob 블롭 모프). 한 발표는 **한 sub 안에서만** 고릅니다(아래 '같은 작은 묶음은 한 번' 규칙은 PPT에는 쓰지 않음). 디자인마다 표지·차례·구역·본문·비교·숫자·사진·인용·흐름·마무리가 한 벌로 맞춰져 있습니다.
+- 10장 한 묶음 템플릿 50개(디자인마다 하나)는 사이트의 `QM_DECKS`(id · ko · topic · theme · font · trans · items)에 있고, `quokaStudio.use('ppt', id)`로 작업실에 깔고 `quokaStudio.peek(id)`로 발표 화면을 봅니다.
 
 ## 고를 때 지킬 것 (요약)
 
@@ -50,4 +50,4 @@ python3 catalog/pick.py roles
 3. 같은 작은 묶음은 한 작품에 한 번(장면이 8개 넘으면 두 번까지), 같은 종류가 연달아 나오지 않게, 한 종류는 전체의 절반을 넘지 않게.
 4. 밝기(tone)·포인트 색·글꼴은 한 작품 안에서 맞춘다. 비율은 작품 비율과 같은 것을 앞세운다.
 5. 자막·강조처럼 영상 위에 얹는 것(`overlay`)은 투명으로 뽑고, 장면 전체(`full`)는 배경까지 뽑는다.
-6. 색: 흰색·네이비(#1f3460)·버건디(#6e1a2f)·검정·종이색. 오렌지·청록·보라·네온·무지개 금지. 한글이 든 글줄은 한글 글꼴 하나로.
+6. 색: 흰색·네이비(#1f3460)·코발트·버건디(#6e1a2f)·검정·쿨 그레이. 오렌지·청록·보라·네온·무지개·노랑·베이지 금지. 한글이 든 글줄은 한글 글꼴 하나로.

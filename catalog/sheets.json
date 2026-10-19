@@ -378,6 +378,766 @@
 ]
 },
 {
+"file": "sheets/slide-kinetic.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "kinetic",
+"subKo": "키네틱 타이포 덱",
+"ids": [
+"sl-kt-cover",
+"sl-kt-agenda",
+"sl-kt-section",
+"sl-kt-list",
+"sl-kt-compare",
+"sl-kt-data",
+"sl-kt-photo",
+"sl-kt-quote",
+"sl-kt-flow",
+"sl-kt-closing"
+]
+},
+{
+"file": "sheets/slide-morph.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "morph",
+"subKo": "매직 무브",
+"ids": [
+"sl-mm-cover",
+"sl-mm-agenda",
+"sl-mm-section",
+"sl-mm-points",
+"sl-mm-compare",
+"sl-mm-data",
+"sl-mm-photo",
+"sl-mm-quote",
+"sl-mm-flow",
+"sl-mm-closing"
+]
+},
+{
+"file": "sheets/slide-zoom.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "zoom",
+"subKo": "줌 캔버스",
+"ids": [
+"sl-zm-cover",
+"sl-zm-agenda",
+"sl-zm-section",
+"sl-zm-points",
+"sl-zm-compare",
+"sl-zm-data",
+"sl-zm-photo",
+"sl-zm-quote",
+"sl-zm-flow",
+"sl-zm-closing"
+]
+},
+{
+"file": "sheets/slide-blocks.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "blocks",
+"subKo": "슬라이딩 블록",
+"ids": [
+"sl-sb-cover",
+"sl-sb-agenda",
+"sl-sb-section",
+"sl-sb-points",
+"sl-sb-compare",
+"sl-sb-data",
+"sl-sb-photo",
+"sl-sb-quote",
+"sl-sb-flow",
+"sl-sb-closing"
+]
+},
+{
+"file": "sheets/slide-scrolly.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "scrolly",
+"subKo": "스크롤텔링",
+"ids": [
+"sl-sy-cover",
+"sl-sy-agenda",
+"sl-sy-section",
+"sl-sy-points",
+"sl-sy-compare",
+"sl-sy-data",
+"sl-sy-photo",
+"sl-sy-quote",
+"sl-sy-flow",
+"sl-sy-closing"
+]
+},
+{
+"file": "sheets/slide-datastory.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "datastory",
+"subKo": "데이터 스토리",
+"ids": [
+"sl-da-cover",
+"sl-da-agenda",
+"sl-da-section",
+"sl-da-bars",
+"sl-da-compare",
+"sl-da-data",
+"sl-da-photo",
+"sl-da-quote",
+"sl-da-flow",
+"sl-da-closing"
+]
+},
+{
+"file": "sheets/slide-brutal.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "brutal",
+"subKo": "네오 브루탈",
+"ids": [
+"sl-br-cover",
+"sl-br-agenda",
+"sl-br-section",
+"sl-br-list",
+"sl-br-compare",
+"sl-br-data",
+"sl-br-photo",
+"sl-br-quote",
+"sl-br-flow",
+"sl-br-closing"
+]
+},
+{
+"file": "sheets/slide-terminal.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "terminal",
+"subKo": "터미널·코드",
+"ids": [
+"sl-tm-cover",
+"sl-tm-agenda",
+"sl-tm-section",
+"sl-tm-points",
+"sl-tm-compare",
+"sl-tm-data",
+"sl-tm-photo",
+"sl-tm-quote",
+"sl-tm-flow",
+"sl-tm-closing"
+]
+},
+{
+"file": "sheets/slide-launch.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "launch",
+"subKo": "다크 런칭",
+"ids": [
+"sl-ln-cover",
+"sl-ln-agenda",
+"sl-ln-section",
+"sl-ln-features",
+"sl-ln-compare",
+"sl-ln-data",
+"sl-ln-photo",
+"sl-ln-quote",
+"sl-ln-flow",
+"sl-ln-closing"
+]
+},
+{
+"file": "sheets/slide-aurora.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "aurora",
+"subKo": "오로라 라이트",
+"ids": [
+"sl-ar-cover",
+"sl-ar-agenda",
+"sl-ar-section",
+"sl-ar-points",
+"sl-ar-compare",
+"sl-ar-data",
+"sl-ar-photo",
+"sl-ar-quote",
+"sl-ar-flow",
+"sl-ar-closing"
+]
+},
+{
+"file": "sheets/slide-duotone.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "duotone",
+"subKo": "듀오톤 포스터",
+"ids": [
+"sl-du-cover",
+"sl-du-agenda",
+"sl-du-section",
+"sl-du-points",
+"sl-du-compare",
+"sl-du-data",
+"sl-du-photo",
+"sl-du-quote",
+"sl-du-flow",
+"sl-du-closing"
+]
+},
+{
+"file": "sheets/slide-split.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "split",
+"subKo": "분할 화면",
+"ids": [
+"sl-sp-cover",
+"sl-sp-agenda",
+"sl-sp-section",
+"sl-sp-points",
+"sl-sp-compare",
+"sl-sp-data",
+"sl-sp-photo",
+"sl-sp-quote",
+"sl-sp-flow",
+"sl-sp-closing"
+]
+},
+{
+"file": "sheets/slide-iso.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "iso",
+"subKo": "아이소메트릭",
+"ids": [
+"sl-is-cover",
+"sl-is-agenda",
+"sl-is-section",
+"sl-is-points",
+"sl-is-compare",
+"sl-is-data",
+"sl-is-photo",
+"sl-is-quote",
+"sl-is-flow",
+"sl-is-closing"
+]
+},
+{
+"file": "sheets/slide-soft3d.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "soft3d",
+"subKo": "소프트 3D 오브젝트",
+"ids": [
+"sl-sd-cover",
+"sl-sd-agenda",
+"sl-sd-section",
+"sl-sd-points",
+"sl-sd-compare",
+"sl-sd-data",
+"sl-sd-photo",
+"sl-sd-quote",
+"sl-sd-flow",
+"sl-sd-closing"
+]
+},
+{
+"file": "sheets/slide-blueprint.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "blueprint",
+"subKo": "블루프린트",
+"ids": [
+"sl-bp-cover",
+"sl-bp-agenda",
+"sl-bp-section",
+"sl-bp-points",
+"sl-bp-compare",
+"sl-bp-data",
+"sl-bp-photo",
+"sl-bp-quote",
+"sl-bp-flow",
+"sl-bp-closing"
+]
+},
+{
+"file": "sheets/slide-maximal.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "maximal",
+"subKo": "타이포 맥시멀",
+"ids": [
+"sl-mx-cover",
+"sl-mx-agenda",
+"sl-mx-section",
+"sl-mx-points",
+"sl-mx-compare",
+"sl-mx-data",
+"sl-mx-photo",
+"sl-mx-quote",
+"sl-mx-flow",
+"sl-mx-closing"
+]
+},
+{
+"file": "sheets/slide-browser.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "browser",
+"subKo": "앱 화면 데모",
+"ids": [
+"sl-wb-cover",
+"sl-wb-agenda",
+"sl-wb-section",
+"sl-wb-points",
+"sl-wb-compare",
+"sl-wb-data",
+"sl-wb-photo",
+"sl-wb-quote",
+"sl-wb-flow",
+"sl-wb-closing"
+]
+},
+{
+"file": "sheets/slide-device.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "device",
+"subKo": "디바이스 쇼케이스",
+"ids": [
+"sl-dv-cover",
+"sl-dv-agenda",
+"sl-dv-section",
+"sl-dv-points",
+"sl-dv-compare",
+"sl-dv-data",
+"sl-dv-photo",
+"sl-dv-quote",
+"sl-dv-flow",
+"sl-dv-closing"
+]
+},
+{
+"file": "sheets/slide-museum.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "museum",
+"subKo": "미술관 전시",
+"ids": [
+"sl-ms-cover",
+"sl-ms-agenda",
+"sl-ms-section",
+"sl-ms-points",
+"sl-ms-compare",
+"sl-ms-data",
+"sl-ms-photo",
+"sl-ms-quote",
+"sl-ms-flow",
+"sl-ms-closing"
+]
+},
+{
+"file": "sheets/slide-journey.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "journey",
+"subKo": "지도 여정",
+"ids": [
+"sl-jr-cover",
+"sl-jr-agenda",
+"sl-jr-section",
+"sl-jr-points",
+"sl-jr-compare",
+"sl-jr-data",
+"sl-jr-photo",
+"sl-jr-quote",
+"sl-jr-flow",
+"sl-jr-closing"
+]
+},
+{
+"file": "sheets/slide-quiz.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "quiz",
+"subKo": "퀴즈 쇼",
+"ids": [
+"sl-qz-cover",
+"sl-qz-rounds",
+"sl-qz-round",
+"sl-qz-question",
+"sl-qz-ox",
+"sl-qz-score",
+"sl-qz-photo",
+"sl-qz-blank",
+"sl-qz-stairs",
+"sl-qz-closing"
+]
+},
+{
+"file": "sheets/slide-chat.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "chat",
+"subKo": "메신저 대화",
+"ids": [
+"sl-ct-cover",
+"sl-ct-agenda",
+"sl-ct-section",
+"sl-ct-list",
+"sl-ct-compare",
+"sl-ct-data",
+"sl-ct-photo",
+"sl-ct-quote",
+"sl-ct-flow",
+"sl-ct-closing"
+]
+},
+{
+"file": "sheets/slide-feed.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "feed",
+"subKo": "소셜 피드",
+"ids": [
+"sl-sf-cover",
+"sl-sf-agenda",
+"sl-sf-section",
+"sl-sf-points",
+"sl-sf-compare",
+"sl-sf-data",
+"sl-sf-photo",
+"sl-sf-quote",
+"sl-sf-flow",
+"sl-sf-closing"
+]
+},
+{
+"file": "sheets/slide-news.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "news",
+"subKo": "뉴스 방송",
+"ids": [
+"sl-nw-cover",
+"sl-nw-agenda",
+"sl-nw-section",
+"sl-nw-points",
+"sl-nw-compare",
+"sl-nw-data",
+"sl-nw-photo",
+"sl-nw-quote",
+"sl-nw-flow",
+"sl-nw-closing"
+]
+},
+{
+"file": "sheets/slide-sports.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "sports",
+"subKo": "스포츠 중계",
+"ids": [
+"sl-sv-cover",
+"sl-sv-agenda",
+"sl-sv-section",
+"sl-sv-points",
+"sl-sv-compare",
+"sl-sv-data",
+"sl-sv-photo",
+"sl-sv-quote",
+"sl-sv-flow",
+"sl-sv-closing"
+]
+},
+{
+"file": "sheets/slide-dashboard.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "dashboard",
+"subKo": "컨트롤룸 대시보드",
+"ids": [
+"sl-cr-cover",
+"sl-cr-agenda",
+"sl-cr-section",
+"sl-cr-points",
+"sl-cr-compare",
+"sl-cr-data",
+"sl-cr-photo",
+"sl-cr-quote",
+"sl-cr-flow",
+"sl-cr-closing"
+]
+},
+{
+"file": "sheets/slide-riso.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "riso",
+"subKo": "리소그래프",
+"ids": [
+"sl-rs-cover",
+"sl-rs-agenda",
+"sl-rs-section",
+"sl-rs-points",
+"sl-rs-compare",
+"sl-rs-data",
+"sl-rs-photo",
+"sl-rs-quote",
+"sl-rs-flow",
+"sl-rs-closing"
+]
+},
+{
+"file": "sheets/slide-spatial.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "spatial",
+"subKo": "공간 UI",
+"ids": [
+"sl-vs-cover",
+"sl-vs-agenda",
+"sl-vs-section",
+"sl-vs-points",
+"sl-vs-compare",
+"sl-vs-data",
+"sl-vs-photo",
+"sl-vs-quote",
+"sl-vs-flow",
+"sl-vs-closing"
+]
+},
+{
+"file": "sheets/slide-fold.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "fold",
+"subKo": "폴딩 패널",
+"ids": [
+"sl-fd-cover",
+"sl-fd-agenda",
+"sl-fd-section",
+"sl-fd-points",
+"sl-fd-compare",
+"sl-fd-data",
+"sl-fd-photo",
+"sl-fd-quote",
+"sl-fd-flow",
+"sl-fd-closing"
+]
+},
+{
+"file": "sheets/slide-cube.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "cube",
+"subKo": "3D 큐브",
+"ids": [
+"sl-cu-cover",
+"sl-cu-agenda",
+"sl-cu-section",
+"sl-cu-points",
+"sl-cu-compare",
+"sl-cu-data",
+"sl-cu-photo",
+"sl-cu-quote",
+"sl-cu-flow",
+"sl-cu-closing"
+]
+},
+{
+"file": "sheets/slide-generative.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "generative",
+"subKo": "제너러티브 입자",
+"ids": [
+"sl-gn-cover",
+"sl-gn-agenda",
+"sl-gn-section",
+"sl-gn-points",
+"sl-gn-compare",
+"sl-gn-data",
+"sl-gn-photo",
+"sl-gn-quote",
+"sl-gn-flow",
+"sl-gn-closing"
+]
+},
+{
+"file": "sheets/slide-lineart.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "lineart",
+"subKo": "한 줄 드로잉",
+"ids": [
+"sl-la-cover",
+"sl-la-agenda",
+"sl-la-section",
+"sl-la-points",
+"sl-la-compare",
+"sl-la-data",
+"sl-la-photo",
+"sl-la-quote",
+"sl-la-flow",
+"sl-la-closing"
+]
+},
+{
+"file": "sheets/slide-document.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "document",
+"subKo": "문서·하이라이트",
+"ids": [
+"sl-dc-cover",
+"sl-dc-agenda",
+"sl-dc-section",
+"sl-dc-points",
+"sl-dc-compare",
+"sl-dc-data",
+"sl-dc-photo",
+"sl-dc-quote",
+"sl-dc-flow",
+"sl-dc-closing"
+]
+},
+{
+"file": "sheets/slide-photoessay.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "photoessay",
+"subKo": "포토 에세이",
+"ids": [
+"sl-pe-cover",
+"sl-pe-agenda",
+"sl-pe-section",
+"sl-pe-list",
+"sl-pe-compare",
+"sl-pe-data",
+"sl-pe-photo",
+"sl-pe-quote",
+"sl-pe-flow",
+"sl-pe-closing"
+]
+},
+{
+"file": "sheets/slide-splitflap.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "splitflap",
+"subKo": "스플릿 플랩",
+"ids": [
+"sl-fl-cover",
+"sl-fl-agenda",
+"sl-fl-section",
+"sl-fl-list",
+"sl-fl-compare",
+"sl-fl-data",
+"sl-fl-photo",
+"sl-fl-quote",
+"sl-fl-flow",
+"sl-fl-closing"
+]
+},
+{
+"file": "sheets/slide-ticket.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "ticket",
+"subKo": "티켓·보딩패스",
+"ids": [
+"sl-tk-cover",
+"sl-tk-agenda",
+"sl-tk-section",
+"sl-tk-points",
+"sl-tk-compare",
+"sl-tk-data",
+"sl-tk-photo",
+"sl-tk-quote",
+"sl-tk-flow",
+"sl-tk-closing"
+]
+},
+{
+"file": "sheets/slide-dither.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "dither",
+"subKo": "디더·픽셀",
+"ids": [
+"sl-dt-cover",
+"sl-dt-agenda",
+"sl-dt-section",
+"sl-dt-points",
+"sl-dt-compare",
+"sl-dt-data",
+"sl-dt-photo",
+"sl-dt-quote",
+"sl-dt-flow",
+"sl-dt-closing"
+]
+},
+{
+"file": "sheets/slide-radial.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "radial",
+"subKo": "원형 다이얼",
+"ids": [
+"sl-rd-cover",
+"sl-rd-agenda",
+"sl-rd-section",
+"sl-rd-points",
+"sl-rd-compare",
+"sl-rd-data",
+"sl-rd-photo",
+"sl-rd-quote",
+"sl-rd-flow",
+"sl-rd-closing"
+]
+},
+{
+"file": "sheets/slide-bauhaus.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "bauhaus",
+"subKo": "바우하우스 도형",
+"ids": [
+"sl-bh-cover",
+"sl-bh-agenda",
+"sl-bh-section",
+"sl-bh-points",
+"sl-bh-compare",
+"sl-bh-data",
+"sl-bh-photo",
+"sl-bh-quote",
+"sl-bh-steps",
+"sl-bh-close"
+]
+},
+{
+"file": "sheets/slide-blob.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "blob",
+"subKo": "블롭 모프",
+"ids": [
+"sl-bl-cover",
+"sl-bl-agenda",
+"sl-bl-section",
+"sl-bl-list",
+"sl-bl-compare",
+"sl-bl-data",
+"sl-bl-photo",
+"sl-bl-quote",
+"sl-bl-flow",
+"sl-bl-closing"
+]
+},
+{
 "file": "sheets/cardnews-cover.jpg",
 "cat": "cardnews",
 "catKo": "캐러셀 카드",
