@@ -178,68 +178,203 @@
 ]
 },
 {
-"file": "sheets/slide-open.jpg",
+"file": "sheets/slide-lecture.jpg",
 "cat": "slide",
-"catKo": "모션 PPT 장면",
-"sub": "open",
-"subKo": "표지·순서",
+"catKo": "모션 PPT",
+"sub": "lecture",
+"subKo": "강의안 기본",
 "ids": [
 "sl-cover",
 "sl-section",
-"sl-case"
-]
-},
-{
-"file": "sheets/slide-list.jpg",
-"cat": "slide",
-"catKo": "모션 PPT 장면",
-"sub": "list",
-"subKo": "목록·내용",
-"ids": [
+"sl-case",
 "sl-index",
 "sl-points",
-"sl-flow",
-"sl-growth"
-]
-},
-{
-"file": "sheets/slide-body.jpg",
-"cat": "slide",
-"catKo": "모션 PPT 장면",
-"sub": "body",
-"subKo": "본문·비교",
-"ids": [
 "sl-compare",
 "sl-quote",
 "sl-question",
-"sl-table",
-"sl-keywords",
-"sl-cycle",
-"sl-statement"
-]
-},
-{
-"file": "sheets/slide-visual.jpg",
-"cat": "slide",
-"catKo": "모션 PPT 장면",
-"sub": "visual",
-"subKo": "숫자·사진·흐름",
-"ids": [
 "sl-change",
 "sl-number",
 "sl-photo",
-"sl-gallery"
+"sl-gallery",
+"sl-flow",
+"sl-growth",
+"sl-table",
+"sl-keywords",
+"sl-cycle",
+"sl-activity",
+"sl-statement",
+"sl-thanks"
 ]
 },
 {
-"file": "sheets/slide-close.jpg",
+"file": "sheets/slide-editorial.jpg",
 "cat": "slide",
-"catKo": "모션 PPT 장면",
-"sub": "close",
-"subKo": "질문·마무리",
+"catKo": "모션 PPT",
+"sub": "editorial",
+"subKo": "에디토리얼 매거진",
 "ids": [
-"sl-activity",
-"sl-thanks"
+"sl-ed-cover",
+"sl-ed-contents",
+"sl-ed-section",
+"sl-ed-article",
+"sl-ed-versus",
+"sl-ed-figures",
+"sl-ed-plate",
+"sl-ed-quote",
+"sl-ed-timeline",
+"sl-ed-closing"
+]
+},
+{
+"file": "sheets/slide-keynote.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "keynote",
+"subKo": "미니멀 키노트",
+"ids": [
+"sl-kn-cover",
+"sl-kn-agenda",
+"sl-kn-section",
+"sl-kn-points",
+"sl-kn-compare",
+"sl-kn-stat",
+"sl-kn-photo",
+"sl-kn-quote",
+"sl-kn-flow",
+"sl-kn-close"
+]
+},
+{
+"file": "sheets/slide-swiss.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "swiss",
+"subKo": "스위스 그리드",
+"ids": [
+"sl-sw-cover",
+"sl-sw-agenda",
+"sl-sw-section",
+"sl-sw-points",
+"sl-sw-compare",
+"sl-sw-data",
+"sl-sw-photo",
+"sl-sw-quote",
+"sl-sw-timeline",
+"sl-sw-closing"
+]
+},
+{
+"file": "sheets/slide-cinema.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "cinema",
+"subKo": "다크 시네마",
+"ids": [
+"sl-ci-cover",
+"sl-ci-agenda",
+"sl-ci-chapter",
+"sl-ci-points",
+"sl-ci-versus",
+"sl-ci-numbers",
+"sl-ci-still",
+"sl-ci-quote",
+"sl-ci-sequence",
+"sl-ci-credits"
+]
+},
+{
+"file": "sheets/slide-notebook.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "notebook",
+"subKo": "종이 노트",
+"ids": [
+"sl-nb-cover",
+"sl-nb-agenda",
+"sl-nb-section",
+"sl-nb-list",
+"sl-nb-compare",
+"sl-nb-data",
+"sl-nb-photo",
+"sl-nb-quote",
+"sl-nb-steps",
+"sl-nb-close"
+]
+},
+{
+"file": "sheets/slide-glass.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "glass",
+"subKo": "소프트 글래스",
+"ids": [
+"sl-gl-cover",
+"sl-gl-agenda",
+"sl-gl-section",
+"sl-gl-points",
+"sl-gl-compare",
+"sl-gl-data",
+"sl-gl-photo",
+"sl-gl-quote",
+"sl-gl-flow",
+"sl-gl-closing"
+]
+},
+{
+"file": "sheets/slide-bento.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "bento",
+"subKo": "벤토 그리드",
+"ids": [
+"sl-bt-cover",
+"sl-bt-agenda",
+"sl-bt-section",
+"sl-bt-list",
+"sl-bt-compare",
+"sl-bt-data",
+"sl-bt-photo",
+"sl-bt-quote",
+"sl-bt-flow",
+"sl-bt-closing"
+]
+},
+{
+"file": "sheets/slide-press.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "press",
+"subKo": "신문 브리핑",
+"ids": [
+"sl-pr-cover",
+"sl-pr-agenda",
+"sl-pr-section",
+"sl-pr-columns",
+"sl-pr-compare",
+"sl-pr-chart",
+"sl-pr-photo",
+"sl-pr-quote",
+"sl-pr-timeline",
+"sl-pr-closing"
+]
+},
+{
+"file": "sheets/slide-organic.jpg",
+"cat": "slide",
+"catKo": "모션 PPT",
+"sub": "organic",
+"subKo": "자연·오가닉",
+"ids": [
+"sl-og-cover",
+"sl-og-agenda",
+"sl-og-section",
+"sl-og-list",
+"sl-og-compare",
+"sl-og-data",
+"sl-og-photo",
+"sl-og-quote",
+"sl-og-flow",
+"sl-og-closing"
 ]
 },
 {

@@ -40,6 +40,8 @@ python3 catalog/pick.py roles
 
 - `cat: slide` 장면은 단계가 있습니다(`frame.steps`). 영상으로 뽑으면 시간표대로 저절로 펼쳐지고, 사이트의 모션 PPT 작업실·저장한 HTML에서는 '다음 효과'로 한 단계씩 넘깁니다.
 - 색 8개 중 [5]가 채움 포인트 색(띠·알약·번호 원·상자), [6]이 빨간 펜 색입니다. `point`로 포인트 색만 바꾸면 채움 위 글자색은 저절로 맞춰집니다.
+- `sub`가 디자인 테마입니다(lecture 강의안 기본 · editorial 에디토리얼 매거진 · keynote 미니멀 키노트 · swiss 스위스 그리드 · cinema 다크 시네마 · notebook 종이 노트 · glass 소프트 글래스 · bento 벤토 그리드 · press 신문 브리핑 · organic 자연·오가닉). 한 발표는 **한 sub 안에서만** 고릅니다(아래 '같은 작은 묶음은 한 번' 규칙은 PPT에는 쓰지 않음). 테마마다 표지·차례·구역·본문·비교·숫자·사진·인용·흐름·마무리가 한 벌로 맞춰져 있습니다.
+- 10장 한 묶음 템플릿 50개는 사이트의 `QM_DECKS`(id · ko · topic · theme · font · items)에 있고, `quokaStudio.use('ppt', id)`로 작업실에 깔고 `quokaStudio.peek(id)`로 발표 화면을 봅니다.
 
 ## 고를 때 지킬 것 (요약)
 
