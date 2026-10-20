@@ -273,6 +273,21 @@ h1 { margin-top: 6px; font-weight: 600; font-size: clamp(28px, 3.6vw, 42px); lin
 .fold > summary svg { color: var(--muted); transition: transform .2s; }
 .fold[open] > summary svg { transform: rotate(180deg); }
 .fold-in { padding-bottom: 14px; }
+/* 내 사진 칸: 장면이 쓰는 그림 수만큼 칸을 보여 주고, 칸마다 사진을 넣고 뺌 */
+.img-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; padding: 2px 0 12px; }
+.img-slot { position: relative; aspect-ratio: 1; border-radius: 12px; border: 1.5px dashed var(--hover); background: var(--panel) center / cover no-repeat; color: var(--muted); transition: border-color .15s, transform .15s; }
+.img-slot:hover { border-color: var(--muted); }
+.img-pick { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: inherit; background: transparent; color: inherit; display: grid; place-items: center; padding: 0; font: 400 22px/1 var(--body); cursor: pointer; }
+.img-pick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.img-slot.on .img-pick:hover { background: rgba(0, 0, 0, .12); }
+.img-slot.on { border: 1px solid var(--line); }
+.img-slot.drop { border: 2px solid var(--accent); transform: scale(1.03); }
+.img-slot .no { position: absolute; left: 6px; top: 6px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: rgba(0, 0, 0, .55); color: #fff; font: 600 10.5px/18px var(--mono); text-align: center; }
+.img-slot:not(.on) .no { background: transparent; color: var(--muted); }
+.img-slot .x { position: absolute; right: 4px; top: 4px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .6); color: #fff; font: 600 13px/22px var(--body); cursor: pointer; padding: 0; }
+.img-slot .x:hover { background: rgba(0, 0, 0, .8); }
+.img-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; min-height: 40px; }
+.img-btns { display: inline-flex; gap: 6px; }
 .row { display: grid; grid-template-columns: 84px minmax(0, 1fr); align-items: center; gap: 16px; min-height: 50px; border-top: 1px solid var(--line); font-size: 13.5px; }
 .row > label, .row > .name { color: var(--muted); }
 .end { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 0; }
@@ -856,6 +871,26 @@ ffmpeg -i out.mp4 -i voice.wav -c:v copy -c:a aac -b:a 192k -shortest out_audio.
             <p class="hint">미리보기와 ‘영상으로 저장(MP4)’에 함께 들어가요. 로고는 이 브라우저에만 담겨 있고 어디에도 올라가지 않아요. 복사되는 코드에는 배경(효과 켜기·끄기 포함)만 들어가요.</p>
           </div>
         </details>
+        <details class="fold" id="foldImg" open hidden>
+          <summary><span id="imgTitle">내 사진</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="fold-in">
+            <div class="img-slots" id="imgSlots" role="group" aria-label="사진 칸"></div>
+            <input class="sr-only" type="file" id="slotFile" accept="image/*" tabindex="-1" aria-hidden="true">
+            <div class="img-tools">
+              <span class="state" id="imgState"></span>
+              <span class="img-btns">
+                <button class="btn" id="btnSample" type="button" hidden>모두 빼기</button>
+                <label class="btn pick" for="files">여러 장 한꺼번에<input class="sr-only" type="file" id="files" accept="image/*" multiple></label>
+              </span>
+            </div>
+            <p class="hint" id="imgHint"></p>
+            <div class="row" id="folderField" hidden>
+              <label for="folder">이미지 폴더</label>
+              <input type="text" id="folder" spellcheck="false" autocomplete="off">
+            </div>
+            <p class="hint" id="fileNote" hidden>코드에는 폴더 이름과 파일 이름이 칸 차례대로 적힙니다(빈 칸은 null = 샘플). 같은 파일을 내 사이트의 그 폴더에 올려 두세요.</p>
+          </div>
+        </details>
         <details class="fold" id="foldText" open>
           <summary>문구<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
           <div class="fold-in">
@@ -904,19 +939,6 @@ ffmpeg -i out.mp4 -i voice.wav -c:v copy -c:a aac -b:a 192k -shortest out_audio.
               <label for="bg">배경색</label>
               <div class="end"><span class="val" id="bgOut"></span><input type="color" id="bg"></div>
             </div>
-            <div class="row" id="imageRow">
-              <span class="name">내 이미지</span>
-              <div class="end">
-                <span class="state" id="imgState"></span>
-                <button class="btn" id="btnSample" type="button" hidden>샘플로</button>
-                <label class="btn pick" for="files">고르기<input class="sr-only" type="file" id="files" accept="image/*" multiple></label>
-              </div>
-            </div>
-            <div class="row" id="folderField" hidden>
-              <label for="folder">이미지 폴더</label>
-              <input type="text" id="folder" spellcheck="false" autocomplete="off">
-            </div>
-            <p class="hint" id="fileNote" hidden>코드에는 폴더 이름과 파일 이름이 적힙니다. 같은 파일을 내 사이트의 그 폴더에 올려 두세요.</p>
             <p class="hint" id="uiNote" hidden>글자·숫자·날짜 같은 내용은 복사한 코드의 ‘② 모션’ 맨 위에서 바꿉니다.</p>
           </div>
         </details>
@@ -971,6 +993,10 @@ function qmEngine(root, CFG, motion) {
   // 샘플 그림: CONFIG.images가 비어 있을 때 쓰입니다. 어느 카드에 어떤 그림이 갈지는 열 때마다 섞입니다
   const dice = rand(CFG.seed || Math.floor(Math.random() * 1e9) + 1);
   const shift = Math.floor(dice() * 16);
+  // 내 이미지: 칸마다 하나씩(빈 칸은 null → 그 칸은 샘플 그림). 칸보다 장면의 그림 자리가 많으면 돌아가며 씀
+  const IMGS = (CFG.images || []).slice();
+  const NIMG = IMGS.some(Boolean) ? IMGS.length : 0;
+  const used = new Set(), usedArt = new Set();     // 장면이 몇 번째 그림까지 쓰는지 (사이트가 사진 칸 수를 정할 때 읽음)
   const FONT = '"Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif';
   // 색의 밝기 (0 = 검정, 255 = 흰색). #rrggbb 꼴이 아니면 검정으로 봅니다
   // 투명 배경 위에 다른 배경을 깔 때(CONFIG.under = 그 배경의 대표 색)는 그 색을 바탕으로 보고 글자색을 고릅니다
@@ -997,7 +1023,7 @@ function qmEngine(root, CFG, motion) {
     rand: rand,
     font: FONT,
     ko: text => /[\u3131-\u318e\uac00-\ud7a3]/.test(text),   // 한글이 들어 있나 (한글이 든 글줄은 한글 글꼴 하나로 씁니다)
-    count: (CFG.images || []).length,             // 넣은 이미지 수 (0이면 샘플)
+    count: NIMG,                                  // 넣은 이미지 칸 수 (0이면 샘플)
     words: CFG.words || [],                       // 넣은 낱말 (글자 모션에서 사용, 비면 기본 낱말)
     live: LIVE && !TRY,                           // 실제 페이지에서 마우스·스크롤에 반응하는 중 (미리보기 칸·영상 저장 때는 false)
     // 발표(모션 PPT)에서 '다음 효과'를 누른 단계 { step, at }: 발표기가 채워 줌. 없으면 null (미리보기·영상은 시간표대로)
@@ -1014,19 +1040,21 @@ function qmEngine(root, CFG, motion) {
     },
     // 스크롤 진행 0~1. 미리보기·영상 저장 때는 demo(t로 계산한 값), 실제 페이지에서는 이 상자(또는 CONFIG.track의 칸)가 화면을 지나는 정도
     scroll: demo => LIVE && !TRY ? live.s : demo,
-    image: i => { const n = (CFG.images || []).length; return n ? CFG.images[i % n] : null; },   // i번째 이미지 주소 (없으면 null)
+    image: i => { used.add(i); if (!NIMG) return null; const u = IMGS[i % NIMG]; if (u) return u; const a = api.art(i, true); return a ? a.url : null; },   // i번째 이미지 주소 (없으면 null, 빈 칸이면 샘플 그림)
     // i번째 샘플 그림 { cv, url }. 코드에 qmArt가 함께 들어 있을 때만 나옵니다 (plain: 글자 없는 그림만)
-    art: (i, plain) => { drew = true; return typeof qmArt === 'function' ? qmArt(plain ? i : i + shift, plain) : null; },
+    art: (i, plain) => { drew = true; usedArt.add(i); return typeof qmArt === 'function' ? qmArt(plain ? i : i + shift, plain) : null; },
     // i번째 그림을 CSS background 값으로: 내 이미지가 있으면 이미지, 없으면 샘플 그림
     paint: i => {
-      const n = (CFG.images || []).length, a = n ? null : api.art(i);
-      return n ? `url("${CFG.images[i % n]}") center / cover no-repeat, #1c1c1e` : a ? `url(${a.url}) center / cover no-repeat` : `linear-gradient(145deg, ${COLORS[2]}, ${COLORS[5]})`;
+      used.add(i);
+      const u = NIMG ? IMGS[i % NIMG] : null, a = u ? null : api.art(i, NIMG > 0);   // 내 사진 사이의 빈 칸은 글자 없는 샘플 사진으로
+      return u ? `url("${u}") center / cover no-repeat, #1c1c1e` : a ? `url(${a.url}) center / cover no-repeat` : `linear-gradient(145deg, ${COLORS[2]}, ${COLORS[5]})`;
     },
     // 숏폼 자막용 미리보기 바탕: 영상 대신 깔아 두는 흐릿한 장면 (내 이미지를 넣으면 그 그림). 투명 배경일 때는 그리지 않고 null을 돌려줍니다
     footage(dim) {
       if (api.clear) return null;
-      const el = document.createElement('div'), n = (CFG.images || []).length;
-      el.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;filter:brightness(' + (dim == null ? 0.85 : dim) + ');background:' + (n ? `url("${CFG.images[0]}") center / cover no-repeat` :
+      used.add(0);
+      const el = document.createElement('div'), n = IMGS[0] ? 1 : 0;
+      el.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;filter:brightness(' + (dim == null ? 0.85 : dim) + ');background:' + (n ? `url("${IMGS[0]}") center / cover no-repeat` :
         'radial-gradient(55% 32% at 28% 26%, rgba(243,237,226,.5), rgba(243,237,226,0) 70%), radial-gradient(45% 30% at 78% 52%, rgba(154,120,110,.45), rgba(154,120,110,0) 70%), ' +
         'radial-gradient(80% 45% at 50% 108%, rgba(31,52,96,.75), rgba(31,52,96,0) 72%), radial-gradient(40% 25% at 18% 70%, rgba(205,196,184,.28), rgba(205,196,184,0) 70%), linear-gradient(172deg, #4a4f5a, #23262d 60%, #15171c)') + ';';
       root.appendChild(el);
@@ -1163,6 +1191,7 @@ function qmEngine(root, CFG, motion) {
     seek(t) { time = t; if (frame) frame(time); if (watch) mend(watch.takeRecords()); },
     now() { return time; },                       // 지금 몇 초의 장면인지 (발표기에서 씀)
     motion() { return frame; },                   // 모션이 돌려준 장면 함수 (frame.steps 같은 정보를 읽을 때)   // t초의 장면으로 건너뜀 (영상으로 한 장씩 찍을 때)
+    slots() { return used.size || usedArt.size; },   // 이 장면이 쓰는 그림 칸 수 (사이트의 '내 사진' 칸)
     destroy() { want = false; sync(); if (LIVE) Object.keys(hands).forEach(k => root.removeEventListener(k, hands[k])); ro.disconnect(); io.disconnect(); if (watch) watch.disconnect(); clearTimeout(timer); if (document.fonts && document.fonts.removeEventListener) document.fonts.removeEventListener('loadingdone', refit); if (frame && frame.dispose) frame.dispose(); root.textContent = ''; }
   };
 }
@@ -124387,7 +124416,22 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
   state.radius = Math.min(0.25, Math.max(0, +state.radius || 0));
   const save = () => { try { localStorage.setItem('qml8', JSON.stringify(state)); } catch (e) {} };
 
+  // 내 사진 주소 목록 (칸 차례, 빈 칸은 null). files 칸에는 { name, url } 또는 주소 문자열이 들어 있음
+  // 칸이 12개 이하인 장면은 칸 수만큼 null로 채워 '그 칸에만' 들어가게 하고, 그림 자리가 더 많은 장면은 넣은 사진이 돌아가며 들어가게 둠
+  const urlOf = f => !f ? null : typeof f === 'string' ? f : f.url;
+  const imgUrls = () => {
+    const u = files.map(urlOf);
+    while (u.length && !u[u.length - 1]) u.pop();
+    if (!u.length) return u;
+    const need = slotsBy[current().id] || 0;
+    if (need && need <= MAXSLOT) while (u.length < need) u.push(null);
+    return u;
+  };
   let files = [], engine = null, cfg = null, query = '', playing = !calm, open = false, back = null;
+  const MAXSLOT = 12, slotsBy = {};                // 내 사진 칸: 12칸까지, 모션마다 본 칸 수
+  let slotAt = 0, slotTimers = [];
+  const filledLen = () => { let n = files.length; while (n && !files[n - 1]) n--; return n; };
+  const dropUrl = f => { if (f && f.url && f.url.indexOf('blob:') === 0) URL.revokeObjectURL(f.url); };
   const index = () => MOTIONS.findIndex(m => m.id === state.id);
   const current = () => MOTIONS[index()];
   const catName = id => CATS.find(c => c.id === id).ko;
@@ -124730,7 +124774,7 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
     fit();
     stage.classList.toggle('clear', clearNow(current()));
     if (current().ext) { mountExt(current()); return; }
-    cfg = { images: files.map(f => f.url), speed: state.speed, radius: state.radius, bg: clearNow(current()) ? 'transparent' : bgOf(current()), colors: colorsOf(current()), ratio: ratioOf(current()), seed: SEED, words: wordsOf(current()) };
+    cfg = { images: imgUrls(), speed: state.speed, radius: state.radius, bg: clearNow(current()) ? 'transparent' : bgOf(current()), colors: colorsOf(current()), ratio: ratioOf(current()), seed: SEED, words: wordsOf(current()) };
     if (current().uses.indexOf('p') >= 0) cfg.live = 'try';   // 마우스에 반응하는 랜딩 모션: 창에서 마우스를 올리면 진짜로 반응, 내리면 다시 연출
     const m = current(), fn = fnOf(m);
     if (m.cat === 'wall') { wallMount(m, fn); return; }
@@ -124744,6 +124788,7 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
       textOk(false);
     }
     if (playing) engine.play(); else engine.pause();
+    watchSlots();
   }
   /* ---- 배경 탭: 배경 위에 자막·학교 로고 올리기 (미리보기 + MP4 저장) ---- */
   const DECO_KEY = 'qm-deco-v1';
@@ -124869,7 +124914,6 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
     $('mDesc').textContent = m.desc;
     decoPaint();
     $('radiusRow').hidden = m.uses.indexOf('r') < 0;
-    $('imageRow').hidden = m.uses.indexOf('i') < 0;
     $('uiNote').hidden = m.cat === 'card' || m.uses.indexOf('t') >= 0 || !!m.ext || fieldsFor(m).length > 0;
     const tryNote = $('tryNote'), byPointer = m.uses.indexOf('p') >= 0, byScroll = m.uses.indexOf('s') >= 0;
     tryNote.hidden = !byPointer && !byScroll;
@@ -124920,7 +124964,7 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
     const m = current(), id = 'qm-' + m.id;
     // 카드나 그림을 쓰는 모션에는 샘플 그림을 그리는 qmArt도 함께 넣습니다
     const libs = m.lib.concat(/api\.(card|paint|art|footage)\(/.test(m.lib.concat(m.fn).join('\n')) ? [qmArt] : []);
-    const paths = files.map(f => "'" + (state.folder + f.name).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'");
+    const paths = imgUrls().map((u, k) => u ? "'" + (state.folder + ((files[k] && files[k].name) || 'photo' + (k + 1) + '.jpg')).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'" : 'null');
     const images = paths.length ? '[\n      ' + paths.join(',\n      ') + '\n    ]' : '[]';
     const box = full
       ? `width:100%;max-width:calc(100vh * ${+ratioNum().toFixed(4)})`
@@ -125135,25 +125179,96 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
   $('pointPick').addEventListener('input', e => setPoint(e.target.value));
   $('folder').addEventListener('input', e => { state.folder = e.target.value; save(); renderCode(); });
 
-  function paintFiles() {
-    const n = files.length, uses = current().uses.indexOf('i') >= 0;
-    $('btnSample').hidden = !n;
-    $('folderField').hidden = !n || !uses;
-    $('fileNote').hidden = !n || !uses;
-    $('imgState').textContent = n ? `내 이미지 ${n}장` : '샘플';
+  // 내 사진 칸: 장면이 쓰는 그림 수만큼 칸을 보여 줌(12칸까지). 칸을 누르면 그 자리 사진을 고르고, 빈 칸에는 샘플 그림이 들어감
+  // files[k] = k번째 칸의 사진 { name, url } (빈 칸은 null)
+  function slotNeed(m) {
+    const seen = engine && engine.slots ? engine.slots() : 0;
+    if (seen) slotsBy[m.id] = Math.max(slotsBy[m.id] || 0, seen);
+    return slotsBy[m.id] || 0;
   }
+  function slotCount(m) { return Math.max(1, Math.min(MAXSLOT, slotNeed(m) || 1), filledLen()); }
+  function paintFiles() {
+    const m = current(), uses = m.uses.indexOf('i') >= 0, n = files.filter(Boolean).length;
+    $('foldImg').hidden = !uses;
+    if (!uses) return;
+    const need = slotNeed(m), count = slotCount(m), box = $('imgSlots');
+    box.dataset.count = count;
+    $('imgTitle').textContent = '내 사진 · ' + count + '칸';
+    box.textContent = '';
+    for (let k = 0; k < count; k++) {
+      const f = files[k], cell = document.createElement('div'), pick = document.createElement('button'), no = document.createElement('span');
+      cell.className = 'img-slot' + (f ? ' on' : '');
+      cell.dataset.k = k;
+      if (f) cell.style.backgroundImage = `url("${urlOf(f)}")`;
+      pick.type = 'button'; pick.className = 'img-pick'; pick.dataset.k = k;
+      pick.setAttribute('aria-label', (k + 1) + '번 칸 ' + (f ? '사진 바꾸기' : '사진 넣기'));
+      no.className = 'no'; no.textContent = k + 1;
+      pick.appendChild(no);
+      if (!f) pick.appendChild(document.createTextNode('+'));
+      cell.appendChild(pick);
+      if (f) {
+        const x = document.createElement('button');
+        x.type = 'button'; x.className = 'x'; x.dataset.x = k; x.textContent = '×';
+        x.setAttribute('aria-label', (k + 1) + '번 칸 비우기');
+        cell.appendChild(x);
+      }
+      box.appendChild(cell);
+    }
+    $('btnSample').hidden = !n;
+    $('folderField').hidden = $('fileNote').hidden = !n;
+    $('imgState').textContent = n ? `${count}칸 중 ${files.slice(0, count).filter(Boolean).length}칸에 내 사진` : '지금은 샘플 그림';
+    $('imgHint').textContent = (count === 1 && need <= 1 ? '이 장면에는 사진이 한 장 들어가요. ' : '') + '칸을 누르면 그 자리에 들어갈 사진을 고를 수 있어요. 사진을 칸 위로 끌어다 놓아도 돼요. 빈 칸에는 샘플 그림이 들어가요.' + (need > MAXSLOT ? ` 이 장면은 그림 자리가 ${need}개라, 넣은 사진이 차례로 돌아가며 들어가요.` : '');
+  }
+  // 장면이 그림을 늦게 부르기도 해서, 그린 뒤 잠깐 있다가 칸 수를 다시 봄 (바뀌었을 때만 다시 그림)
+  function watchSlots() {
+    slotTimers.forEach(clearTimeout);
+    slotTimers = [250, 1400].map(ms => setTimeout(() => {
+      const m = current();
+      if (!open || m.uses.indexOf('i') < 0) return;
+      if (+$('imgSlots').dataset.count !== slotCount(m)) paintFiles();
+    }, ms));
+  }
+  function imagesChanged() { paintFiles(); mount(); renderCode(); }
+  // k번째 칸부터 차례로 사진을 넣음
+  function putFiles(list, k) {
+    list.forEach((f, j) => {
+      const at = k + j;
+      while (files.length < at) files.push(null);
+      dropUrl(files[at]);
+      files[at] = { name: f.name, url: URL.createObjectURL(f) };
+    });
+    imagesChanged();
+  }
+  const imageFiles = list => Array.from(list || []).filter(f => f.type.indexOf('image/') === 0);
+  $('imgSlots').addEventListener('click', e => {
+    const x = e.target.closest('.x');
+    if (x) { const k = +x.dataset.x; dropUrl(files[k]); files[k] = null; files.length = filledLen(); imagesChanged(); return; }
+    const b = e.target.closest('.img-pick');
+    if (b) { slotAt = +b.dataset.k; $('slotFile').click(); }
+  });
+  $('slotFile').addEventListener('change', e => { const picked = imageFiles(e.target.files); e.target.value = ''; if (picked.length) putFiles(picked.slice(0, 1), slotAt); });
+  $('imgSlots').addEventListener('dragover', e => { const c = e.target.closest('.img-slot'); if (!c) return; e.preventDefault(); $('imgSlots').querySelectorAll('.drop').forEach(d => d !== c && d.classList.remove('drop')); c.classList.add('drop'); });
+  $('imgSlots').addEventListener('dragleave', e => { const c = e.target.closest('.img-slot'); if (c && !c.contains(e.relatedTarget)) c.classList.remove('drop'); });
+  $('imgSlots').addEventListener('drop', e => { const c = e.target.closest('.img-slot'); if (!c) return; e.preventDefault(); c.classList.remove('drop'); const picked = imageFiles(e.dataTransfer && e.dataTransfer.files); if (picked.length) putFiles(picked, +c.dataset.k); });
+  // 여러 장 한꺼번에: 빈 칸을 앞에서부터 채우고, 칸이 모자라면 뒤에 이어 붙임
   $('files').addEventListener('change', e => {
-    const picked = Array.from(e.target.files).filter(f => f.type.indexOf('image/') === 0);
+    const picked = imageFiles(e.target.files);
+    e.target.value = '';
     if (!picked.length) return;
-    files.forEach(f => URL.revokeObjectURL(f.url));
-    files = picked.map(f => ({ name: f.name, url: URL.createObjectURL(f) }));
-    paintFiles(); mount(); renderCode();
+    const count = slotCount(current()), empty = [];
+    for (let k = 0; k < count && empty.length < picked.length; k++) if (!files[k]) empty.push(k);
+    picked.forEach((f, j) => {
+      const at = j < empty.length ? empty[j] : Math.max(count, filledLen()) + (j - empty.length);
+      while (files.length < at) files.push(null);
+      dropUrl(files[at]);
+      files[at] = { name: f.name, url: URL.createObjectURL(f) };
+    });
+    imagesChanged();
   });
   $('btnSample').addEventListener('click', () => {
-    files.forEach(f => URL.revokeObjectURL(f.url));
+    files.forEach(dropUrl);
     files = [];
-    $('files').value = '';
-    paintFiles(); mount(); renderCode();
+    imagesChanged();
   });
 
   /* ---- 문구 칸: 고칠 수 있는 값을 입력칸으로 늘어놓습니다 ---- */
@@ -125469,7 +125584,7 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
   async function makeRig(m, secs, clear, ratio, under) {
     const rr = SIZE[ratio] ? ratio : ratioOf(m), size = SIZE[rr], W = size[0], H = size[1], total = Math.round(secs * FPS);
     const host = document.createElement('div'), root = document.createElement('div'), sheet = document.createElement('canvas'), g = sheet.getContext('2d', { willReadFrequently: !!clear });
-    const images = await Promise.all(files.map(f => asData(f.url)));
+    const images = await Promise.all(imgUrls().map(u => u ? asData(u) : null));
     // 미리보기 무대가 물려받는 글자 설정(글꼴·줄 간격·색 등)을 그대로 물려줘야 미리보기와 똑같이 나옵니다
     const cs = getComputedStyle(stage), lh = cs.lineHeight === 'normal' ? 'normal' : Math.round(parseFloat(cs.lineHeight) / parseFloat(cs.fontSize) * 1000) / 1000;
     const inherit = `color:${cs.color};font:${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize}/${lh} ${cs.fontFamily};letter-spacing:${cs.letterSpacing};word-spacing:${cs.wordSpacing};word-break:${cs.wordBreak};overflow-wrap:${cs.overflowWrap};text-align:${cs.textAlign};white-space:${cs.whiteSpace};text-transform:${cs.textTransform};-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;`;
@@ -125869,7 +125984,7 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
       el.appendChild(host);
       if (isStill(m)) { root.style.height = box.BH + 'px'; poster(root, { ratio: bask.ratio }, m); return; }
       try {
-        const eng = qmEngine(root, { images: files.map(f => f.url), speed: state.speed, radius: state.radius, bg: frame ? 'transparent' : bgOf(m), colors: colorsOf(m), ratio: bask.ratio, seed: SEED, words: wordsOf(m), autoplay: !calm }, fnOf(m));
+        const eng = qmEngine(root, { images: imgUrls(), speed: state.speed, radius: state.radius, bg: frame ? 'transparent' : bgOf(m), colors: colorsOf(m), ratio: bask.ratio, seed: SEED, words: wordsOf(m), autoplay: !calm }, fnOf(m));
         baskEngines.push(eng);
       } catch (e) { el.textContent = ''; }
     });
@@ -126262,7 +126377,7 @@ const QM_DECKS = [{"id": "lec-training", "ko": "생성형 AI 수업 설계 연�
     return out;
   }
   // 작업실 미리보기용: 고친 문구·주제색을 넣은 모션 함수와 설정
-  const labMake = (id, opts) => labWith(id, opts, m => ({ m: m, fn: fnOf(m), cfg: { images: files.map(f => f.url), speed: 1, radius: state.radius, bg: bgOf(m), colors: colorsOf(m), ratio: ratioOf(m), seed: SEED, words: wordsOf(m) } }));
+  const labMake = (id, opts) => labWith(id, opts, m => ({ m: m, fn: fnOf(m), cfg: { images: imgUrls(), speed: 1, radius: state.radius, bg: bgOf(m), colors: colorsOf(m), ratio: ratioOf(m), seed: SEED, words: wordsOf(m) } }));
   // 작업실 내보내기(HTML 파일)용: 고친 모션 코드 문자열과 그 모션이 쓰는 도우미·글꼴
   const labSource = (id, opts) => labWith(id, opts, m => ({ m: m, src: m.ext ? '' : dress(m, srcOf(m)), libs: m.lib.concat(/api\.(card|paint|art|footage)\(/.test(m.lib.concat(m.fn).join('\n')) ? [qmArt] : []).map(f => dress(m, f.toString())), bg: bgOf(m), colors: colorsOf(m), words: wordsOf(m) }));
   // 여러 장면을 한 영상(mp4)으로: scenes = [{ id, opts, secs }], fade = 장면 사이 겹쳐 바뀌는 시간(초)
