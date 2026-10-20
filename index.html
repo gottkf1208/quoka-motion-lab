@@ -126982,13 +126982,16 @@ function qmDeckPlayer(host, deck, opt) {
   }
   function paintList() {
     clearThumbs();
-    const ol = $('stItems'); ol.textContent = '';
+    // 목록을 다시 그려도 보던 자리를 지킴 (넓은 화면은 세로로, 좁은 화면은 가로로 스크롤)
+    const ol = $('stItems'), box = ol.parentElement, keepTop = box.scrollTop, keepLeft = ol.scrollLeft;
+    ol.textContent = '';
     doc.items.forEach((it, i) => {
       const m = metaOf(it.id); if (!m) return;
       const li = document.createElement('li'); li.className = 'st-item' + (i === doc.sel ? ' on' : '');
       li.innerHTML = `<button class="st-th" type="button" aria-label="${i + 1}번 ${esc(m.ko)}"><div class="st-thin"></div></button><div class="st-meta"><b>${String(i + 1).padStart(2, '0')}</b><span>${esc(m.ko)}</span>` +
         `<div class="st-acts"><button type="button" data-i="up" title="앞으로">↑</button><button type="button" data-i="down" title="뒤로">↓</button><button type="button" data-i="dup" title="복제">⧉</button><button type="button" data-i="del" title="빼기">×</button></div></div>`;
       ol.appendChild(li);
+      li.querySelector('.st-th').style.aspectRatio = doc.ratio;   // 썸네일이 그려지기 전부터 칸 높이를 잡아 둬야 스크롤 자리가 안 튐
       li.querySelector('.st-th').addEventListener('click', () => { doc.sel = i; saveStore(); paintAll(); });
       li.querySelector('.st-acts').addEventListener('click', e => {
         const a = e.target.dataset.i; if (!a) return;
@@ -127006,6 +127009,14 @@ function qmDeckPlayer(host, deck, opt) {
         const r = mountInto(th, it, doc, true); thumbEngs.push.apply(thumbEngs, r.engs); };
       requestAnimationFrame(make);
     });
+    box.scrollTop = keepTop; ol.scrollLeft = keepLeft;
+    // 고른 장이 보이는 곳 밖에 있으면(더하기·복제·순서 바꾸기 뒤 등) 그 장까지만 살짝 옮겨 보여 줌
+    const on = ol.querySelector('.st-item.on');
+    if (on) {
+      const r = on.getBoundingClientRect(), b = box.getBoundingClientRect(), o = ol.getBoundingClientRect();
+      if (box.scrollHeight > box.clientHeight + 1) { if (r.top < b.top) box.scrollTop += r.top - b.top - 8; else if (r.bottom > b.bottom) box.scrollTop += r.bottom - b.bottom + 8; }
+      if (ol.scrollWidth > ol.clientWidth + 1) { if (r.left < o.left) ol.scrollLeft += r.left - o.left - 8; else if (r.right > o.right) ol.scrollLeft += r.right - o.right + 8; }
+    }
   }
   function paintSide() {
     const it = doc.items[doc.sel], m = it && metaOf(it.id), M = MODES[mode];
