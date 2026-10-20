@@ -126700,6 +126700,9 @@ function qmDeckPlayer(host, deck, opt) {
     const slDiv = doc.createElement('div'); el.appendChild(slDiv);
     const made = s.make(), c = { step: 0, at: 0 };
     e = qmEngine(slDiv, Object.assign({}, made.cfg, { ratio: deck.ratio, cue: c, page: s.page || i + 1, bg: s.bg ? 'transparent' : made.cfg.bg, under: s.bg ? s.under : undefined }), made.fn);
+    // 컴퓨터의 '동작 줄이기(애니메이션 끄기)'가 켜져 있어도 발표는 움직여야 '다음 효과'가 펼쳐짐 (엔진은 그 설정이면 멈춘 한 장으로 그리기 때문)
+    if (b) b.play();
+    e.play();
     c.at = e.now();
     return { el: el, eng: e, bg: b, cue: c };
   }
@@ -126878,7 +126881,7 @@ function qmDeckPlayer(host, deck, opt) {
         <div class="st-row" id="stBgRow"><span>뒤에 깔 배경</span><button class="btn" data-x="bg" type="button" id="stBgBtn"></button><button class="btn st-mini" data-x="bgOff" type="button">없음</button><button class="btn st-mini" data-x="bgAll" type="button" id="stBgAll">모든 장에</button></div>
         <div id="stFields"></div>
       </section>
-      <section class="st-sec"><h3>내 사진</h3><p class="hint">사진이 들어가는 장면에 차례로 쓰여요. 이 브라우저에서만 쓰고 어디에도 올리지 않아요(새로 열면 다시 넣어야 해요).</p>
+      <section class="st-sec"><h3>내 사진</h3><p class="hint">사진이 들어가는 장면에 차례로 쓰여요. '다음 효과'를 눌러야 사진이 나오는 장도 있어요. 이 브라우저에서만 쓰고 어디에도 올리지 않아요(새로 열면 다시 넣어야 해요).</p>
         <div class="st-row"><button class="btn" data-x="pics" type="button">사진 고르기</button><small id="stPicN"></small></div><input type="file" id="stPicks" accept="image/*" multiple hidden></section>
     </aside>
   </div>
@@ -126959,6 +126962,7 @@ function qmDeckPlayer(host, deck, opt) {
     box.style.width = Math.max(200, w) + 'px';
     const r = mountInto(box, it, doc, false);
     stageEng = r.engs; stageCue = r.cue;
+    stageEng.forEach(e => e.play());   // '동작 줄이기'가 켜진 컴퓨터에서도 무대는 움직이고 '다음 효과'가 펼쳐지게
     const main = stageEng[stageEng.length - 1];
     if (stageCue) { stageCue.at = main.now(); $('stSteps').hidden = false; paintDots(); setTimeout(paintDots, 400); setTimeout(paintDots, 1500); }
   }
@@ -127415,6 +127419,8 @@ function qmDeckPlayer(host, deck, opt) {
     picks.forEach(p => URL.revokeObjectURL(p.url));
     picks = Array.from(e.target.files || []).map(f => ({ url: URL.createObjectURL(f), name: f.name }));
     e.target.value = ''; paintAll();
+    // 사진이 '다음 효과'에서 나오는 장면도 있어서, 넣자마자 보이게 무대를 마지막 효과까지 펼쳐 둠
+    if (picks.length && mode === 'ppt') setTimeout(() => stepTo(99), 450);
   });
   window.addEventListener('resize', () => { if (!root.hidden) { clearTimeout(editTimer); editTimer = setTimeout(paintStage, 200); } });
   // 주소 끝이 #studio-ppt 등이면 바로 엶
